@@ -1,0 +1,176 @@
+<xmodel version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation='http://flame.ac.uk/schema/xmml_v2.xsd'>
+ 
+  <name>Dormant Cancer Cells</name>
+  <author>Christine Seeliger</author>
+  <description>Dormant Cancer cell model with non-cell based BMU concept</description>
+  <version>1</version>
+  
+	<environment>
+		
+		<functionFiles>
+			<file>oc.c</file>
+			<file>ob.c</file>
+			<file>bmu.c</file>
+		</functionFiles>
+		
+		<constants>
+			<variable>
+				<description>The size of the world in gridunits</description>
+				<name>worldsize</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>oc_lifespan</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>ob_lifespan</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>bmu_lifespan</name>
+				<type>int</type>
+			</variable>
+		</constants>
+		
+		<timeUnits>
+			<timeUnit>
+				<name>minute</name>
+				<unit>iteration</unit>
+				<period>1</period>
+			</timeUnit>
+			<timeUnit>
+				<name>hour</name>
+				<unit>minute</unit>
+				<period>60</period>
+			</timeUnit>
+			<timeUnit>
+				<name>day</name>
+				<unit>hour</unit>
+				<period>24</period>
+			</timeUnit>
+		</timeUnits>
+		
+		<dataTypes>
+			<dataType>
+				<name>celldim</name>
+				<variables>
+					<variable>
+						<description>position</description>
+						<name>xy</name>
+						<type>coordinate</type>
+					</variable>
+					<variable>
+						<description>Diameter of the cell</description>
+						<name>diameter</name>
+						<type>int</type>
+					</variable>
+				</variables>
+			</dataType>
+			
+			<dataType>
+				<name>coordinate</name>
+				<variables>
+					<variable>
+						<name>x</name>
+						<type>int</type>
+					</variable>
+					<variable>
+						<name>y</name>
+						<type>int</type>
+					</variable>
+				</variables>
+			</dataType>
+		</dataTypes>
+		
+	</environment>
+	
+	<agents>
+		<xagent>
+			<name>oc</name>
+			<memory>
+				<variable>
+					<name>mydim</name>
+					<type>celldim</type>
+				</variable>
+				<variable>
+					<name>age</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>speed</name>
+					<type>int</type>
+				</variable>
+			</memory>
+			<functions></functions>
+		</xagent>
+		
+		<xagent>
+			<name>ob</name>
+			<memory>
+				<variable>
+					<name>mydim</name>
+					<type>celldim</type>
+				</variable>
+				<variable>
+					<name>age</name>
+					<type>int</type>
+				</variable>
+			</memory>
+			<functions></functions>
+		</xagent>
+		
+		<xagent>
+			<name>bmu</name>
+			<memory>
+				<variable>
+					<name>direction</name>
+					<type>coodinate</type>
+				</variable>
+				<variable>
+					<name>speed</name>
+					<type>double</type>
+				</variable>
+				<variable>
+					<name>start</name>
+					<type>coordinate</type>
+				</variable>
+				<variable>
+					<name>lifespan</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>length</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>oc_frequency</name>
+					<type>double</type>
+				</variable>
+				<variable>
+					<name>ob_frequency</name>
+					<type>double</type>
+				</variable>
+			</memory>
+			<functions></functions>
+		</xagent>
+		
+		<xagent>
+			<name>environment</name>
+			<memory>
+				<variable>
+					<name>bmu_activation_freq</name>
+					<type>double</type>
+				</variable>
+			</memory>
+			<functions></functions>
+		</xagent>
+	</agents>
+	
+	
+	
+	<messages>
+	</messages>
+	
+</xmodel>
