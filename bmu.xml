@@ -12,6 +12,7 @@
 			<file>oc.c</file>
 			<file>ob.c</file>
 			<file>bmu.c</file>
+			<file>environment.c</file>
 		</functionFiles>
 		
 		<constants>
@@ -31,6 +32,14 @@
 			<variable>
 				<name>bmu_lifespan</name>
 				<type>int</type>
+			</variable>
+			<variable>
+				<name>oc_creation_freq</name>
+				<type>double</type>			
+			</variable>
+			<variable>
+				<name>ob_creation_freq</name>
+				<type>double</type>
 			</variable>
 		</constants>
 		
@@ -54,6 +63,19 @@
 		
 		<dataTypes>
 			<dataType>
+				<name>coordinate</name>
+				<variables>
+					<variable>
+						<name>x</name>
+						<type>int</type>
+					</variable>
+					<variable>
+						<name>y</name>
+						<type>int</type>
+					</variable>
+				</variables>
+			</dataType>
+			<dataType>
 				<name>celldim</name>
 				<variables>
 					<variable>
@@ -68,25 +90,13 @@
 					</variable>
 				</variables>
 			</dataType>
-			
-			<dataType>
-				<name>coordinate</name>
-				<variables>
-					<variable>
-						<name>x</name>
-						<type>int</type>
-					</variable>
-					<variable>
-						<name>y</name>
-						<type>int</type>
-					</variable>
-				</variables>
-			</dataType>
 		</dataTypes>
 		
 	</environment>
-	
+		
 	<agents>
+
+<!-- OSTEOCLAST AGENT -->
 		<xagent>
 			<name>oc</name>
 			<memory>
@@ -97,15 +107,72 @@
 				<variable>
 					<name>age</name>
 					<type>int</type>
+				</variable> 
+				<variable>
+					<name>nuclei</name>
+					<type>int</type>
 				</variable>
 				<variable>
-					<name>speed</name>
+					<name>id</name>
 					<type>int</type>
 				</variable>
 			</memory>
-			<functions></functions>
+			
+			<functions>
+				<function>
+					<name>signal_oc_position</name>
+					<currentState>start</currentState>
+					<nextState>1</nextState>
+					<outputs>
+						<output>
+							<messageName>position</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>oc_get_older</name>
+					<currentState>1</currentState>
+					<nextState>2</nextState>
+				</function>
+				<function>
+					<name>oc_die</name>
+					<currentState>2</currentState>
+					<nextState>3</nextState>
+				</function>
+				<function>
+					<name>fuse</name>
+					<currentState>3</currentState>
+					<nextState>4</nextState>
+					<inputs>
+						<input>
+							<messageName>position</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>fusion</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+			    	<name>got_merged</name>
+			    	<currentState>4</currentState>
+			    	<nextState>5</nextState>
+			    	<inputs>
+			    		<input>
+			    			<messageName>fusion</messageName>
+			    		</input>
+			    	</inputs>
+			    </function>
+				<function>
+					<name>oc_move</name>
+					<currentState>5</currentState>
+					<nextState>end</nextState>
+				</function>
+			</functions>
 		</xagent>
 		
+<!-- OSTEOBLAST AGENT -->
 		<xagent>
 			<name>ob</name>
 			<memory>
@@ -118,59 +185,273 @@
 					<type>int</type>
 				</variable>
 			</memory>
-			<functions></functions>
+			<functions>
+				<function>
+					<name>ob_get_older</name>
+					<currentState>start</currentState>
+					<nextState>1</nextState>
+				</function>
+				<function>
+					<name>ob_die</name>
+					<currentState>1</currentState>
+					<nextState>2</nextState>
+				</function>
+				<function>
+					<name>signal_ob_position</name>
+					<currentState>2</currentState>
+					<nextState>end</nextState>
+					<outputs>
+						<output>
+							<messageName>position</messageName>
+						</output>
+					</outputs>
+				</function>
+			</functions>
 		</xagent>
 		
+	
+<!-- BASIC MULTICELLULAR UNIT -->		
 		<xagent>
 			<name>bmu</name>
 			<memory>
 				<variable>
+					<name>bmu_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
 					<name>direction</name>
-					<type>coodinate</type>
-				</variable>
-				<variable>
-					<name>speed</name>
-					<type>double</type>
-				</variable>
-				<variable>
-					<name>start</name>
 					<type>coordinate</type>
 				</variable>
 				<variable>
-					<name>lifespan</name>
-					<type>int</type>
+					<name>bmu_speed</name>
+					<type>double</type>
+				</variable>
+				<variable>
+					<name>position</name>
+					<type>coordinate</type>
 				</variable>
 				<variable>
 					<name>length</name>
 					<type>int</type>
 				</variable>
-				<variable>
-					<name>oc_frequency</name>
-					<type>double</type>
-				</variable>
-				<variable>
-					<name>ob_frequency</name>
-					<type>double</type>
-				</variable>
 			</memory>
-			<functions></functions>
+			<functions>
+			    <function>
+			    	<name>request_numbers</name>
+			    	<currentState>start</currentState>
+			    	<nextState>1</nextState>
+			    	<outputs>
+			    		<output>
+			    			<messageName>oc_id_req</messageName>
+			    		</output>
+			    		<output>
+			    			<messageName>ob_id_req</messageName>
+			    		</output>
+			    		<output>
+			    			<messageName>rnd_number_req</messageName>
+			    		</output>
+			    		<output>
+			    			<messageName>rnd_number_req</messageName>
+			    		</output>
+			    	</outputs>
+			    </function>
+				<function>
+					<name>create</name>
+					<currentState>1</currentState>
+					<nextState>2</nextState>
+					<inputs>
+						<input>
+							<messageName>new_ob_id</messageName>
+						</input>
+						<input>
+							<messageName>new_oc_id</messageName>
+						</input>
+						<input>
+							<messageName>rnd_number</messageName>
+						</input>
+						<input>
+							<messageName>rnd_number</messageName>
+						</input>
+					</inputs>
+				</function>
+				<function>
+					<name>bmu_die</name>
+					<currentState>2</currentState>
+					<nextState>3</nextState>
+				</function>
+				<function>
+					<name>bmu_move</name>
+					<currentState>3</currentState>
+					<nextState>end</nextState>
+				</function>
+			</functions>
 		</xagent>
-		
+	
+<!-- ENVIRONMENT -->	
 		<xagent>
 			<name>environment</name>
 			<memory>
 				<variable>
-					<name>bmu_activation_freq</name>
-					<type>double</type>
+					<name>rand_init</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>oc_id_counter</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>ob_id_counter</name>
+					<type>int</type>
 				</variable>
 			</memory>
-			<functions></functions>
+			<functions>
+				<function>
+					<name>send_random_number</name>
+					<currentState>start</currentState>
+					<nextState>1</nextState>
+					<inputs>
+						<input>
+							<messageName>rnd_number_req</messageName>
+						</input>	
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>rnd_number</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>send_new_oc_id</name>
+					<currentState>1</currentState>
+					<nextState>2</nextState>
+					<inputs>
+						<input>
+							<messageName>oc_id_req</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>new_oc_id</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>send_new_ob_id</name>
+					<currentState>2</currentState>
+					<nextState>end</nextState>
+					<inputs>
+						<input>
+							<messageName>ob_id_req</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>new_ob_id</messageName>
+						</output>
+					</outputs>
+				</function>
+			</functions>
 		</xagent>
 	</agents>
-	
-	
-	
+
+<!--  MESSAGES -->	
 	<messages>
+		<message>
+			<name>position</name>
+			<variables>
+				<variable>
+					<name>coord</name>
+					<type>coordinate</type>
+				</variable>
+				<variable>
+					<name>id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>type</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>nuclei</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>fusion</name>
+			<variables>
+				<variable>
+					<name>id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>rnd_number_req</name>
+			<variables>
+				<variable>
+					<name>recipient_id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>ob_id_req</name>
+			<variables>
+				<variable>
+					<name>recipient_id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>oc_id_req</name>
+			<variables>
+				<variable>
+					<name>recipient_id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>rnd_number</name>
+			<variables>
+				<variable>
+					<name>recipient_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>rnd_number</name>
+					<type>double</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>new_oc_id</name>
+			<variables>
+				<variable>
+					<name>recipient_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>new_id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>new_ob_id</name>
+			<variables>
+				<variable>
+					<name>recipient_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>new_id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
 	</messages>
 	
 </xmodel>
