@@ -80,21 +80,21 @@ void unittest_fuse_2_3()
 	//return fuse();
 }
 
-void unittest_oc_move_2_3()
+void unittest_oc_move_3_4()
 {
 	
 	
 	//return oc_move();
 }
 
-void unittest_oc_get_older_3_4()
+void unittest_oc_get_older_4_5()
 {
 	
 	
 	//return oc_get_older();
 }
 
-void unittest_oc_die_4_end()
+void unittest_oc_die_5_end()
 {
 	
 	
@@ -376,6 +376,8 @@ int rc;
 	    }
 	    #endif
 	
+	oc_5_state = init_oc_state();
+
 	oc_4_state = init_oc_state();
 
 	oc_3_state = init_oc_state();
@@ -678,6 +680,7 @@ xmachine_memory_oc * init_oc_agent()
 	current->oc_id = 0;
 	current->oc_death_prob = 0.0;
 	current->oc_mybmu = 0;
+	init_coordinate(&current->oc_direction);
 
 	return current;
 }
@@ -689,6 +692,7 @@ void free_oc_agent(xmachine_memory_oc_holder * tmp, xmachine_memory_oc_state * s
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
 	free_celldim(&tmp->agent->oc_dim);
+	free_coordinate(&tmp->agent->oc_direction);
 	
 
 	free(tmp->agent);
@@ -706,18 +710,28 @@ void unittest_init_oc_agent()
 		current_xmachine_oc->oc_id = 0;
 		current_xmachine_oc->oc_death_prob = 0.0;
 		current_xmachine_oc->oc_mybmu = 0;
+		init_coordinate(&current_xmachine_oc->oc_direction);
 	
 }
 
 void unittest_free_oc_agent()
 {
 	free_celldim(&current_xmachine_oc->oc_dim);
+	free_coordinate(&current_xmachine_oc->oc_direction);
 	
 	free(current_xmachine_oc);
 }
 
 void free_oc_agents()
 {
+	current_xmachine_oc_holder = oc_5_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_5_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	oc_5_state->count = 0;
 	current_xmachine_oc_holder = oc_4_state->agents;
 	while(current_xmachine_oc_holder)
 	{
@@ -770,6 +784,7 @@ void free_oc_agents()
 
 void free_oc_states()
 {
+	free(oc_5_state);
 	free(oc_4_state);
 	free(oc_3_state);
 	free(oc_2_state);
@@ -803,7 +818,7 @@ void add_oc_agent_internal(xmachine_memory_oc * agent, xmachine_memory_oc_state 
 
 }
 
-/** \fn void add_oc_agent(celldim * oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu)
+/** \fn void add_oc_agent(celldim * oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu, coordinate * oc_direction)
  * \brief Add oc X-machine to the current being used X-machine list.
  * \param oc_dim Variable for the X-machine memory.
  * \param oc_age Variable for the X-machine memory.
@@ -811,8 +826,9 @@ void add_oc_agent_internal(xmachine_memory_oc * agent, xmachine_memory_oc_state 
  * \param oc_id Variable for the X-machine memory.
  * \param oc_death_prob Variable for the X-machine memory.
  * \param oc_mybmu Variable for the X-machine memory.
+ * \param oc_direction Variable for the X-machine memory.
  */
-void add_oc_agent(celldim oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu)
+void add_oc_agent(celldim oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu, coordinate oc_direction)
 {
 	xmachine_memory_oc * current;
 
@@ -827,6 +843,7 @@ void add_oc_agent(celldim oc_dim, int oc_age, int oc_nuclei, int oc_id, double o
 	current->oc_id = oc_id;
 	current->oc_death_prob = oc_death_prob;
 	current->oc_mybmu = oc_mybmu;
+	copy_coordinate(&oc_direction, &current->oc_direction);
 }
 
 xmachine_memory_ob_state * init_ob_state()
@@ -997,7 +1014,7 @@ xmachine_memory_bmu * init_bmu_agent()
 	CHECK_POINTER(current);
 
 	current->bmu_id = 0;
-	init_coordinate(&current->direction);
+	init_coordinate(&current->bmu_direction);
 	current->bmu_speed = 0.0;
 	init_coordinate(&current->bmu_position);
 	current->bmu_length = 0;
@@ -1011,7 +1028,7 @@ void free_bmu_agent(xmachine_memory_bmu_holder * tmp, xmachine_memory_bmu_state 
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	free_coordinate(&tmp->agent->direction);
+	free_coordinate(&tmp->agent->bmu_direction);
 	free_coordinate(&tmp->agent->bmu_position);
 	
 
@@ -1025,7 +1042,7 @@ void unittest_init_bmu_agent()
 	CHECK_POINTER(current);
 
 		current_xmachine_bmu->bmu_id = 0;
-		init_coordinate(&current_xmachine_bmu->direction);
+		init_coordinate(&current_xmachine_bmu->bmu_direction);
 		current_xmachine_bmu->bmu_speed = 0.0;
 		init_coordinate(&current_xmachine_bmu->bmu_position);
 		current_xmachine_bmu->bmu_length = 0;
@@ -1034,7 +1051,7 @@ void unittest_init_bmu_agent()
 
 void unittest_free_bmu_agent()
 {
-	free_coordinate(&current_xmachine_bmu->direction);
+	free_coordinate(&current_xmachine_bmu->bmu_direction);
 	free_coordinate(&current_xmachine_bmu->bmu_position);
 	
 	free(current_xmachine_bmu);
@@ -1109,15 +1126,15 @@ void add_bmu_agent_internal(xmachine_memory_bmu * agent, xmachine_memory_bmu_sta
 
 }
 
-/** \fn void add_bmu_agent(int bmu_id, coordinate * direction, double bmu_speed, coordinate * bmu_position, int bmu_length)
+/** \fn void add_bmu_agent(int bmu_id, coordinate * bmu_direction, double bmu_speed, coordinate * bmu_position, int bmu_length)
  * \brief Add bmu X-machine to the current being used X-machine list.
  * \param bmu_id Variable for the X-machine memory.
- * \param direction Variable for the X-machine memory.
+ * \param bmu_direction Variable for the X-machine memory.
  * \param bmu_speed Variable for the X-machine memory.
  * \param bmu_position Variable for the X-machine memory.
  * \param bmu_length Variable for the X-machine memory.
  */
-void add_bmu_agent(int bmu_id, coordinate direction, double bmu_speed, coordinate bmu_position, int bmu_length)
+void add_bmu_agent(int bmu_id, coordinate bmu_direction, double bmu_speed, coordinate bmu_position, int bmu_length)
 {
 	xmachine_memory_bmu * current;
 
@@ -1127,7 +1144,7 @@ void add_bmu_agent(int bmu_id, coordinate direction, double bmu_speed, coordinat
 	add_bmu_agent_internal(current, current_xmachine_bmu_next_state);
 
 	current->bmu_id = bmu_id;
-	copy_coordinate(&direction, &current->direction);
+	copy_coordinate(&bmu_direction, &current->bmu_direction);
 	current->bmu_speed = bmu_speed;
 	copy_coordinate(&bmu_position, &current->bmu_position);
 	current->bmu_length = bmu_length;
@@ -1386,6 +1403,19 @@ int get_oc_mybmu()
     return (int)0;
 }
 
+/** \fn coordinate get_oc_direction()
+ * \brief Get oc_direction memory variable from current X-machine.
+ * \return Value for variable.
+ */
+coordinate * get_oc_direction()
+{
+	if(current_xmachine->xmachine_oc) return &(*current_xmachine->xmachine_oc).oc_direction;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return NULL;
+}
+
 /** \fn celldim get_ob_dim()
  * \brief Get ob_dim memory variable from current X-machine.
  * \return Value for variable.
@@ -1509,13 +1539,13 @@ int get_bmu_id()
     return (int)0;
 }
 
-/** \fn coordinate get_direction()
- * \brief Get direction memory variable from current X-machine.
+/** \fn coordinate get_bmu_direction()
+ * \brief Get bmu_direction memory variable from current X-machine.
  * \return Value for variable.
  */
-coordinate * get_direction()
+coordinate * get_bmu_direction()
 {
-	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).direction;
+	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).bmu_direction;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
@@ -2760,6 +2790,14 @@ int FLAME_get_environment_variable_ob_type()
 int FLAME_get_environment_variable_bmu_type()
 {
 	return FLAME_environment_variable_bmu_type;
+}
+double FLAME_get_environment_variable_oc_speed()
+{
+	return FLAME_environment_variable_oc_speed;
+}
+double FLAME_get_environment_variable_oc_displ_stdev()
+{
+	return FLAME_environment_variable_oc_displ_stdev;
 }
 
 

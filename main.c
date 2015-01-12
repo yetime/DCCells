@@ -899,18 +899,18 @@ printf("Iterations: %i\n", iteration_total);
 
 
 	/* If mb is not read then leave sync complete until last possible moment */
-	if(FLAME_oc_position_message_board_read == 1)
+	if(FLAME_ob_position_message_board_read == 1)
 	{
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_oc_position)\n");
-		rc = MB_SyncComplete(b_oc_position);
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_oc_position)\n");
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_ob_position)\n");
+		rc = MB_SyncComplete(b_ob_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_ob_position)\n");
 		#ifdef ERRCHECK
 		if (rc != MB_SUCCESS)
 		{
-		   fprintf(stderr, "ERROR: Could not complete sync of 'oc_position' board\n");
+		   fprintf(stderr, "ERROR: Could not complete sync of 'ob_position' board\n");
 		   switch(rc) {
 				case MB_ERR_INVALID:
-				   fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
+				   fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
 				   break;
 			   case MB_ERR_MEMALLOC:
 				   fprintf(stderr, "\t reason: out of memory\n");
@@ -932,151 +932,19 @@ printf("Iterations: %i\n", iteration_total);
     
 	}
 	
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start check_fusions\n");
-	current_xmachine_oc_holder = oc_1_state->agents;
-	while(current_xmachine_oc_holder)
-	{
-		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		current_xmachine_oc = current_xmachine_oc_holder->agent;
-		current_xmachine_oc_next_state = oc_2_state;
-		/* For backwards compatibility set current_xmachine */
-		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
-		current_xmachine->xmachine_bmu = NULL;
-		current_xmachine->xmachine_environment = NULL;
-		current_xmachine->xmachine_oc = current_xmachine_oc;
-
-		
-
-		
-		
-		
-		  rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
-		  
-		
-		#ifdef ERRCHECK
-		if (rc != MB_SUCCESS)
-		{
-		   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
-		   switch(rc) {
-		       case MB_ERR_INVALID:
-		           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
-		           break;
-		       case MB_ERR_LOCKED:
-	               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
-	               break;
-	           case MB_ERR_MEMALLOC:
-	               fprintf(stderr, "\t reason: out of memory\n");
-	               break;
-	           case MB_ERR_INTERNAL:
-	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-	               break;
-	           default:
-	           
-               
-                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
-               
-                   break;
-		   }
-
-		   
-           exit(rc);
-		}
-		#endif
-		
-		
-
-			i = check_fusions();
-
-		
-		    rc = MB_Iterator_Delete(&i_oc_position);
-		    #ifdef ERRCHECK
-		    if (rc != MB_SUCCESS)
-		    {
-		       fprintf(stderr, "ERROR: Could not delete 'oc_position' iterator\n");
-		       switch(rc) {
-		           case MB_ERR_INVALID:
-		               fprintf(stderr, "\t reason: 'oc_position' iterator is invalid\n");
-		               break;
-		           case MB_ERR_INTERNAL:
-		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-		               break;
-		           default:
-                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
-                       break;
-		       }
-
-		       
-               exit(rc);
-		    }
-		    #endif
-		
-
-			if(i == 1)
-			{
-				free_oc_agent(current_xmachine_oc_holder, oc_1_state);
-			}
-			else
-			{
-				transition_oc_agent(current_xmachine_oc_holder, oc_1_state, oc_2_state);
-			}
-		
-
-		current_xmachine_oc = NULL;
-
-		current_xmachine_oc_holder = temp_xmachine_oc_holder;
-	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish check_fusions\n");
-
-	if(FLAME_fusion_message_board_write == 1)
-	{
-
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_fusion)\n");
-		rc = MB_SyncStart(b_fusion);
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_fusion)\n");
-		#ifdef ERRCHECK
-		if (rc != MB_SUCCESS)
-		{
-		   fprintf(stderr, "ERROR: Could not start sync of 'fusion' board\n");
-		   switch(rc) {
-			   case MB_ERR_INVALID:
-				   fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
-				   break;
-			   case MB_ERR_LOCKED:
-				   fprintf(stderr, "\t reason: 'fusion' board is locked\n");
-				   break;
-			   case MB_ERR_MEMALLOC:
-				   fprintf(stderr, "\t reason: out of memory\n");
-				   break;
-			   case MB_ERR_INTERNAL:
-				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-				   break;
-			   default:
-				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
-				   break;
-		   }
-
-			
-			exit(rc);
-		}
-		#endif
-    }
-    
-
-
 	/* If mb is not read then leave sync complete until last possible moment */
-	if(FLAME_ob_position_message_board_read == 1)
+	if(FLAME_oc_position_message_board_read == 1)
 	{
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_ob_position)\n");
-		rc = MB_SyncComplete(b_ob_position);
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_ob_position)\n");
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_oc_position)\n");
+		rc = MB_SyncComplete(b_oc_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_oc_position)\n");
 		#ifdef ERRCHECK
 		if (rc != MB_SUCCESS)
 		{
-		   fprintf(stderr, "ERROR: Could not complete sync of 'ob_position' board\n");
+		   fprintf(stderr, "ERROR: Could not complete sync of 'oc_position' board\n");
 		   switch(rc) {
 				case MB_ERR_INVALID:
-				   fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
+				   fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
 				   break;
 			   case MB_ERR_MEMALLOC:
 				   fprintf(stderr, "\t reason: out of memory\n");
@@ -1253,6 +1121,138 @@ printf("Iterations: %i\n", iteration_total);
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish create\n");
 
 
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start check_fusions\n");
+	current_xmachine_oc_holder = oc_1_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		current_xmachine_oc = current_xmachine_oc_holder->agent;
+		current_xmachine_oc_next_state = oc_2_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_oc = current_xmachine_oc;
+
+		
+
+		
+		
+		
+		  rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
+		  
+		
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
+		   switch(rc) {
+		       case MB_ERR_INVALID:
+		           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
+		           break;
+		       case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+	           
+               
+                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
+               
+                   break;
+		   }
+
+		   
+           exit(rc);
+		}
+		#endif
+		
+		
+
+			i = check_fusions();
+
+		
+		    rc = MB_Iterator_Delete(&i_oc_position);
+		    #ifdef ERRCHECK
+		    if (rc != MB_SUCCESS)
+		    {
+		       fprintf(stderr, "ERROR: Could not delete 'oc_position' iterator\n");
+		       switch(rc) {
+		           case MB_ERR_INVALID:
+		               fprintf(stderr, "\t reason: 'oc_position' iterator is invalid\n");
+		               break;
+		           case MB_ERR_INTERNAL:
+		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+		               break;
+		           default:
+                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+                       break;
+		       }
+
+		       
+               exit(rc);
+		    }
+		    #endif
+		
+
+			if(i == 1)
+			{
+				free_oc_agent(current_xmachine_oc_holder, oc_1_state);
+			}
+			else
+			{
+				transition_oc_agent(current_xmachine_oc_holder, oc_1_state, oc_2_state);
+			}
+		
+
+		current_xmachine_oc = NULL;
+
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish check_fusions\n");
+
+	if(FLAME_fusion_message_board_write == 1)
+	{
+
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_fusion)\n");
+		rc = MB_SyncStart(b_fusion);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_fusion)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'fusion' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
+
+
 /* End of layer number 1 */
 
 /* Clear message boards that have finished being used
@@ -1378,28 +1378,7 @@ if(FLAME_ob_position_message_board_read == 0)
     }
     #endif
 
-	/* DEBUG: States with branching functions */
-		current_xmachine_oc_holder = oc_2_state->agents;
-		while(current_xmachine_oc_holder)
-		{
-			FLAME_debug_count = 0;
-			/* Function: oc_move */
-			
-			/* Function: fuse */
-			
-			/*printf("FLAME_debug_count = %d\n", FLAME_debug_count);*/
-			if(FLAME_debug_count != 1)
-			{
-				fprintf(stderr, "ERROR: A function condition test has failed for agent type 'oc' leaving state '2'\n");
-				if(FLAME_debug_count > 1)
-					fprintf(stderr, "\t reason: there was more than one possible outgoing transition function\n");
-				if(FLAME_debug_count == 0)
-					fprintf(stderr, "\t reason: there was no possible outgoing transition function\n");
-			}
-			
-			current_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		}
-	
+
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_die\n");
 	current_xmachine_bmu_holder = bmu_1_state->agents;
 	while(current_xmachine_bmu_holder)
@@ -1476,45 +1455,6 @@ if(FLAME_ob_position_message_board_read == 0)
 		current_xmachine_ob_holder = temp_xmachine_ob_holder;
 	}
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish ob_die\n");
-
-
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_move\n");
-	current_xmachine_oc_holder = oc_2_state->agents;
-	while(current_xmachine_oc_holder)
-	{
-		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		current_xmachine_oc = current_xmachine_oc_holder->agent;
-		current_xmachine_oc_next_state = oc_3_state;
-		/* For backwards compatibility set current_xmachine */
-		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
-		current_xmachine->xmachine_bmu = NULL;
-		current_xmachine->xmachine_environment = NULL;
-		current_xmachine->xmachine_oc = current_xmachine_oc;
-
-		
-
-		
-
-			i = oc_move();
-
-		
-
-			if(i == 1)
-			{
-				free_oc_agent(current_xmachine_oc_holder, oc_2_state);
-			}
-			else
-			{
-				transition_oc_agent(current_xmachine_oc_holder, oc_2_state, oc_3_state);
-			}
-		
-
-		current_xmachine_oc = NULL;
-
-		current_xmachine_oc_holder = temp_xmachine_oc_holder;
-	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_move\n");
 
 
 	/* If mb is not read then leave sync complete until last possible moment */
@@ -1753,7 +1693,7 @@ if(FLAME_fusion_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_move\n");
 
 
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_get_older\n");
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_move\n");
 	current_xmachine_oc_holder = oc_3_state->agents;
 	while(current_xmachine_oc_holder)
 	{
@@ -1771,7 +1711,7 @@ if(FLAME_fusion_message_board_read == 0)
 
 		
 
-			i = oc_get_older();
+			i = oc_move();
 
 		
 
@@ -1789,7 +1729,7 @@ if(FLAME_fusion_message_board_read == 0)
 
 		current_xmachine_oc_holder = temp_xmachine_oc_holder;
 	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_get_older\n");
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_move\n");
 
 
 /* End of layer number 3 */
@@ -1798,8 +1738,53 @@ if(FLAME_fusion_message_board_read == 0)
  * and sync complete if doing late sync complete */
 
 
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_die\n");
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_get_older\n");
 	current_xmachine_oc_holder = oc_4_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		current_xmachine_oc = current_xmachine_oc_holder->agent;
+		current_xmachine_oc_next_state = oc_5_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_oc = current_xmachine_oc;
+
+		
+
+		
+
+			i = oc_get_older();
+
+		
+
+			if(i == 1)
+			{
+				free_oc_agent(current_xmachine_oc_holder, oc_4_state);
+			}
+			else
+			{
+				transition_oc_agent(current_xmachine_oc_holder, oc_4_state, oc_5_state);
+			}
+		
+
+		current_xmachine_oc = NULL;
+
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_get_older\n");
+
+
+/* End of layer number 4 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_die\n");
+	current_xmachine_oc_holder = oc_5_state->agents;
 	while(current_xmachine_oc_holder)
 	{
 		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
@@ -1822,11 +1807,11 @@ if(FLAME_fusion_message_board_read == 0)
 
 			if(i == 1)
 			{
-				free_oc_agent(current_xmachine_oc_holder, oc_4_state);
+				free_oc_agent(current_xmachine_oc_holder, oc_5_state);
 			}
 			else
 			{
-				transition_oc_agent(current_xmachine_oc_holder, oc_4_state, oc_end_state);
+				transition_oc_agent(current_xmachine_oc_holder, oc_5_state, oc_end_state);
 			}
 		
 
@@ -1837,12 +1822,15 @@ if(FLAME_fusion_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_die\n");
 
 
-/* End of layer number 4 */
+/* End of layer number 5 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
 
 
+
+	/*printf("oc_5_state->count = %d\n", oc_5_state->count);*/
+	oc_5_state->count = 0;
 
 	/*printf("oc_4_state->count = %d\n", oc_4_state->count);*/
 	oc_4_state->count = 0;

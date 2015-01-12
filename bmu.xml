@@ -61,6 +61,14 @@
 				<name>bmu_type</name>
 				<type>int</type>
 			</variable>
+			<variable>
+				<name>oc_speed</name>
+				<type>double</type>
+			</variable>
+			<variable>
+				<name>oc_displ_stdev</name>
+				<type>double</type>
+			</variable>
 		</constants>
 
 		<timeUnits>
@@ -144,6 +152,10 @@
 					<name>oc_mybmu</name>
 					<type>int</type>
 				</variable>
+				<variable>
+					<name>oc_direction</name>
+					<type>coordinate</type>
+				</variable>
 			</memory>
 
 			<functions>
@@ -199,17 +211,17 @@
 				</function>
 				<function>
 					<name>oc_move</name>
-					<currentState>2</currentState>
-					<nextState>3</nextState>
-				</function>
-				<function>
-					<name>oc_get_older</name>
 					<currentState>3</currentState>
 					<nextState>4</nextState>
 				</function>
 				<function>
-					<name>oc_die</name>
+					<name>oc_get_older</name>
 					<currentState>4</currentState>
+					<nextState>5</nextState>
+				</function>
+				<function>
+					<name>oc_die</name>
+					<currentState>5</currentState>
 					<nextState>end</nextState>
 				</function>
 			</functions>
@@ -290,7 +302,7 @@
 					<type>int</type>
 				</variable>
 				<variable>
-					<name>direction</name>
+					<name>bmu_direction</name>
 					<type>coordinate</type>
 				</variable>
 				<variable>

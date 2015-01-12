@@ -101,9 +101,21 @@ int fuse(){
 }
 
 /*
- * Moves the osteoclasts in the same direction as the BMU
+ * Moves the osteoclasts in the same direction as the BMU randomly asigned BMU direction... (later on: along microcracks?
  */
 int oc_move(){
+	printf("OC_move\n");
+	//determine new position and put a bit of randomization onto it
+	int current_x=OC_DIRECTION.x;
+	int current_y=OC_DIRECTION.y;
+
+	double angle=PI/2*rnd_numbers_normal(OC_DISPL_STDEV);
+
+	int new_x=sin(angle)/current_x*OC_SPEED;
+	int new_y=sin(PI/2-angle)/current_y*OC_SPEED;
+
+	OC_DIM.xy.x=OC_DIM.xy.x+new_x;
+	OC_DIM.xy.y=OC_DIM.xy.y+new_y;
 	return 0;
 }
 
