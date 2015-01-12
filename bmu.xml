@@ -1,20 +1,20 @@
 <xmodel version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:noNamespaceSchemaLocation='http://flame.ac.uk/schema/xmml_v2.xsd'>
- 
+
   <name>Dormant Cancer Cells</name>
   <author>Christine Seeliger</author>
   <description>Dormant Cancer cell model with non-cell based BMU concept</description>
   <version>1</version>
-  
+
 	<environment>
-		
+
 		<functionFiles>
 			<file>oc.c</file>
 			<file>ob.c</file>
 			<file>bmu.c</file>
 			<file>environment.c</file>
 		</functionFiles>
-		
+
 		<constants>
 			<variable>
 				<description>The size of the world in gridunits</description>
@@ -35,14 +35,34 @@
 			</variable>
 			<variable>
 				<name>oc_creation_freq</name>
-				<type>double</type>			
+				<type>double</type>
 			</variable>
 			<variable>
 				<name>ob_creation_freq</name>
 				<type>double</type>
 			</variable>
+			<variable>
+				<name>oc_diameter</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>ob_diameter</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>oc_type</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>ob_type</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>bmu_type</name>
+				<type>int</type>
+			</variable>
 		</constants>
-		
+
 		<timeUnits>
 			<timeUnit>
 				<name>minute</name>
@@ -60,7 +80,7 @@
 				<period>24</period>
 			</timeUnit>
 		</timeUnits>
-		
+
 		<dataTypes>
 			<dataType>
 				<name>coordinate</name>
@@ -91,9 +111,9 @@
 				</variables>
 			</dataType>
 		</dataTypes>
-		
+
 	</environment>
-		
+
 	<agents>
 
 <!-- OSTEOCLAST AGENT -->
@@ -101,51 +121,64 @@
 			<name>oc</name>
 			<memory>
 				<variable>
-					<name>mydim</name>
+					<name>oc_dim</name>
 					<type>celldim</type>
 				</variable>
 				<variable>
-					<name>age</name>
-					<type>int</type>
-				</variable> 
-				<variable>
-					<name>nuclei</name>
+					<name>oc_age</name>
 					<type>int</type>
 				</variable>
 				<variable>
-					<name>id</name>
+					<name>oc_nuclei</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>oc_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>oc_death_prob</name>
+					<type>double</type>
+				</variable>
+				<variable>
+					<name>oc_mybmu</name>
 					<type>int</type>
 				</variable>
 			</memory>
-			
+
 			<functions>
+				<function>
+					<name>initialize_oc</name>
+					<currentState>start</currentState>
+					<nextState>end</nextState>
+					<condition>
+						<lhs><value>a.oc_age</value></lhs>
+						<op>EQ</op>
+						<rhs><value>0</value></rhs>
+					</condition>
+				</function>
 				<function>
 					<name>signal_oc_position</name>
 					<currentState>start</currentState>
 					<nextState>1</nextState>
+					<condition>
+						<lhs><value>a.oc_age</value></lhs>
+						<op>GT</op>
+						<rhs><value>0</value></rhs>
+					</condition>
 					<outputs>
 						<output>
-							<messageName>position</messageName>
+							<messageName>oc_position</messageName>
 						</output>
 					</outputs>
 				</function>
 				<function>
-					<name>oc_get_older</name>
+					<name>check_fusions</name>
 					<currentState>1</currentState>
 					<nextState>2</nextState>
-				</function>
-				<function>
-					<name>oc_die</name>
-					<currentState>2</currentState>
-					<nextState>3</nextState>
-				</function>
-				<function>
-					<name>fuse</name>
-					<currentState>3</currentState>
-					<nextState>4</nextState>
 					<inputs>
 						<input>
-							<messageName>position</messageName>
+							<messageName>oc_position</messageName>
 						</input>
 					</inputs>
 					<outputs>
@@ -155,62 +188,100 @@
 					</outputs>
 				</function>
 				<function>
-			    	<name>got_merged</name>
-			    	<currentState>4</currentState>
-			    	<nextState>5</nextState>
-			    	<inputs>
-			    		<input>
-			    			<messageName>fusion</messageName>
-			    		</input>
-			    	</inputs>
-			    </function>
+					<name>fuse</name>
+					<currentState>2</currentState>
+					<nextState>3</nextState>
+					<inputs>
+						<input>
+							<messageName>fusion</messageName>
+						</input>
+					</inputs>
+				</function>
 				<function>
 					<name>oc_move</name>
-					<currentState>5</currentState>
+					<currentState>2</currentState>
+					<nextState>3</nextState>
+				</function>
+				<function>
+					<name>oc_get_older</name>
+					<currentState>3</currentState>
+					<nextState>4</nextState>
+				</function>
+				<function>
+					<name>oc_die</name>
+					<currentState>4</currentState>
 					<nextState>end</nextState>
 				</function>
 			</functions>
 		</xagent>
-		
+
 <!-- OSTEOBLAST AGENT -->
 		<xagent>
 			<name>ob</name>
 			<memory>
 				<variable>
-					<name>mydim</name>
+					<name>ob_dim</name>
 					<type>celldim</type>
 				</variable>
 				<variable>
-					<name>age</name>
+					<name>ob_age</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>ob_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>ob_death_prob</name>
+					<type>double</type>
+				</variable>
+				<variable>
+					<name>ob_mybmu</name>
 					<type>int</type>
 				</variable>
 			</memory>
+
 			<functions>
 				<function>
-					<name>ob_get_older</name>
+					<name>initialize_ob</name>
 					<currentState>start</currentState>
-					<nextState>1</nextState>
+					<nextState>end</nextState>
+					<condition>
+						<lhs><value>a.ob_age</value></lhs>
+						<op>EQ</op>
+						<rhs><value>0</value></rhs>
+					</condition>
 				</function>
 				<function>
-					<name>ob_die</name>
+					<name>signal_ob_position</name>
+					<currentState>start</currentState>
+					<nextState>1</nextState>
+					<condition>
+						<lhs><value>a.ob_age</value></lhs>
+						<op>GT</op>
+						<rhs><value>0</value></rhs>
+					</condition>
+					<outputs>
+						<output>
+							<messageName>ob_position</messageName>
+						</output>
+					</outputs>
+				</function>
+					<function>
+					<name>ob_get_older</name>
 					<currentState>1</currentState>
 					<nextState>2</nextState>
 				</function>
 				<function>
-					<name>signal_ob_position</name>
+					<name>ob_die</name>
 					<currentState>2</currentState>
 					<nextState>end</nextState>
-					<outputs>
-						<output>
-							<messageName>position</messageName>
-						</output>
-					</outputs>
 				</function>
 			</functions>
 		</xagent>
-		
-	
-<!-- BASIC MULTICELLULAR UNIT -->		
+
+
+<!-- BASIC MULTICELLULAR UNIT -->
 		<xagent>
 			<name>bmu</name>
 			<memory>
@@ -227,67 +298,42 @@
 					<type>double</type>
 				</variable>
 				<variable>
-					<name>position</name>
+					<name>bmu_position</name>
 					<type>coordinate</type>
 				</variable>
 				<variable>
-					<name>length</name>
+					<name>bmu_length</name>
 					<type>int</type>
 				</variable>
 			</memory>
 			<functions>
-			    <function>
-			    	<name>request_numbers</name>
-			    	<currentState>start</currentState>
-			    	<nextState>1</nextState>
-			    	<outputs>
-			    		<output>
-			    			<messageName>oc_id_req</messageName>
-			    		</output>
-			    		<output>
-			    			<messageName>ob_id_req</messageName>
-			    		</output>
-			    		<output>
-			    			<messageName>rnd_number_req</messageName>
-			    		</output>
-			    		<output>
-			    			<messageName>rnd_number_req</messageName>
-			    		</output>
-			    	</outputs>
-			    </function>
 				<function>
 					<name>create</name>
-					<currentState>1</currentState>
-					<nextState>2</nextState>
+					<currentState>start</currentState>
+					<nextState>1</nextState>
 					<inputs>
 						<input>
-							<messageName>new_ob_id</messageName>
+							<messageName>oc_position</messageName>
 						</input>
 						<input>
-							<messageName>new_oc_id</messageName>
-						</input>
-						<input>
-							<messageName>rnd_number</messageName>
-						</input>
-						<input>
-							<messageName>rnd_number</messageName>
+							<messageName>ob_position</messageName>
 						</input>
 					</inputs>
 				</function>
 				<function>
 					<name>bmu_die</name>
-					<currentState>2</currentState>
-					<nextState>3</nextState>
+					<currentState>1</currentState>
+					<nextState>2</nextState>
 				</function>
 				<function>
 					<name>bmu_move</name>
-					<currentState>3</currentState>
+					<currentState>2</currentState>
 					<nextState>end</nextState>
 				</function>
 			</functions>
 		</xagent>
-	
-<!-- ENVIRONMENT -->	
+
+<!-- ENVIRONMENT -->
 		<xagent>
 			<name>environment</name>
 			<memory>
@@ -295,58 +341,27 @@
 					<name>rand_init</name>
 					<type>int</type>
 				</variable>
-				<variable>
-					<name>oc_id_counter</name>
-					<type>int</type>
-				</variable>
-				<variable>
-					<name>ob_id_counter</name>
-					<type>int</type>
-				</variable>
 			</memory>
 			<functions>
 				<function>
-					<name>send_random_number</name>
+					<name>initialize</name>
 					<currentState>start</currentState>
-					<nextState>1</nextState>
-					<inputs>
-						<input>
-							<messageName>rnd_number_req</messageName>
-						</input>	
-					</inputs>
-					<outputs>
-						<output>
-							<messageName>rnd_number</messageName>
-						</output>
-					</outputs>
-				</function>
-				<function>
-					<name>send_new_oc_id</name>
-					<currentState>1</currentState>
-					<nextState>2</nextState>
-					<inputs>
-						<input>
-							<messageName>oc_id_req</messageName>
-						</input>
-					</inputs>
-					<outputs>
-						<output>
-							<messageName>new_oc_id</messageName>
-						</output>
-					</outputs>
-				</function>
-				<function>
-					<name>send_new_ob_id</name>
-					<currentState>2</currentState>
 					<nextState>end</nextState>
-					<inputs>
-						<input>
-							<messageName>ob_id_req</messageName>
-						</input>
-					</inputs>
+					<condition>
+						<lhs>
+							<value>a.rand_init</value>
+						</lhs>
+						<op>EQ</op>
+						<rhs>
+							<value>0</value>
+						</rhs>
+					</condition>
 					<outputs>
 						<output>
-							<messageName>new_ob_id</messageName>
+							<messageName>oc_position</messageName>
+						</output>
+						<output>
+							<messageName>ob_position</messageName>
 						</output>
 					</outputs>
 				</function>
@@ -354,21 +369,17 @@
 		</xagent>
 	</agents>
 
-<!--  MESSAGES -->	
+<!--  MESSAGES -->
 	<messages>
 		<message>
-			<name>position</name>
+			<name>oc_position</name>
 			<variables>
 				<variable>
-					<name>coord</name>
-					<type>coordinate</type>
+					<name>oc_dimension</name>
+					<type>celldim</type>
 				</variable>
 				<variable>
 					<name>id</name>
-					<type>int</type>
-				</variable>
-				<variable>
-					<name>type</name>
 					<type>int</type>
 				</variable>
 				<variable>
@@ -378,8 +389,12 @@
 			</variables>
 		</message>
 		<message>
-			<name>fusion</name>
+			<name>ob_position</name>
 			<variables>
+				<variable>
+					<name>ob_dimension</name>
+					<type>celldim</type>
+				</variable>
 				<variable>
 					<name>id</name>
 					<type>int</type>
@@ -387,71 +402,18 @@
 			</variables>
 		</message>
 		<message>
-			<name>rnd_number_req</name>
+			<name>fusion</name>
 			<variables>
 				<variable>
-					<name>recipient_id</name>
-					<type>int</type>
-				</variable>
-			</variables>
-		</message>
-		<message>
-			<name>ob_id_req</name>
-			<variables>
-				<variable>
-					<name>recipient_id</name>
-					<type>int</type>
-				</variable>
-			</variables>
-		</message>
-		<message>
-			<name>oc_id_req</name>
-			<variables>
-				<variable>
-					<name>recipient_id</name>
-					<type>int</type>
-				</variable>
-			</variables>
-		</message>
-		<message>
-			<name>rnd_number</name>
-			<variables>
-				<variable>
-					<name>recipient_id</name>
+					<name>id1</name>
 					<type>int</type>
 				</variable>
 				<variable>
-					<name>rnd_number</name>
-					<type>double</type>
-				</variable>
-			</variables>
-		</message>
-		<message>
-			<name>new_oc_id</name>
-			<variables>
-				<variable>
-					<name>recipient_id</name>
-					<type>int</type>
-				</variable>
-				<variable>
-					<name>new_id</name>
-					<type>int</type>
-				</variable>
-			</variables>
-		</message>
-		<message>
-			<name>new_ob_id</name>
-			<variables>
-				<variable>
-					<name>recipient_id</name>
-					<type>int</type>
-				</variable>
-				<variable>
-					<name>new_id</name>
+					<name>id2</name>
 					<type>int</type>
 				</variable>
 			</variables>
 		</message>
 	</messages>
-	
+
 </xmodel>

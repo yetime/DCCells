@@ -65,62 +65,62 @@ void* cparams_create(int agent_number, int * agent_count, size_t * agent_struct_
 }
 
 
-/** \fn int FLAME_condition_dcc_respond_start_end(xmachine_memory_dcc *a)
+/** \fn int FLAME_condition_oc_initialize_oc_start_end(xmachine_memory_oc *a)
  * \brief The condition function for an agent function.
  * \param a The agent memory.
  * \return The success (1) or failure (0) of the condition.
  */
-int FLAME_condition_dcc_respond_start_end(xmachine_memory_dcc *a)
+int FLAME_condition_oc_initialize_oc_start_end(xmachine_memory_oc *a)
 {
-	if((a->dormant == 1)) return 1;
+	if((a->oc_age == 0)) return 1;
 	else return 0;
 }
 
 
-/** \fn int FLAME_condition_dcc_divide_start_end(xmachine_memory_dcc *a)
+/** \fn int FLAME_condition_oc_signal_oc_position_start_1(xmachine_memory_oc *a)
  * \brief The condition function for an agent function.
  * \param a The agent memory.
  * \return The success (1) or failure (0) of the condition.
  */
-int FLAME_condition_dcc_divide_start_end(xmachine_memory_dcc *a)
+int FLAME_condition_oc_signal_oc_position_start_1(xmachine_memory_oc *a)
 {
-	if((a->dormant == 0)) return 1;
+	if((a->oc_age > 0)) return 1;
 	else return 0;
 }
 
 
-/** \fn int FLAME_condition_pointsource_init_start_signal(xmachine_memory_pointsource *a)
+/** \fn int FLAME_condition_ob_initialize_ob_start_end(xmachine_memory_ob *a)
  * \brief The condition function for an agent function.
  * \param a The agent memory.
  * \return The success (1) or failure (0) of the condition.
  */
-int FLAME_condition_pointsource_init_start_signal(xmachine_memory_pointsource *a)
+int FLAME_condition_ob_initialize_ob_start_end(xmachine_memory_ob *a)
 {
-	if((iteration_loop%1 == a->source_start)) return 1;
+	if((a->ob_age == 0)) return 1;
 	else return 0;
 }
 
 
-/** \fn int FLAME_condition_pointsource_decay_start_signal(xmachine_memory_pointsource *a)
+/** \fn int FLAME_condition_ob_signal_ob_position_start_1(xmachine_memory_ob *a)
  * \brief The condition function for an agent function.
  * \param a The agent memory.
  * \return The success (1) or failure (0) of the condition.
  */
-int FLAME_condition_pointsource_decay_start_signal(xmachine_memory_pointsource *a)
+int FLAME_condition_ob_signal_ob_position_start_1(xmachine_memory_ob *a)
 {
-	if((a->active == 1)) return 1;
+	if((a->ob_age > 0)) return 1;
 	else return 0;
 }
 
 
-/** \fn int FLAME_condition_pointsource_inactive_start_end(xmachine_memory_pointsource *a)
+/** \fn int FLAME_condition_environment_initialize_start_end(xmachine_memory_environment *a)
  * \brief The condition function for an agent function.
  * \param a The agent memory.
  * \return The success (1) or failure (0) of the condition.
  */
-int FLAME_condition_pointsource_inactive_start_end(xmachine_memory_pointsource *a)
+int FLAME_condition_environment_initialize_start_end(xmachine_memory_environment *a)
 {
-	if((a->active == 0)) return 1;
+	if((a->rand_init == 0)) return 1;
 	else return 0;
 }
 

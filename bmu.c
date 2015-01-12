@@ -11,37 +11,33 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "stuff.h"
 
+/*
+ * Create new osteoblast and osteoclast agents, but only if a OB or OC id message is present (which in turn depends
+ * on the outcome of request ids and rnd numbers
+ */
 int create(){
+	printf("BMU CREATE \n");
+		coordinate ob_pos;
+		init_coordinate(&ob_pos);
+		copy_coordinate(&BMU_POSITION,&ob_pos);
+		celldim ob_dim;
+		init_celldim(&ob_dim);
+		ob_dim.xy=ob_pos;
+		ob_dim.diameter=OB_DIAMETER;
+		add_ob_agent(ob_dim,0,get_new_ob_id(),0, BMU_ID);
 
-	double rnds[2]={0,0};
+		coordinate oc_pos;
+		init_coordinate(&oc_pos);
+		copy_coordinate(&BMU_POSITION,&oc_pos);
+		celldim oc_dim;
+		init_celldim(&oc_dim);
+		oc_dim.xy=oc_pos;
+		oc_dim.diameter=OC_DIAMETER;
+		add_oc_agent(oc_dim,0,1,get_new_oc_id(), 0, BMU_ID);
 
-	int count=0;
-
-	START_RND_NUMBER_MESSAGE_LOOP
-		if(rnd_number_message->recipient_id==BMU_ID){
-			if(count<=1){
-				rnds[count]=rnd_number_message->rnd_number;
-				count++;
-			}
-		}
-	FINISH_RND_NUMBER_MESSAGE_LOOP
-
-	START_NEW_OB_ID_MESSAGE_LOOP
-		if(OB_CREATION_FREQ<=rnds[0]) ;
-	FINISH_NEW_OB_ID_MESSAGE_LOOP
-
-	START_NEW_OC_ID_MESSAGE_LOOP
-	if(OC_CREATION_FREQ<=rnds[1])
-			coordinate pos;
-			init_coordinate(&pos);
-			copy_coordinate(&POSITION,&pos);
-			celldim dim;
-			init_celldim(&dim);
-			dim.xy=pos;
-			dim.diameter=20;
-			add_oc_agent(dim,0,1,new_oc_id_message->new_id);
-	FINISH_NEW_OC_ID_MESSAGE_LOOP
+	printf("BMU CREATE EXIT\n");
 	return 0;
 }
 
@@ -50,13 +46,7 @@ int bmu_die(){
 }
 
 int bmu_move(){
-   return 0;
-}
-
-int request_numbers(){
-	add_oc_id_req_message(BMU_ID);
-	add_ob_id_req_message(BMU_ID);
-	add_rnd_number_req_message(BMU_ID);
-	add_rnd_number_req_message(BMU_ID);
 	return 0;
 }
+
+

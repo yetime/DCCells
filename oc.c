@@ -13,19 +13,105 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "stuff.h"
 
-double eucl_distance(int x1, int x2, int y1, int y2);
 
-int signal_oc_position(){
-	printf("OC signal\n");
-	add_position_message(GEO,1);
+int initialize_oc(){
+	printf("OC INIT\n");
+	OC_AGE=1;
+	printf("OC INIT EXIT\n");
 	return 0;
 }
 
-int move(){
+/*
+ * Announces the current position to the agents in the system
+ */
+int signal_oc_position(){
+	printf("OC POSITION\n");
+	if(OC_AGE!=0) {
+		add_oc_position_message(OC_DIM,OC_ID,OC_NUCLEI);
+	}
+	printf("OC POSITIION EXIT\n");
+		return 0;
+}
+
+/*
+ * Increments the age (in minutes) of a cell, increments the probability for celldeath in a window
+ * of +- 2 days around the maximum age
+ */
+int oc_get_older(){
+	printf("OC GET OLDER \n");
+	int min=OC_LIFESPAN-2*1440;
+	int max=OC_LIFESPAN-2*1440;
+
+	if (min<0) min=0;
+	if(OC_AGE>min && OC_AGE<=max){
+		OC_DEATH_PROB=OC_DEATH_PROB+1/1440;
+	}
+	OC_AGE=OC_AGE+1;
+	printf("OC GET OLDER EXIT\n");
+	return 0;
+}
+
+
+/*
+ * Kills an agent if it reaches its maximum age or a bit earlier based on probability that increases (atm linear)
+ * over the last two days of a cells life
+ */
+int oc_die(){
+	printf("OC DIE\n");
+	double rndnr=rnd_numbers();
+
+	if(OC_AGE>OC_LIFESPAN){
+		return 1;
+	}
+	if(rndnr<OC_DEATH_PROB) {
+		return 1;
+	}
+	printf("OC DIE EXIT\n");
+	return 0;
+}
+
+
+/*
+ * Determines if two cells are close enough to fuse into one (probability dependent)
+ */
+
+int check_fusions(){
+	printf("OC FUSE\n");
+	int fused=0;
+	int other_cell_id=0;
+	START_OC_POSITION_MESSAGE_LOOP
+		coordinate other_oc=oc_position_message->oc_dimension.xy;
+	    double distance=eucl_distance(OC_DIM.xy.x, other_oc.x, OC_DIM.xy.y, other_oc.y);
+	    if(distance>=OC_DIM.diameter/2+oc_position_message->oc_dimension.diameter/2){
+	    	fused=1;
+	    	other_cell_id=oc_position_message->id;
+	    }
+	FINISH_OC_POSITION_MESSAGE_LOOP
+
+	if(fused!=0) add_fusion_message(OC_ID, other_cell_id);
+
+	printf("OC FUSE EXIT\n");
+	return 0;
+}
+
+int fuse(){
+	return 0;
+}
+
+/*
+ * Moves the osteoclasts in the same direction as the BMU
+ */
+int oc_move(){
+	return 0;
+}
+
+
+/*int move(){
 	printf("OC move\n");
 
-		//The four points on the cell surface were the concentration is messured
+		//The four points on the cell surface were the concentration is measured
 		int x1=GEO.xcoord+GEO.length/2;
 
 	    printf("X1: %d\n", x1);
@@ -98,7 +184,5 @@ int move(){
 	FINISH_POINTSOURCE_MESSAGE_LOOP
 	return 0;
 }
+*/
 
-double eucl_distance(int x1, int y1,int x2, int y2){
-	return sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-}

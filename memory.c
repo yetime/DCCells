@@ -6,126 +6,36 @@
 #include "header.h"
 
 
-void unittest_respond_start_end()
-{
-	int rc;
-	
-	
-	rc = MB_Iterator_Create(b_position, &i_position);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'position'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'position' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'position' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	//return respond();
-}
-
-void unittest_divide_start_end()
-{
-	int rc;
-	
-	
-	rc = MB_Iterator_Create(b_position, &i_position);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'position'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'position' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'position' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	//return divide();
-}
-
-void unittest_signal_ob_position_start_moving()
+void unittest_initialize_oc_start_end()
 {
 	
 	
-	//return signal_ob_position();
+	//return initialize_oc();
 }
 
-void unittest_move_moving_end()
-{
-	int rc;
-	
-	
-	rc = MB_Iterator_Create(b_pointsource, &i_pointsource);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'pointsource'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'pointsource' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'pointsource' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	//return move();
-}
-
-void unittest_signal_oc_position_signal_end()
+void unittest_signal_oc_position_start_1()
 {
 	
 	
 	//return signal_oc_position();
 }
 
-void unittest_move_start_signal()
+void unittest_check_fusions_1_2()
 {
 	int rc;
 	
 	
-	rc = MB_Iterator_Create(b_pointsource, &i_pointsource);
+	rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
 	#ifdef ERRCHECK
 	if (rc != MB_SUCCESS)
 	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'pointsource'\n");
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
 	   switch(rc) {
 	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'pointsource' board is invalid\n");
+	           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
 	           break;
 	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'pointsource' board is locked\n");
+               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
                break;
            case MB_ERR_MEMALLOC:
                fprintf(stderr, "\t reason: out of memory\n");
@@ -137,42 +47,160 @@ void unittest_move_start_signal()
 	}
 	#endif
 	
-	//return move();
+	//return check_fusions();
 }
 
-void unittest_init_start_signal()
+void unittest_fuse_2_3()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_fusion, &i_fusion);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'fusion'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return fuse();
+}
+
+void unittest_oc_move_2_3()
 {
 	
 	
-	//return init();
+	//return oc_move();
 }
 
-void unittest_decay_start_signal()
+void unittest_oc_get_older_3_4()
 {
 	
 	
-	//return decay();
+	//return oc_get_older();
 }
 
-void unittest_inactive_start_end()
+void unittest_oc_die_4_end()
 {
 	
 	
-	//return inactive();
+	//return oc_die();
 }
 
-void unittest_signal_signal_increase_lifetime()
+void unittest_initialize_ob_start_end()
 {
 	
 	
-	//return signal();
+	//return initialize_ob();
 }
 
-void unittest_increase_lifetime_increase_lifetime_end()
+void unittest_signal_ob_position_start_1()
 {
 	
 	
-	//return increase_lifetime();
+	//return signal_ob_position();
+}
+
+void unittest_ob_get_older_1_2()
+{
+	
+	
+	//return ob_get_older();
+}
+
+void unittest_ob_die_2_end()
+{
+	
+	
+	//return ob_die();
+}
+
+void unittest_create_start_1()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	
+	rc = MB_Iterator_Create(b_ob_position, &i_ob_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'ob_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return create();
+}
+
+void unittest_bmu_die_1_2()
+{
+	
+	
+	//return bmu_die();
+}
+
+void unittest_bmu_move_2_end()
+{
+	
+	
+	//return bmu_move();
+}
+
+void unittest_initialize_start_end()
+{
+	
+	
+	//return initialize();
 }
 
 
@@ -180,17 +208,17 @@ void free_messages()
 {
 	int rc;
 	
-	    rc = MB_Clear(b_pointsource);
+	    rc = MB_Clear(b_oc_position);
 	    #ifdef ERRCHECK
 	    if (rc != MB_SUCCESS)
 	    {
-	       fprintf(stderr, "ERROR: Could not clear 'pointsource' board\n");
+	       fprintf(stderr, "ERROR: Could not clear 'oc_position' board\n");
 	       switch(rc) {
 	           case MB_ERR_INVALID:
-	               fprintf(stderr, "\t reason: 'pointsource' board is invalid\n");
+	               fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
 	               break;
 	           case MB_ERR_LOCKED:
-	               fprintf(stderr, "\t reason: 'pointsource' board is locked\n");
+	               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
 	               break;
 	           case MB_ERR_INTERNAL:
 	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -205,17 +233,42 @@ void free_messages()
 	    }
 	    #endif
 	
-	    rc = MB_Clear(b_position);
+	    rc = MB_Clear(b_ob_position);
 	    #ifdef ERRCHECK
 	    if (rc != MB_SUCCESS)
 	    {
-	       fprintf(stderr, "ERROR: Could not clear 'position' board\n");
+	       fprintf(stderr, "ERROR: Could not clear 'ob_position' board\n");
 	       switch(rc) {
 	           case MB_ERR_INVALID:
-	               fprintf(stderr, "\t reason: 'position' board is invalid\n");
+	               fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
 	               break;
 	           case MB_ERR_LOCKED:
-	               fprintf(stderr, "\t reason: 'position' board is locked\n");
+	               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	    rc = MB_Clear(b_fusion);
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not clear 'fusion' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
+	               break;
+	           case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
 	               break;
 	           case MB_ERR_INTERNAL:
 	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -240,13 +293,13 @@ void initialise_pointers()
 int rc;
 
 	/* Initialise message sync composite params as NULL */
-	FLAME_m_pointsource_composite_params = NULL;
+	FLAME_m_oc_position_composite_params = NULL;
 
-	    rc = MB_Create(&b_pointsource, sizeof(m_pointsource));
+	    rc = MB_Create(&b_oc_position, sizeof(m_oc_position));
 	    #ifdef ERRCHECK
 	    if (rc != MB_SUCCESS)
 	    {
-	       fprintf(stderr, "ERROR: Could not create 'pointsource' board\n");
+	       fprintf(stderr, "ERROR: Could not create 'oc_position' board\n");
 	       switch(rc) {
 	           case MB_ERR_INVALID:
 	               fprintf(stderr, "\t reason: Invalid message size\n");
@@ -268,13 +321,13 @@ int rc;
 	    #endif
 	
 	/* Initialise message sync composite params as NULL */
-	FLAME_m_position_composite_params = NULL;
+	FLAME_m_ob_position_composite_params = NULL;
 
-	    rc = MB_Create(&b_position, sizeof(m_position));
+	    rc = MB_Create(&b_ob_position, sizeof(m_ob_position));
 	    #ifdef ERRCHECK
 	    if (rc != MB_SUCCESS)
 	    {
-	       fprintf(stderr, "ERROR: Could not create 'position' board\n");
+	       fprintf(stderr, "ERROR: Could not create 'ob_position' board\n");
 	       switch(rc) {
 	           case MB_ERR_INVALID:
 	               fprintf(stderr, "\t reason: Invalid message size\n");
@@ -295,29 +348,65 @@ int rc;
 	    }
 	    #endif
 	
-	dcc_end_state = init_dcc_state();
+	/* Initialise message sync composite params as NULL */
+	FLAME_m_fusion_composite_params = NULL;
 
-	dcc_start_state = init_dcc_state();
+	    rc = MB_Create(&b_fusion, sizeof(m_fusion));
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not create 'fusion' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: Invalid message size\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
 
-	ob_end_state = init_ob_state();
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	oc_4_state = init_oc_state();
 
-	ob_moving_state = init_ob_state();
+	oc_3_state = init_oc_state();
 
-	ob_start_state = init_ob_state();
+	oc_2_state = init_oc_state();
 
-	oc_start_state = init_oc_state();
+	oc_1_state = init_oc_state();
 
 	oc_end_state = init_oc_state();
 
-	oc_signal_state = init_oc_state();
+	oc_start_state = init_oc_state();
 
-	pointsource_increase_lifetime_state = init_pointsource_state();
+	ob_2_state = init_ob_state();
 
-	pointsource_end_state = init_pointsource_state();
+	ob_1_state = init_ob_state();
 
-	pointsource_signal_state = init_pointsource_state();
+	ob_end_state = init_ob_state();
 
-	pointsource_start_state = init_pointsource_state();
+	ob_start_state = init_ob_state();
+
+	bmu_end_state = init_bmu_state();
+
+	bmu_2_state = init_bmu_state();
+
+	bmu_1_state = init_bmu_state();
+
+	bmu_start_state = init_bmu_state();
+
+	environment_end_state = init_environment_state();
+
+	environment_start_state = init_environment_state();
 
 	temp_node_info = NULL;
 	p_node_info = &temp_node_info;
@@ -479,110 +568,97 @@ void init_char_static_array(/*@out@*/ char * array, int size)
 
 
 
-void init_gridcell(/*@out@*/ gridcell * temp)
+void init_coordinate(/*@out@*/ coordinate * temp)
 {
-	(*temp).xcoord = 0;
-	(*temp).ycoord = 0;
-	(*temp).length = 0;
+	(*temp).x = 0;
+	(*temp).y = 0;
 
 }
 
-void init_gridcell_static_array(/*@out@*/ gridcell * array, int size)
-{
-	int i;
-
-	for(i = 0; i < size; i++) init_gridcell(&array[i]);
-}
-
-void free_gridcell(gridcell * temp)
-{
-
-}
-
-void free_gridcell_static_array(gridcell * array, int size)
+void init_coordinate_static_array(/*@out@*/ coordinate * array, int size)
 {
 	int i;
 
-	for(i = 0; i < size; i++) free_gridcell(&array[i]);
+	for(i = 0; i < size; i++) init_coordinate(&array[i]);
 }
 
-void copy_gridcell(gridcell * from, gridcell * to)
+void free_coordinate(coordinate * temp)
 {
-	(*to).xcoord = (*from).xcoord;
-	(*to).ycoord = (*from).ycoord;
-	(*to).length = (*from).length;
+
 }
 
-void copy_gridcell_static_array(gridcell * from, gridcell * to, int size)
+void free_coordinate_static_array(coordinate * array, int size)
 {
 	int i;
 
-	for(i = 0; i < size; i++)
-	{
-		copy_gridcell(&from[i], &to[i]);
-	}
+	for(i = 0; i < size; i++) free_coordinate(&array[i]);
 }
 
-
-void init_ps(/*@out@*/ ps * temp)
+void copy_coordinate(coordinate * from, coordinate * to)
 {
-	(*temp).locationx = 0;
-	(*temp).locationy = 0;
-	(*temp).base_conc = 0.0;
-	(*temp).max_conc = 0.0;
-	(*temp).current_conc = 0.0;
-	(*temp).decay_exp = 0.0;
-	(*temp).gradient_power = 0;
-	(*temp).lifetime = 0;
-
+	(*to).x = (*from).x;
+	(*to).y = (*from).y;
 }
 
-void init_ps_static_array(/*@out@*/ ps * array, int size)
-{
-	int i;
-
-	for(i = 0; i < size; i++) init_ps(&array[i]);
-}
-
-void free_ps(ps * temp)
-{
-
-}
-
-void free_ps_static_array(ps * array, int size)
-{
-	int i;
-
-	for(i = 0; i < size; i++) free_ps(&array[i]);
-}
-
-void copy_ps(ps * from, ps * to)
-{
-	(*to).locationx = (*from).locationx;
-	(*to).locationy = (*from).locationy;
-	(*to).base_conc = (*from).base_conc;
-	(*to).max_conc = (*from).max_conc;
-	(*to).current_conc = (*from).current_conc;
-	(*to).decay_exp = (*from).decay_exp;
-	(*to).gradient_power = (*from).gradient_power;
-	(*to).lifetime = (*from).lifetime;
-}
-
-void copy_ps_static_array(ps * from, ps * to, int size)
+void copy_coordinate_static_array(coordinate * from, coordinate * to, int size)
 {
 	int i;
 
 	for(i = 0; i < size; i++)
 	{
-		copy_ps(&from[i], &to[i]);
+		copy_coordinate(&from[i], &to[i]);
+	}
+}
+
+
+void init_celldim(/*@out@*/ celldim * temp)
+{
+	init_coordinate(&(*temp).xy);
+	(*temp).diameter = 0;
+
+}
+
+void init_celldim_static_array(/*@out@*/ celldim * array, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++) init_celldim(&array[i]);
+}
+
+void free_celldim(celldim * temp)
+{
+	free_coordinate(&(*temp).xy);
+
+}
+
+void free_celldim_static_array(celldim * array, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++) free_celldim(&array[i]);
+}
+
+void copy_celldim(celldim * from, celldim * to)
+{
+	copy_coordinate(&(*from).xy, &(*to).xy);
+	(*to).diameter = (*from).diameter;
+}
+
+void copy_celldim_static_array(celldim * from, celldim * to, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++)
+	{
+		copy_celldim(&from[i], &to[i]);
 	}
 }
 
 
 
-xmachine_memory_dcc_state * init_dcc_state()
+xmachine_memory_oc_state * init_oc_state()
 {
-	xmachine_memory_dcc_state * current = (xmachine_memory_dcc_state *)malloc(sizeof(xmachine_memory_dcc_state));
+	xmachine_memory_oc_state * current = (xmachine_memory_oc_state *)malloc(sizeof(xmachine_memory_oc_state));
 	CHECK_POINTER(current);
 
 	current->agents = NULL;
@@ -591,88 +667,130 @@ xmachine_memory_dcc_state * init_dcc_state()
 	return current;
 }
 
-xmachine_memory_dcc * init_dcc_agent()
+xmachine_memory_oc * init_oc_agent()
 {
-	xmachine_memory_dcc * current = (xmachine_memory_dcc *)malloc(sizeof(xmachine_memory_dcc));
+	xmachine_memory_oc * current = (xmachine_memory_oc *)malloc(sizeof(xmachine_memory_oc));
 	CHECK_POINTER(current);
 
-	current->DiD_MFI = 0;
-	init_gridcell(&current->geo);
-	current->dormant = 0;
+	init_celldim(&current->oc_dim);
+	current->oc_age = 0;
+	current->oc_nuclei = 0;
+	current->oc_id = 0;
+	current->oc_death_prob = 0.0;
+	current->oc_mybmu = 0;
 
 	return current;
 }
 
-void free_dcc_agent(xmachine_memory_dcc_holder * tmp, xmachine_memory_dcc_state * state)
+void free_oc_agent(xmachine_memory_oc_holder * tmp, xmachine_memory_oc_state * state)
 {
 	if(tmp->prev == NULL) state->agents = tmp->next;
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	free_gridcell(&tmp->agent->geo);
+	free_celldim(&tmp->agent->oc_dim);
 	
 
 	free(tmp->agent);
 	free(tmp);
 }
 
-void unittest_init_dcc_agent()
+void unittest_init_oc_agent()
 {
-	current_xmachine_dcc = (xmachine_memory_dcc *)malloc(sizeof(xmachine_memory_dcc));
+	current_xmachine_oc = (xmachine_memory_oc *)malloc(sizeof(xmachine_memory_oc));
 	CHECK_POINTER(current);
 
-		current_xmachine_dcc->DiD_MFI = 0;
-		init_gridcell(&current_xmachine_dcc->geo);
-		current_xmachine_dcc->dormant = 0;
+		init_celldim(&current_xmachine_oc->oc_dim);
+		current_xmachine_oc->oc_age = 0;
+		current_xmachine_oc->oc_nuclei = 0;
+		current_xmachine_oc->oc_id = 0;
+		current_xmachine_oc->oc_death_prob = 0.0;
+		current_xmachine_oc->oc_mybmu = 0;
 	
 }
 
-void unittest_free_dcc_agent()
+void unittest_free_oc_agent()
 {
-	free_gridcell(&current_xmachine_dcc->geo);
+	free_celldim(&current_xmachine_oc->oc_dim);
 	
-	free(current_xmachine_dcc);
+	free(current_xmachine_oc);
 }
 
-void free_dcc_agents()
+void free_oc_agents()
 {
-	current_xmachine_dcc_holder = dcc_end_state->agents;
-	while(current_xmachine_dcc_holder)
+	current_xmachine_oc_holder = oc_4_state->agents;
+	while(current_xmachine_oc_holder)
 	{
-		temp_xmachine_dcc_holder = current_xmachine_dcc_holder->next;
-		free_dcc_agent(current_xmachine_dcc_holder, dcc_end_state);
-		current_xmachine_dcc_holder = temp_xmachine_dcc_holder;
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_4_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
 	}
-	dcc_end_state->count = 0;
-	current_xmachine_dcc_holder = dcc_start_state->agents;
-	while(current_xmachine_dcc_holder)
+	oc_4_state->count = 0;
+	current_xmachine_oc_holder = oc_3_state->agents;
+	while(current_xmachine_oc_holder)
 	{
-		temp_xmachine_dcc_holder = current_xmachine_dcc_holder->next;
-		free_dcc_agent(current_xmachine_dcc_holder, dcc_start_state);
-		current_xmachine_dcc_holder = temp_xmachine_dcc_holder;
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_3_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
 	}
-	dcc_start_state->count = 0;
+	oc_3_state->count = 0;
+	current_xmachine_oc_holder = oc_2_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_2_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	oc_2_state->count = 0;
+	current_xmachine_oc_holder = oc_1_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_1_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	oc_1_state->count = 0;
+	current_xmachine_oc_holder = oc_end_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_end_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	oc_end_state->count = 0;
+	current_xmachine_oc_holder = oc_start_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_start_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	oc_start_state->count = 0;
 }
 
-void free_dcc_states()
+void free_oc_states()
 {
-	free(dcc_end_state);
-	free(dcc_start_state);
+	free(oc_4_state);
+	free(oc_3_state);
+	free(oc_2_state);
+	free(oc_1_state);
+	free(oc_end_state);
+	free(oc_start_state);
 }
 
-void transition_dcc_agent(xmachine_memory_dcc_holder * tmp, xmachine_memory_dcc_state * from_state, xmachine_memory_dcc_state * to_state)
+void transition_oc_agent(xmachine_memory_oc_holder * tmp, xmachine_memory_oc_state * from_state, xmachine_memory_oc_state * to_state)
 {
 	if(tmp->prev == NULL) from_state->agents = tmp->next;
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	add_dcc_agent_internal(tmp->agent, to_state);
+	add_oc_agent_internal(tmp->agent, to_state);
 	free(tmp);
 }
 
-void add_dcc_agent_internal(xmachine_memory_dcc * agent, xmachine_memory_dcc_state * state)
+void add_oc_agent_internal(xmachine_memory_oc * agent, xmachine_memory_oc_state * state)
 {
-	xmachine_memory_dcc_holder * current = (xmachine_memory_dcc_holder *)malloc(sizeof(xmachine_memory_dcc_holder));
+	xmachine_memory_oc_holder * current = (xmachine_memory_oc_holder *)malloc(sizeof(xmachine_memory_oc_holder));
 	CHECK_POINTER(current);
 
 	current->next = state->agents;
@@ -685,24 +803,30 @@ void add_dcc_agent_internal(xmachine_memory_dcc * agent, xmachine_memory_dcc_sta
 
 }
 
-/** \fn void add_dcc_agent(int DiD_MFI, gridcell * geo, int dormant)
- * \brief Add dcc X-machine to the current being used X-machine list.
- * \param DiD_MFI Variable for the X-machine memory.
- * \param geo Variable for the X-machine memory.
- * \param dormant Variable for the X-machine memory.
+/** \fn void add_oc_agent(celldim * oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu)
+ * \brief Add oc X-machine to the current being used X-machine list.
+ * \param oc_dim Variable for the X-machine memory.
+ * \param oc_age Variable for the X-machine memory.
+ * \param oc_nuclei Variable for the X-machine memory.
+ * \param oc_id Variable for the X-machine memory.
+ * \param oc_death_prob Variable for the X-machine memory.
+ * \param oc_mybmu Variable for the X-machine memory.
  */
-void add_dcc_agent(int DiD_MFI, gridcell geo, int dormant)
+void add_oc_agent(celldim oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu)
 {
-	xmachine_memory_dcc * current;
+	xmachine_memory_oc * current;
 
-	current = init_dcc_agent();
+	current = init_oc_agent();
 	/* new line added to handle dynamic agent creation*/
-	current_xmachine_dcc_next_state = dcc_start_state;
-	add_dcc_agent_internal(current, current_xmachine_dcc_next_state);
+	current_xmachine_oc_next_state = oc_start_state;
+	add_oc_agent_internal(current, current_xmachine_oc_next_state);
 
-	current->DiD_MFI = DiD_MFI;
-	copy_gridcell(&geo, &current->geo);
-	current->dormant = dormant;
+	copy_celldim(&oc_dim, &current->oc_dim);
+	current->oc_age = oc_age;
+	current->oc_nuclei = oc_nuclei;
+	current->oc_id = oc_id;
+	current->oc_death_prob = oc_death_prob;
+	current->oc_mybmu = oc_mybmu;
 }
 
 xmachine_memory_ob_state * init_ob_state()
@@ -721,8 +845,11 @@ xmachine_memory_ob * init_ob_agent()
 	xmachine_memory_ob * current = (xmachine_memory_ob *)malloc(sizeof(xmachine_memory_ob));
 	CHECK_POINTER(current);
 
-	init_gridcell(&current->geo);
-	current->celltype = 0;
+	init_celldim(&current->ob_dim);
+	current->ob_age = 0;
+	current->ob_id = 0;
+	current->ob_death_prob = 0.0;
+	current->ob_mybmu = 0;
 
 	return current;
 }
@@ -733,7 +860,7 @@ void free_ob_agent(xmachine_memory_ob_holder * tmp, xmachine_memory_ob_state * s
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	free_gridcell(&tmp->agent->geo);
+	free_celldim(&tmp->agent->ob_dim);
 	
 
 	free(tmp->agent);
@@ -745,20 +872,39 @@ void unittest_init_ob_agent()
 	current_xmachine_ob = (xmachine_memory_ob *)malloc(sizeof(xmachine_memory_ob));
 	CHECK_POINTER(current);
 
-		init_gridcell(&current_xmachine_ob->geo);
-		current_xmachine_ob->celltype = 0;
+		init_celldim(&current_xmachine_ob->ob_dim);
+		current_xmachine_ob->ob_age = 0;
+		current_xmachine_ob->ob_id = 0;
+		current_xmachine_ob->ob_death_prob = 0.0;
+		current_xmachine_ob->ob_mybmu = 0;
 	
 }
 
 void unittest_free_ob_agent()
 {
-	free_gridcell(&current_xmachine_ob->geo);
+	free_celldim(&current_xmachine_ob->ob_dim);
 	
 	free(current_xmachine_ob);
 }
 
 void free_ob_agents()
 {
+	current_xmachine_ob_holder = ob_2_state->agents;
+	while(current_xmachine_ob_holder)
+	{
+		temp_xmachine_ob_holder = current_xmachine_ob_holder->next;
+		free_ob_agent(current_xmachine_ob_holder, ob_2_state);
+		current_xmachine_ob_holder = temp_xmachine_ob_holder;
+	}
+	ob_2_state->count = 0;
+	current_xmachine_ob_holder = ob_1_state->agents;
+	while(current_xmachine_ob_holder)
+	{
+		temp_xmachine_ob_holder = current_xmachine_ob_holder->next;
+		free_ob_agent(current_xmachine_ob_holder, ob_1_state);
+		current_xmachine_ob_holder = temp_xmachine_ob_holder;
+	}
+	ob_1_state->count = 0;
 	current_xmachine_ob_holder = ob_end_state->agents;
 	while(current_xmachine_ob_holder)
 	{
@@ -767,14 +913,6 @@ void free_ob_agents()
 		current_xmachine_ob_holder = temp_xmachine_ob_holder;
 	}
 	ob_end_state->count = 0;
-	current_xmachine_ob_holder = ob_moving_state->agents;
-	while(current_xmachine_ob_holder)
-	{
-		temp_xmachine_ob_holder = current_xmachine_ob_holder->next;
-		free_ob_agent(current_xmachine_ob_holder, ob_moving_state);
-		current_xmachine_ob_holder = temp_xmachine_ob_holder;
-	}
-	ob_moving_state->count = 0;
 	current_xmachine_ob_holder = ob_start_state->agents;
 	while(current_xmachine_ob_holder)
 	{
@@ -787,8 +925,9 @@ void free_ob_agents()
 
 void free_ob_states()
 {
+	free(ob_2_state);
+	free(ob_1_state);
 	free(ob_end_state);
-	free(ob_moving_state);
 	free(ob_start_state);
 }
 
@@ -817,12 +956,15 @@ void add_ob_agent_internal(xmachine_memory_ob * agent, xmachine_memory_ob_state 
 
 }
 
-/** \fn void add_ob_agent(gridcell * geo, int celltype)
+/** \fn void add_ob_agent(celldim * ob_dim, int ob_age, int ob_id, double ob_death_prob, int ob_mybmu)
  * \brief Add ob X-machine to the current being used X-machine list.
- * \param geo Variable for the X-machine memory.
- * \param celltype Variable for the X-machine memory.
+ * \param ob_dim Variable for the X-machine memory.
+ * \param ob_age Variable for the X-machine memory.
+ * \param ob_id Variable for the X-machine memory.
+ * \param ob_death_prob Variable for the X-machine memory.
+ * \param ob_mybmu Variable for the X-machine memory.
  */
-void add_ob_agent(gridcell geo, int celltype)
+void add_ob_agent(celldim ob_dim, int ob_age, int ob_id, double ob_death_prob, int ob_mybmu)
 {
 	xmachine_memory_ob * current;
 
@@ -831,13 +973,16 @@ void add_ob_agent(gridcell geo, int celltype)
 	current_xmachine_ob_next_state = ob_start_state;
 	add_ob_agent_internal(current, current_xmachine_ob_next_state);
 
-	copy_gridcell(&geo, &current->geo);
-	current->celltype = celltype;
+	copy_celldim(&ob_dim, &current->ob_dim);
+	current->ob_age = ob_age;
+	current->ob_id = ob_id;
+	current->ob_death_prob = ob_death_prob;
+	current->ob_mybmu = ob_mybmu;
 }
 
-xmachine_memory_oc_state * init_oc_state()
+xmachine_memory_bmu_state * init_bmu_state()
 {
-	xmachine_memory_oc_state * current = (xmachine_memory_oc_state *)malloc(sizeof(xmachine_memory_oc_state));
+	xmachine_memory_bmu_state * current = (xmachine_memory_bmu_state *)malloc(sizeof(xmachine_memory_bmu_state));
 	CHECK_POINTER(current);
 
 	current->agents = NULL;
@@ -846,95 +991,112 @@ xmachine_memory_oc_state * init_oc_state()
 	return current;
 }
 
-xmachine_memory_oc * init_oc_agent()
+xmachine_memory_bmu * init_bmu_agent()
 {
-	xmachine_memory_oc * current = (xmachine_memory_oc *)malloc(sizeof(xmachine_memory_oc));
+	xmachine_memory_bmu * current = (xmachine_memory_bmu *)malloc(sizeof(xmachine_memory_bmu));
 	CHECK_POINTER(current);
 
-	current->id = ' ';
-	init_gridcell(&current->geo);
+	current->bmu_id = 0;
+	init_coordinate(&current->direction);
+	current->bmu_speed = 0.0;
+	init_coordinate(&current->bmu_position);
+	current->bmu_length = 0;
 
 	return current;
 }
 
-void free_oc_agent(xmachine_memory_oc_holder * tmp, xmachine_memory_oc_state * state)
+void free_bmu_agent(xmachine_memory_bmu_holder * tmp, xmachine_memory_bmu_state * state)
 {
 	if(tmp->prev == NULL) state->agents = tmp->next;
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	free_gridcell(&tmp->agent->geo);
+	free_coordinate(&tmp->agent->direction);
+	free_coordinate(&tmp->agent->bmu_position);
 	
 
 	free(tmp->agent);
 	free(tmp);
 }
 
-void unittest_init_oc_agent()
+void unittest_init_bmu_agent()
 {
-	current_xmachine_oc = (xmachine_memory_oc *)malloc(sizeof(xmachine_memory_oc));
+	current_xmachine_bmu = (xmachine_memory_bmu *)malloc(sizeof(xmachine_memory_bmu));
 	CHECK_POINTER(current);
 
-		current_xmachine_oc->id = ' ';
-		init_gridcell(&current_xmachine_oc->geo);
+		current_xmachine_bmu->bmu_id = 0;
+		init_coordinate(&current_xmachine_bmu->direction);
+		current_xmachine_bmu->bmu_speed = 0.0;
+		init_coordinate(&current_xmachine_bmu->bmu_position);
+		current_xmachine_bmu->bmu_length = 0;
 	
 }
 
-void unittest_free_oc_agent()
+void unittest_free_bmu_agent()
 {
-	free_gridcell(&current_xmachine_oc->geo);
+	free_coordinate(&current_xmachine_bmu->direction);
+	free_coordinate(&current_xmachine_bmu->bmu_position);
 	
-	free(current_xmachine_oc);
+	free(current_xmachine_bmu);
 }
 
-void free_oc_agents()
+void free_bmu_agents()
 {
-	current_xmachine_oc_holder = oc_start_state->agents;
-	while(current_xmachine_oc_holder)
+	current_xmachine_bmu_holder = bmu_end_state->agents;
+	while(current_xmachine_bmu_holder)
 	{
-		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		free_oc_agent(current_xmachine_oc_holder, oc_start_state);
-		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_end_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
-	oc_start_state->count = 0;
-	current_xmachine_oc_holder = oc_end_state->agents;
-	while(current_xmachine_oc_holder)
+	bmu_end_state->count = 0;
+	current_xmachine_bmu_holder = bmu_2_state->agents;
+	while(current_xmachine_bmu_holder)
 	{
-		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		free_oc_agent(current_xmachine_oc_holder, oc_end_state);
-		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_2_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
-	oc_end_state->count = 0;
-	current_xmachine_oc_holder = oc_signal_state->agents;
-	while(current_xmachine_oc_holder)
+	bmu_2_state->count = 0;
+	current_xmachine_bmu_holder = bmu_1_state->agents;
+	while(current_xmachine_bmu_holder)
 	{
-		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		free_oc_agent(current_xmachine_oc_holder, oc_signal_state);
-		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_1_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
-	oc_signal_state->count = 0;
+	bmu_1_state->count = 0;
+	current_xmachine_bmu_holder = bmu_start_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_start_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_start_state->count = 0;
 }
 
-void free_oc_states()
+void free_bmu_states()
 {
-	free(oc_start_state);
-	free(oc_end_state);
-	free(oc_signal_state);
+	free(bmu_end_state);
+	free(bmu_2_state);
+	free(bmu_1_state);
+	free(bmu_start_state);
 }
 
-void transition_oc_agent(xmachine_memory_oc_holder * tmp, xmachine_memory_oc_state * from_state, xmachine_memory_oc_state * to_state)
+void transition_bmu_agent(xmachine_memory_bmu_holder * tmp, xmachine_memory_bmu_state * from_state, xmachine_memory_bmu_state * to_state)
 {
 	if(tmp->prev == NULL) from_state->agents = tmp->next;
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	add_oc_agent_internal(tmp->agent, to_state);
+	add_bmu_agent_internal(tmp->agent, to_state);
 	free(tmp);
 }
 
-void add_oc_agent_internal(xmachine_memory_oc * agent, xmachine_memory_oc_state * state)
+void add_bmu_agent_internal(xmachine_memory_bmu * agent, xmachine_memory_bmu_state * state)
 {
-	xmachine_memory_oc_holder * current = (xmachine_memory_oc_holder *)malloc(sizeof(xmachine_memory_oc_holder));
+	xmachine_memory_bmu_holder * current = (xmachine_memory_bmu_holder *)malloc(sizeof(xmachine_memory_bmu_holder));
 	CHECK_POINTER(current);
 
 	current->next = state->agents;
@@ -947,27 +1109,33 @@ void add_oc_agent_internal(xmachine_memory_oc * agent, xmachine_memory_oc_state 
 
 }
 
-/** \fn void add_oc_agent(char id, gridcell * geo)
- * \brief Add oc X-machine to the current being used X-machine list.
- * \param id Variable for the X-machine memory.
- * \param geo Variable for the X-machine memory.
+/** \fn void add_bmu_agent(int bmu_id, coordinate * direction, double bmu_speed, coordinate * bmu_position, int bmu_length)
+ * \brief Add bmu X-machine to the current being used X-machine list.
+ * \param bmu_id Variable for the X-machine memory.
+ * \param direction Variable for the X-machine memory.
+ * \param bmu_speed Variable for the X-machine memory.
+ * \param bmu_position Variable for the X-machine memory.
+ * \param bmu_length Variable for the X-machine memory.
  */
-void add_oc_agent(char id, gridcell geo)
+void add_bmu_agent(int bmu_id, coordinate direction, double bmu_speed, coordinate bmu_position, int bmu_length)
 {
-	xmachine_memory_oc * current;
+	xmachine_memory_bmu * current;
 
-	current = init_oc_agent();
+	current = init_bmu_agent();
 	/* new line added to handle dynamic agent creation*/
-	current_xmachine_oc_next_state = oc_start_state;
-	add_oc_agent_internal(current, current_xmachine_oc_next_state);
+	current_xmachine_bmu_next_state = bmu_start_state;
+	add_bmu_agent_internal(current, current_xmachine_bmu_next_state);
 
-	current->id = id;
-	copy_gridcell(&geo, &current->geo);
+	current->bmu_id = bmu_id;
+	copy_coordinate(&direction, &current->direction);
+	current->bmu_speed = bmu_speed;
+	copy_coordinate(&bmu_position, &current->bmu_position);
+	current->bmu_length = bmu_length;
 }
 
-xmachine_memory_pointsource_state * init_pointsource_state()
+xmachine_memory_environment_state * init_environment_state()
 {
-	xmachine_memory_pointsource_state * current = (xmachine_memory_pointsource_state *)malloc(sizeof(xmachine_memory_pointsource_state));
+	xmachine_memory_environment_state * current = (xmachine_memory_environment_state *)malloc(sizeof(xmachine_memory_environment_state));
 	CHECK_POINTER(current);
 
 	current->agents = NULL;
@@ -976,106 +1144,82 @@ xmachine_memory_pointsource_state * init_pointsource_state()
 	return current;
 }
 
-xmachine_memory_pointsource * init_pointsource_agent()
+xmachine_memory_environment * init_environment_agent()
 {
-	xmachine_memory_pointsource * current = (xmachine_memory_pointsource *)malloc(sizeof(xmachine_memory_pointsource));
+	xmachine_memory_environment * current = (xmachine_memory_environment *)malloc(sizeof(xmachine_memory_environment));
 	CHECK_POINTER(current);
 
-	init_ps(&current->descrip);
-	current->active = 0;
-	current->source_start = 0;
+	current->rand_init = 0;
 
 	return current;
 }
 
-void free_pointsource_agent(xmachine_memory_pointsource_holder * tmp, xmachine_memory_pointsource_state * state)
+void free_environment_agent(xmachine_memory_environment_holder * tmp, xmachine_memory_environment_state * state)
 {
 	if(tmp->prev == NULL) state->agents = tmp->next;
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	free_ps(&tmp->agent->descrip);
 	
 
 	free(tmp->agent);
 	free(tmp);
 }
 
-void unittest_init_pointsource_agent()
+void unittest_init_environment_agent()
 {
-	current_xmachine_pointsource = (xmachine_memory_pointsource *)malloc(sizeof(xmachine_memory_pointsource));
+	current_xmachine_environment = (xmachine_memory_environment *)malloc(sizeof(xmachine_memory_environment));
 	CHECK_POINTER(current);
 
-		init_ps(&current_xmachine_pointsource->descrip);
-		current_xmachine_pointsource->active = 0;
-		current_xmachine_pointsource->source_start = 0;
+		current_xmachine_environment->rand_init = 0;
 	
 }
 
-void unittest_free_pointsource_agent()
+void unittest_free_environment_agent()
 {
-	free_ps(&current_xmachine_pointsource->descrip);
 	
-	free(current_xmachine_pointsource);
+	free(current_xmachine_environment);
 }
 
-void free_pointsource_agents()
+void free_environment_agents()
 {
-	current_xmachine_pointsource_holder = pointsource_increase_lifetime_state->agents;
-	while(current_xmachine_pointsource_holder)
+	current_xmachine_environment_holder = environment_end_state->agents;
+	while(current_xmachine_environment_holder)
 	{
-		temp_xmachine_pointsource_holder = current_xmachine_pointsource_holder->next;
-		free_pointsource_agent(current_xmachine_pointsource_holder, pointsource_increase_lifetime_state);
-		current_xmachine_pointsource_holder = temp_xmachine_pointsource_holder;
+		temp_xmachine_environment_holder = current_xmachine_environment_holder->next;
+		free_environment_agent(current_xmachine_environment_holder, environment_end_state);
+		current_xmachine_environment_holder = temp_xmachine_environment_holder;
 	}
-	pointsource_increase_lifetime_state->count = 0;
-	current_xmachine_pointsource_holder = pointsource_end_state->agents;
-	while(current_xmachine_pointsource_holder)
+	environment_end_state->count = 0;
+	current_xmachine_environment_holder = environment_start_state->agents;
+	while(current_xmachine_environment_holder)
 	{
-		temp_xmachine_pointsource_holder = current_xmachine_pointsource_holder->next;
-		free_pointsource_agent(current_xmachine_pointsource_holder, pointsource_end_state);
-		current_xmachine_pointsource_holder = temp_xmachine_pointsource_holder;
+		temp_xmachine_environment_holder = current_xmachine_environment_holder->next;
+		free_environment_agent(current_xmachine_environment_holder, environment_start_state);
+		current_xmachine_environment_holder = temp_xmachine_environment_holder;
 	}
-	pointsource_end_state->count = 0;
-	current_xmachine_pointsource_holder = pointsource_signal_state->agents;
-	while(current_xmachine_pointsource_holder)
-	{
-		temp_xmachine_pointsource_holder = current_xmachine_pointsource_holder->next;
-		free_pointsource_agent(current_xmachine_pointsource_holder, pointsource_signal_state);
-		current_xmachine_pointsource_holder = temp_xmachine_pointsource_holder;
-	}
-	pointsource_signal_state->count = 0;
-	current_xmachine_pointsource_holder = pointsource_start_state->agents;
-	while(current_xmachine_pointsource_holder)
-	{
-		temp_xmachine_pointsource_holder = current_xmachine_pointsource_holder->next;
-		free_pointsource_agent(current_xmachine_pointsource_holder, pointsource_start_state);
-		current_xmachine_pointsource_holder = temp_xmachine_pointsource_holder;
-	}
-	pointsource_start_state->count = 0;
+	environment_start_state->count = 0;
 }
 
-void free_pointsource_states()
+void free_environment_states()
 {
-	free(pointsource_increase_lifetime_state);
-	free(pointsource_end_state);
-	free(pointsource_signal_state);
-	free(pointsource_start_state);
+	free(environment_end_state);
+	free(environment_start_state);
 }
 
-void transition_pointsource_agent(xmachine_memory_pointsource_holder * tmp, xmachine_memory_pointsource_state * from_state, xmachine_memory_pointsource_state * to_state)
+void transition_environment_agent(xmachine_memory_environment_holder * tmp, xmachine_memory_environment_state * from_state, xmachine_memory_environment_state * to_state)
 {
 	if(tmp->prev == NULL) from_state->agents = tmp->next;
 	else tmp->prev->next = tmp->next;
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
-	add_pointsource_agent_internal(tmp->agent, to_state);
+	add_environment_agent_internal(tmp->agent, to_state);
 	free(tmp);
 }
 
-void add_pointsource_agent_internal(xmachine_memory_pointsource * agent, xmachine_memory_pointsource_state * state)
+void add_environment_agent_internal(xmachine_memory_environment * agent, xmachine_memory_environment_state * state)
 {
-	xmachine_memory_pointsource_holder * current = (xmachine_memory_pointsource_holder *)malloc(sizeof(xmachine_memory_pointsource_holder));
+	xmachine_memory_environment_holder * current = (xmachine_memory_environment_holder *)malloc(sizeof(xmachine_memory_environment_holder));
 	CHECK_POINTER(current);
 
 	current->next = state->agents;
@@ -1088,24 +1232,20 @@ void add_pointsource_agent_internal(xmachine_memory_pointsource * agent, xmachin
 
 }
 
-/** \fn void add_pointsource_agent(ps * descrip, int active, int source_start)
- * \brief Add pointsource X-machine to the current being used X-machine list.
- * \param descrip Variable for the X-machine memory.
- * \param active Variable for the X-machine memory.
- * \param source_start Variable for the X-machine memory.
+/** \fn void add_environment_agent(int rand_init)
+ * \brief Add environment X-machine to the current being used X-machine list.
+ * \param rand_init Variable for the X-machine memory.
  */
-void add_pointsource_agent(ps descrip, int active, int source_start)
+void add_environment_agent(int rand_init)
 {
-	xmachine_memory_pointsource * current;
+	xmachine_memory_environment * current;
 
-	current = init_pointsource_agent();
+	current = init_environment_agent();
 	/* new line added to handle dynamic agent creation*/
-	current_xmachine_pointsource_next_state = pointsource_start_state;
-	add_pointsource_agent_internal(current, current_xmachine_pointsource_next_state);
+	current_xmachine_environment_next_state = environment_start_state;
+	add_environment_agent_internal(current, current_xmachine_environment_next_state);
 
-	copy_ps(&descrip, &current->descrip);
-	current->active = active;
-	current->source_start = source_start;
+	current->rand_init = rand_init;
 }
 
 
@@ -1115,168 +1255,346 @@ void add_pointsource_agent(ps descrip, int active, int source_start)
  */
 void freexmachines()
 {
-	free_dcc_agents();
-	free_ob_agents();
 	free_oc_agents();
-	free_pointsource_agents();
+	free_ob_agents();
+	free_bmu_agents();
+	free_environment_agents();
 	
 }
 
 
-/** \fn void set_DiD_MFI(int DiD_MFI)
- * \brief Set DiD_MFI memory variable for current X-machine.
- * \param DiD_MFI New value for variable.
- */
-void set_DiD_MFI(int DiD_MFI)
-{
-	if(current_xmachine->xmachine_dcc) (*current_xmachine->xmachine_dcc).DiD_MFI = DiD_MFI;
-}
-
-/** \fn int get_DiD_MFI()
- * \brief Get DiD_MFI memory variable from current X-machine.
+/** \fn celldim get_oc_dim()
+ * \brief Get oc_dim memory variable from current X-machine.
  * \return Value for variable.
  */
-int get_DiD_MFI()
+celldim * get_oc_dim()
 {
-	if(current_xmachine->xmachine_dcc) return (*current_xmachine->xmachine_dcc).DiD_MFI;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return (int)0;
-}
-
-/** \fn gridcell get_geo()
- * \brief Get geo memory variable from current X-machine.
- * \return Value for variable.
- */
-gridcell * get_geo()
-{
-	if(current_xmachine->xmachine_dcc) return &(*current_xmachine->xmachine_dcc).geo;
-	if(current_xmachine->xmachine_ob) return &(*current_xmachine->xmachine_ob).geo;
-	if(current_xmachine->xmachine_oc) return &(*current_xmachine->xmachine_oc).geo;
+	if(current_xmachine->xmachine_oc) return &(*current_xmachine->xmachine_oc).oc_dim;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
     return NULL;
 }
 
-/** \fn void set_dormant(int dormant)
- * \brief Set dormant memory variable for current X-machine.
- * \param dormant New value for variable.
+/** \fn void set_oc_age(int oc_age)
+ * \brief Set oc_age memory variable for current X-machine.
+ * \param oc_age New value for variable.
  */
-void set_dormant(int dormant)
+void set_oc_age(int oc_age)
 {
-	if(current_xmachine->xmachine_dcc) (*current_xmachine->xmachine_dcc).dormant = dormant;
+	if(current_xmachine->xmachine_oc) (*current_xmachine->xmachine_oc).oc_age = oc_age;
 }
 
-/** \fn int get_dormant()
- * \brief Get dormant memory variable from current X-machine.
+/** \fn int get_oc_age()
+ * \brief Get oc_age memory variable from current X-machine.
  * \return Value for variable.
  */
-int get_dormant()
+int get_oc_age()
 {
-	if(current_xmachine->xmachine_dcc) return (*current_xmachine->xmachine_dcc).dormant;
+	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).oc_age;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
     return (int)0;
 }
 
-/** \fn void set_celltype(int celltype)
- * \brief Set celltype memory variable for current X-machine.
- * \param celltype New value for variable.
+/** \fn void set_oc_nuclei(int oc_nuclei)
+ * \brief Set oc_nuclei memory variable for current X-machine.
+ * \param oc_nuclei New value for variable.
  */
-void set_celltype(int celltype)
+void set_oc_nuclei(int oc_nuclei)
 {
-	if(current_xmachine->xmachine_ob) (*current_xmachine->xmachine_ob).celltype = celltype;
+	if(current_xmachine->xmachine_oc) (*current_xmachine->xmachine_oc).oc_nuclei = oc_nuclei;
 }
 
-/** \fn int get_celltype()
- * \brief Get celltype memory variable from current X-machine.
+/** \fn int get_oc_nuclei()
+ * \brief Get oc_nuclei memory variable from current X-machine.
  * \return Value for variable.
  */
-int get_celltype()
+int get_oc_nuclei()
 {
-	if(current_xmachine->xmachine_ob) return (*current_xmachine->xmachine_ob).celltype;
+	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).oc_nuclei;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
     return (int)0;
 }
 
-/** \fn void set_id(char id)
- * \brief Set id memory variable for current X-machine.
- * \param id New value for variable.
+/** \fn void set_oc_id(int oc_id)
+ * \brief Set oc_id memory variable for current X-machine.
+ * \param oc_id New value for variable.
  */
-void set_id(char id)
+void set_oc_id(int oc_id)
 {
-	if(current_xmachine->xmachine_oc) (*current_xmachine->xmachine_oc).id = id;
+	if(current_xmachine->xmachine_oc) (*current_xmachine->xmachine_oc).oc_id = oc_id;
 }
 
-/** \fn char get_id()
- * \brief Get id memory variable from current X-machine.
+/** \fn int get_oc_id()
+ * \brief Get oc_id memory variable from current X-machine.
  * \return Value for variable.
  */
-char get_id()
+int get_oc_id()
 {
-	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).id;
+	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).oc_id;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
-    return (char)0;
+    return (int)0;
 }
 
-/** \fn ps get_descrip()
- * \brief Get descrip memory variable from current X-machine.
+/** \fn void set_oc_death_prob(double oc_death_prob)
+ * \brief Set oc_death_prob memory variable for current X-machine.
+ * \param oc_death_prob New value for variable.
+ */
+void set_oc_death_prob(double oc_death_prob)
+{
+	if(current_xmachine->xmachine_oc) (*current_xmachine->xmachine_oc).oc_death_prob = oc_death_prob;
+}
+
+/** \fn double get_oc_death_prob()
+ * \brief Get oc_death_prob memory variable from current X-machine.
  * \return Value for variable.
  */
-ps * get_descrip()
+double get_oc_death_prob()
 {
-	if(current_xmachine->xmachine_pointsource) return &(*current_xmachine->xmachine_pointsource).descrip;
+	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).oc_death_prob;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
+}
+
+/** \fn void set_oc_mybmu(int oc_mybmu)
+ * \brief Set oc_mybmu memory variable for current X-machine.
+ * \param oc_mybmu New value for variable.
+ */
+void set_oc_mybmu(int oc_mybmu)
+{
+	if(current_xmachine->xmachine_oc) (*current_xmachine->xmachine_oc).oc_mybmu = oc_mybmu;
+}
+
+/** \fn int get_oc_mybmu()
+ * \brief Get oc_mybmu memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_oc_mybmu()
+{
+	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).oc_mybmu;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn celldim get_ob_dim()
+ * \brief Get ob_dim memory variable from current X-machine.
+ * \return Value for variable.
+ */
+celldim * get_ob_dim()
+{
+	if(current_xmachine->xmachine_ob) return &(*current_xmachine->xmachine_ob).ob_dim;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
     return NULL;
 }
 
-/** \fn void set_active(int active)
- * \brief Set active memory variable for current X-machine.
- * \param active New value for variable.
+/** \fn void set_ob_age(int ob_age)
+ * \brief Set ob_age memory variable for current X-machine.
+ * \param ob_age New value for variable.
  */
-void set_active(int active)
+void set_ob_age(int ob_age)
 {
-	if(current_xmachine->xmachine_pointsource) (*current_xmachine->xmachine_pointsource).active = active;
+	if(current_xmachine->xmachine_ob) (*current_xmachine->xmachine_ob).ob_age = ob_age;
 }
 
-/** \fn int get_active()
- * \brief Get active memory variable from current X-machine.
+/** \fn int get_ob_age()
+ * \brief Get ob_age memory variable from current X-machine.
  * \return Value for variable.
  */
-int get_active()
+int get_ob_age()
 {
-	if(current_xmachine->xmachine_pointsource) return (*current_xmachine->xmachine_pointsource).active;
+	if(current_xmachine->xmachine_ob) return (*current_xmachine->xmachine_ob).ob_age;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
     return (int)0;
 }
 
-/** \fn void set_source_start(int source_start)
- * \brief Set source_start memory variable for current X-machine.
- * \param source_start New value for variable.
+/** \fn void set_ob_id(int ob_id)
+ * \brief Set ob_id memory variable for current X-machine.
+ * \param ob_id New value for variable.
  */
-void set_source_start(int source_start)
+void set_ob_id(int ob_id)
 {
-	if(current_xmachine->xmachine_pointsource) (*current_xmachine->xmachine_pointsource).source_start = source_start;
+	if(current_xmachine->xmachine_ob) (*current_xmachine->xmachine_ob).ob_id = ob_id;
 }
 
-/** \fn int get_source_start()
- * \brief Get source_start memory variable from current X-machine.
+/** \fn int get_ob_id()
+ * \brief Get ob_id memory variable from current X-machine.
  * \return Value for variable.
  */
-int get_source_start()
+int get_ob_id()
 {
-	if(current_xmachine->xmachine_pointsource) return (*current_xmachine->xmachine_pointsource).source_start;
+	if(current_xmachine->xmachine_ob) return (*current_xmachine->xmachine_ob).ob_id;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_ob_death_prob(double ob_death_prob)
+ * \brief Set ob_death_prob memory variable for current X-machine.
+ * \param ob_death_prob New value for variable.
+ */
+void set_ob_death_prob(double ob_death_prob)
+{
+	if(current_xmachine->xmachine_ob) (*current_xmachine->xmachine_ob).ob_death_prob = ob_death_prob;
+}
+
+/** \fn double get_ob_death_prob()
+ * \brief Get ob_death_prob memory variable from current X-machine.
+ * \return Value for variable.
+ */
+double get_ob_death_prob()
+{
+	if(current_xmachine->xmachine_ob) return (*current_xmachine->xmachine_ob).ob_death_prob;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
+}
+
+/** \fn void set_ob_mybmu(int ob_mybmu)
+ * \brief Set ob_mybmu memory variable for current X-machine.
+ * \param ob_mybmu New value for variable.
+ */
+void set_ob_mybmu(int ob_mybmu)
+{
+	if(current_xmachine->xmachine_ob) (*current_xmachine->xmachine_ob).ob_mybmu = ob_mybmu;
+}
+
+/** \fn int get_ob_mybmu()
+ * \brief Get ob_mybmu memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_ob_mybmu()
+{
+	if(current_xmachine->xmachine_ob) return (*current_xmachine->xmachine_ob).ob_mybmu;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_bmu_id(int bmu_id)
+ * \brief Set bmu_id memory variable for current X-machine.
+ * \param bmu_id New value for variable.
+ */
+void set_bmu_id(int bmu_id)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_id = bmu_id;
+}
+
+/** \fn int get_bmu_id()
+ * \brief Get bmu_id memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_bmu_id()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_id;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn coordinate get_direction()
+ * \brief Get direction memory variable from current X-machine.
+ * \return Value for variable.
+ */
+coordinate * get_direction()
+{
+	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).direction;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return NULL;
+}
+
+/** \fn void set_bmu_speed(double bmu_speed)
+ * \brief Set bmu_speed memory variable for current X-machine.
+ * \param bmu_speed New value for variable.
+ */
+void set_bmu_speed(double bmu_speed)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_speed = bmu_speed;
+}
+
+/** \fn double get_bmu_speed()
+ * \brief Get bmu_speed memory variable from current X-machine.
+ * \return Value for variable.
+ */
+double get_bmu_speed()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_speed;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
+}
+
+/** \fn coordinate get_bmu_position()
+ * \brief Get bmu_position memory variable from current X-machine.
+ * \return Value for variable.
+ */
+coordinate * get_bmu_position()
+{
+	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).bmu_position;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return NULL;
+}
+
+/** \fn void set_bmu_length(int bmu_length)
+ * \brief Set bmu_length memory variable for current X-machine.
+ * \param bmu_length New value for variable.
+ */
+void set_bmu_length(int bmu_length)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_length = bmu_length;
+}
+
+/** \fn int get_bmu_length()
+ * \brief Get bmu_length memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_bmu_length()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_length;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_rand_init(int rand_init)
+ * \brief Set rand_init memory variable for current X-machine.
+ * \param rand_init New value for variable.
+ */
+void set_rand_init(int rand_init)
+{
+	if(current_xmachine->xmachine_environment) (*current_xmachine->xmachine_environment).rand_init = rand_init;
+}
+
+/** \fn int get_rand_init()
+ * \brief Get rand_init memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_rand_init()
+{
+	if(current_xmachine->xmachine_environment) return (*current_xmachine->xmachine_environment).rand_init;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
@@ -1291,10 +1609,10 @@ int get_source_start()
 double agent_get_range()
 {
     double value = 0.0;
-    /*if (current_xmachine->xmachine_dcc) value = current_xmachine->xmachine_dcc->;*/
-    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->;*/
     /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->;*/
-    /*if (current_xmachine->xmachine_pointsource) value = current_xmachine->xmachine_pointsource->;*/
+    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->;*/
+    /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->;*/
+    /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->;*/
 
     return value;
 }
@@ -1306,10 +1624,10 @@ double agent_get_range()
 int agent_get_id()
 {
     int value = 0;
-    /*if (current_xmachine->xmachine_dcc) value = current_xmachine->xmachine_dcc->;*/
+    /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->;*/
     /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->;*/
-    /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->id;*/
-    /*if (current_xmachine->xmachine_pointsource) value = current_xmachine->xmachine_pointsource->;*/
+    /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->;*/
+    /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->;*/
 
     return value;
 }
@@ -1321,10 +1639,10 @@ int agent_get_id()
 double agent_get_x()
 {
     double value = 0.0;
-    /*if (current_xmachine->xmachine_dcc) value = current_xmachine->xmachine_dcc->0.0;*/
-    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
     /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->0.0;*/
-    /*if (current_xmachine->xmachine_pointsource) value = current_xmachine->xmachine_pointsource->0.0;*/
+    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
+    /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->0.0;*/
+    /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->0.0;*/
 
     return value;
 }
@@ -1335,10 +1653,10 @@ double agent_get_x()
 double agent_get_y()
 {
     double value = 0.0;
-    /*if (current_xmachine->xmachine_dcc) value = current_xmachine->xmachine_dcc->0.0;*/
-    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
     /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->0.0;*/
-    /*if (current_xmachine->xmachine_pointsource) value = current_xmachine->xmachine_pointsource->0.0;*/
+    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
+    /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->0.0;*/
+    /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->0.0;*/
 
     return value;
 }
@@ -1391,8 +1709,9 @@ void add_node(int node_id, double minx, double maxx, double miny, double maxy, d
 	current->agents_in_halo = 0;
 	current->agent_total = 0;
 	current->agents = NULL;
-	current->pointsource_messages = NULL;
-	current->position_messages = NULL;
+	current->oc_position_messages = NULL;
+	current->ob_position_messages = NULL;
+	current->fusion_messages = NULL;
 
 
 	current->partition_data[0] = minx;
@@ -1439,10 +1758,10 @@ void clean_up(int code)
 	/* Free output list */
 	free_FLAME_outputs(&FLAME_outputs);
 	/* Free agent states */
-	free_dcc_states();
-	free_ob_states();
 	free_oc_states();
-	free_pointsource_states();
+	free_ob_states();
+	free_bmu_states();
+	free_environment_states();
 
 
 	/* Free index maps */
@@ -1450,17 +1769,17 @@ void clean_up(int code)
 
 	/* Free message boards */
 
-	rc = MB_Delete(&b_pointsource);
+	rc = MB_Delete(&b_oc_position);
 	#ifdef ERRCHECK
     if (rc != MB_SUCCESS)
     {
-       fprintf(stderr, "ERROR: Could not delete 'pointsource' board\n");
+       fprintf(stderr, "ERROR: Could not delete 'oc_position' board\n");
        switch(rc) {
            case MB_ERR_INVALID:
-               fprintf(stderr, "\t reason: 'pointsource' board has not been created?\n");
+               fprintf(stderr, "\t reason: 'oc_position' board has not been created?\n");
                break;
            case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'pointsource' board is locked\n");
+               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
                break;
            case MB_ERR_INTERNAL:
                fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -1475,17 +1794,42 @@ void clean_up(int code)
     }
     #endif
 
-	rc = MB_Delete(&b_position);
+	rc = MB_Delete(&b_ob_position);
 	#ifdef ERRCHECK
     if (rc != MB_SUCCESS)
     {
-       fprintf(stderr, "ERROR: Could not delete 'position' board\n");
+       fprintf(stderr, "ERROR: Could not delete 'ob_position' board\n");
        switch(rc) {
            case MB_ERR_INVALID:
-               fprintf(stderr, "\t reason: 'position' board has not been created?\n");
+               fprintf(stderr, "\t reason: 'ob_position' board has not been created?\n");
                break;
            case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'position' board is locked\n");
+               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+
+	       
+       	   exit(rc);
+    }
+    #endif
+
+	rc = MB_Delete(&b_fusion);
+	#ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not delete 'fusion' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'fusion' board has not been created?\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
                break;
            case MB_ERR_INTERNAL:
                fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -1563,10 +1907,10 @@ void propagate_agents()
 	before_xmachine = NULL;
 	while(current_xmachine)
 	{
-		if(current_xmachine->xmachine_dcc != NULL)
+		if(current_xmachine->xmachine_oc != NULL)
 		{
-			x_xmachine = current_xmachine->xmachine_dcc->0.0;
-			y_xmachine = current_xmachine->xmachine_dcc->0.0;
+			x_xmachine = current_xmachine->xmachine_oc->0.0;
+			y_xmachine = current_xmachine->xmachine_oc->0.0;
 			z_xmachine = 0.0;
 		}
 		else if(current_xmachine->xmachine_ob != NULL)
@@ -1575,16 +1919,16 @@ void propagate_agents()
 			y_xmachine = current_xmachine->xmachine_ob->0.0;
 			z_xmachine = 0.0;
 		}
-		else if(current_xmachine->xmachine_oc != NULL)
+		else if(current_xmachine->xmachine_bmu != NULL)
 		{
-			x_xmachine = current_xmachine->xmachine_oc->0.0;
-			y_xmachine = current_xmachine->xmachine_oc->0.0;
+			x_xmachine = current_xmachine->xmachine_bmu->0.0;
+			y_xmachine = current_xmachine->xmachine_bmu->0.0;
 			z_xmachine = 0.0;
 		}
-		else if(current_xmachine->xmachine_pointsource != NULL)
+		else if(current_xmachine->xmachine_environment != NULL)
 		{
-			x_xmachine = current_xmachine->xmachine_pointsource->0.0;
-			y_xmachine = current_xmachine->xmachine_pointsource->0.0;
+			x_xmachine = current_xmachine->xmachine_environment->0.0;
+			y_xmachine = current_xmachine->xmachine_environment->0.0;
 			z_xmachine = 0.0;
 		}
 
@@ -2182,191 +2526,184 @@ void print_char_array(char_array * array)
 	printf("%s", (*array).array);
 }
 
-/* Functions for the gridcell datatype */
-/** \fn gridcell_array * init_gridcell_array()
- * \brief Allocate memory for a dynamic gridcell array.
- * \return gridcell_array Pointer to the new dynamic gridcell array.
+/* Functions for the coordinate datatype */
+/** \fn coordinate_array * init_coordinate_array()
+ * \brief Allocate memory for a dynamic coordinate array.
+ * \return coordinate_array Pointer to the new dynamic coordinate array.
  */
-void init_gridcell_array(gridcell_array * array)
+void init_coordinate_array(coordinate_array * array)
 {
 	(*array).size = 0;
 	(*array).total_size = ARRAY_BLOCK_SIZE;
-	(*array).array = (gridcell *)malloc(ARRAY_BLOCK_SIZE * sizeof(gridcell));
+	(*array).array = (coordinate *)malloc(ARRAY_BLOCK_SIZE * sizeof(coordinate));
 	CHECK_POINTER((*array).array);
 }
 
-/** \fn void reset_gridcell_array(gridcell_array* array)
-* \brief Reset the gridcell array to hold nothing.
-* \param array Pointer to the dynamic gridcell array.
+/** \fn void reset_coordinate_array(coordinate_array* array)
+* \brief Reset the coordinate array to hold nothing.
+* \param array Pointer to the dynamic coordinate array.
 */
-void reset_gridcell_array(gridcell_array * array)
+void reset_coordinate_array(coordinate_array * array)
 {
 	(*array).size = 0;
 }
 
-/** \fn void free_gridcell_array(gridcell_array * array)
-* \brief Free the memory of a dynamic gridcell array.
-* \param array Pointer to the dynamic gridcell array.
+/** \fn void free_coordinate_array(coordinate_array * array)
+* \brief Free the memory of a dynamic coordinate array.
+* \param array Pointer to the dynamic coordinate array.
 */
-void free_gridcell_array(gridcell_array * array)
+void free_coordinate_array(coordinate_array * array)
 {
 	int i;
 	
 	for(i = 0; i < array->size; i++)
 	{
-		free_gridcell(&(*array).array[i]);
+		free_coordinate(&(*array).array[i]);
 	}
 	
 	free((*array).array);
 }
 
-void copy_gridcell_array(gridcell_array * from, gridcell_array * to)
+void copy_coordinate_array(coordinate_array * from, coordinate_array * to)
 {
 	int i;
 
-	//to = init_gridcell_array();
+	//to = init_coordinate_array();
 
 	for(i = 0; i < (*from).size; i++)
 	{
-		add_gridcell(to, (*from).array[i].xcoord, (*from).array[i].ycoord, (*from).array[i].length);
+		add_coordinate(to, (*from).array[i].x, (*from).array[i].y);
 	}
 }
 
-/** \fn void add_gridcell(gridcell_array * array, int xcoord, int ycoord, int length)
-* \brief Add an gridcell to the dynamic gridcell array.
-* \param array Pointer to the dynamic gridcell array.
-* \param new_int The gridcell to add
+/** \fn void add_coordinate(coordinate_array * array, int x, int y)
+* \brief Add an coordinate to the dynamic coordinate array.
+* \param array Pointer to the dynamic coordinate array.
+* \param new_int The coordinate to add
 */
-void add_gridcell(gridcell_array * array,  int xcoord,  int ycoord,  int length)
+void add_coordinate(coordinate_array * array,  int x,  int y)
 {
 	if((*array).size == (*array).total_size)
 	{
 		(*array).total_size = (int)((*array).total_size * ARRAY_GROWTH_RATE);
-		(*array).array = (gridcell *)realloc((*array).array, ((*array).total_size * sizeof(gridcell)));
+		(*array).array = (coordinate *)realloc((*array).array, ((*array).total_size * sizeof(coordinate)));
 	}
-	init_gridcell(&(*array).array[(*array).size]);
-	(*array).array[(*array).size].xcoord = xcoord;
-	(*array).array[(*array).size].ycoord = ycoord;
-	(*array).array[(*array).size].length = length;
+	init_coordinate(&(*array).array[(*array).size]);
+	(*array).array[(*array).size].x = x;
+	(*array).array[(*array).size].y = y;
 
 	(*array).size++;
 }
 
-/** \fn void remove_gridcell(gridcell_array * array, int index)
- * \brief Remove an gridcell from a dynamic gridcell array.
- * \param array Pointer to the dynamic gridcell array.
- * \param index The index of the gridcell to remove.
+/** \fn void remove_coordinate(coordinate_array * array, int index)
+ * \brief Remove an coordinate from a dynamic coordinate array.
+ * \param array Pointer to the dynamic coordinate array.
+ * \param index The index of the coordinate to remove.
  */
-void remove_gridcell(gridcell_array * array, int index)
+void remove_coordinate(coordinate_array * array, int index)
 {
 	int i;
 
 	/* Free element at index index */
-	free_gridcell(&(*array).array[index]);
+	free_coordinate(&(*array).array[index]);
 
 	/* Copy all elements up by one */
 	if(index < (*array).size)
 	{
 		for(i = index; i < (*array).size - 1; i++)
 		{
-			copy_gridcell(&(*array).array[i+1], &(*array).array[i]);
+			copy_coordinate(&(*array).array[i+1], &(*array).array[i]);
 		}
 		(*array).size--;
 	}
 }
-/* Functions for the ps datatype */
-/** \fn ps_array * init_ps_array()
- * \brief Allocate memory for a dynamic ps array.
- * \return ps_array Pointer to the new dynamic ps array.
+/* Functions for the celldim datatype */
+/** \fn celldim_array * init_celldim_array()
+ * \brief Allocate memory for a dynamic celldim array.
+ * \return celldim_array Pointer to the new dynamic celldim array.
  */
-void init_ps_array(ps_array * array)
+void init_celldim_array(celldim_array * array)
 {
 	(*array).size = 0;
 	(*array).total_size = ARRAY_BLOCK_SIZE;
-	(*array).array = (ps *)malloc(ARRAY_BLOCK_SIZE * sizeof(ps));
+	(*array).array = (celldim *)malloc(ARRAY_BLOCK_SIZE * sizeof(celldim));
 	CHECK_POINTER((*array).array);
 }
 
-/** \fn void reset_ps_array(ps_array* array)
-* \brief Reset the ps array to hold nothing.
-* \param array Pointer to the dynamic ps array.
+/** \fn void reset_celldim_array(celldim_array* array)
+* \brief Reset the celldim array to hold nothing.
+* \param array Pointer to the dynamic celldim array.
 */
-void reset_ps_array(ps_array * array)
+void reset_celldim_array(celldim_array * array)
 {
 	(*array).size = 0;
 }
 
-/** \fn void free_ps_array(ps_array * array)
-* \brief Free the memory of a dynamic ps array.
-* \param array Pointer to the dynamic ps array.
+/** \fn void free_celldim_array(celldim_array * array)
+* \brief Free the memory of a dynamic celldim array.
+* \param array Pointer to the dynamic celldim array.
 */
-void free_ps_array(ps_array * array)
+void free_celldim_array(celldim_array * array)
 {
 	int i;
 	
 	for(i = 0; i < array->size; i++)
 	{
-		free_ps(&(*array).array[i]);
+		free_celldim(&(*array).array[i]);
 	}
 	
 	free((*array).array);
 }
 
-void copy_ps_array(ps_array * from, ps_array * to)
+void copy_celldim_array(celldim_array * from, celldim_array * to)
 {
 	int i;
 
-	//to = init_ps_array();
+	//to = init_celldim_array();
 
 	for(i = 0; i < (*from).size; i++)
 	{
-		add_ps(to, (*from).array[i].locationx, (*from).array[i].locationy, (*from).array[i].base_conc, (*from).array[i].max_conc, (*from).array[i].current_conc, (*from).array[i].decay_exp, (*from).array[i].gradient_power, (*from).array[i].lifetime);
+		add_celldim(to, &(*from).array[i].xy, (*from).array[i].diameter);
 	}
 }
 
-/** \fn void add_ps(ps_array * array, int locationx, int locationy, double base_conc, double max_conc, double current_conc, double decay_exp, int gradient_power, int lifetime)
-* \brief Add an ps to the dynamic ps array.
-* \param array Pointer to the dynamic ps array.
-* \param new_int The ps to add
+/** \fn void add_celldim(celldim_array * array, coordinate * xy, int diameter)
+* \brief Add an celldim to the dynamic celldim array.
+* \param array Pointer to the dynamic celldim array.
+* \param new_int The celldim to add
 */
-void add_ps(ps_array * array,  int locationx,  int locationy,  double base_conc,  double max_conc,  double current_conc,  double decay_exp,  int gradient_power,  int lifetime)
+void add_celldim(celldim_array * array, /*@out@*/ coordinate * xy,  int diameter)
 {
 	if((*array).size == (*array).total_size)
 	{
 		(*array).total_size = (int)((*array).total_size * ARRAY_GROWTH_RATE);
-		(*array).array = (ps *)realloc((*array).array, ((*array).total_size * sizeof(ps)));
+		(*array).array = (celldim *)realloc((*array).array, ((*array).total_size * sizeof(celldim)));
 	}
-	init_ps(&(*array).array[(*array).size]);
-	(*array).array[(*array).size].locationx = locationx;
-	(*array).array[(*array).size].locationy = locationy;
-	(*array).array[(*array).size].base_conc = base_conc;
-	(*array).array[(*array).size].max_conc = max_conc;
-	(*array).array[(*array).size].current_conc = current_conc;
-	(*array).array[(*array).size].decay_exp = decay_exp;
-	(*array).array[(*array).size].gradient_power = gradient_power;
-	(*array).array[(*array).size].lifetime = lifetime;
+	init_celldim(&(*array).array[(*array).size]);
+	copy_coordinate(xy, &(*array).array[(*array).size].xy);
+	(*array).array[(*array).size].diameter = diameter;
 
 	(*array).size++;
 }
 
-/** \fn void remove_ps(ps_array * array, int index)
- * \brief Remove an ps from a dynamic ps array.
- * \param array Pointer to the dynamic ps array.
- * \param index The index of the ps to remove.
+/** \fn void remove_celldim(celldim_array * array, int index)
+ * \brief Remove an celldim from a dynamic celldim array.
+ * \param array Pointer to the dynamic celldim array.
+ * \param index The index of the celldim to remove.
  */
-void remove_ps(ps_array * array, int index)
+void remove_celldim(celldim_array * array, int index)
 {
 	int i;
 
 	/* Free element at index index */
-	free_ps(&(*array).array[index]);
+	free_celldim(&(*array).array[index]);
 
 	/* Copy all elements up by one */
 	if(index < (*array).size)
 	{
 		for(i = index; i < (*array).size - 1; i++)
 		{
-			copy_ps(&(*array).array[i+1], &(*array).array[i]);
+			copy_celldim(&(*array).array[i+1], &(*array).array[i]);
 		}
 		(*array).size--;
 	}
@@ -2384,13 +2721,45 @@ int FLAME_get_environment_variable_worldsize()
 {
 	return FLAME_environment_variable_worldsize;
 }
-int FLAME_get_environment_variable_unitum()
+int FLAME_get_environment_variable_oc_lifespan()
 {
-	return FLAME_environment_variable_unitum;
+	return FLAME_environment_variable_oc_lifespan;
 }
-int FLAME_get_environment_variable_OC_speed()
+int FLAME_get_environment_variable_ob_lifespan()
 {
-	return FLAME_environment_variable_OC_speed;
+	return FLAME_environment_variable_ob_lifespan;
+}
+int FLAME_get_environment_variable_bmu_lifespan()
+{
+	return FLAME_environment_variable_bmu_lifespan;
+}
+double FLAME_get_environment_variable_oc_creation_freq()
+{
+	return FLAME_environment_variable_oc_creation_freq;
+}
+double FLAME_get_environment_variable_ob_creation_freq()
+{
+	return FLAME_environment_variable_ob_creation_freq;
+}
+int FLAME_get_environment_variable_oc_diameter()
+{
+	return FLAME_environment_variable_oc_diameter;
+}
+int FLAME_get_environment_variable_ob_diameter()
+{
+	return FLAME_environment_variable_ob_diameter;
+}
+int FLAME_get_environment_variable_oc_type()
+{
+	return FLAME_environment_variable_oc_type;
+}
+int FLAME_get_environment_variable_ob_type()
+{
+	return FLAME_environment_variable_ob_type;
+}
+int FLAME_get_environment_variable_bmu_type()
+{
+	return FLAME_environment_variable_bmu_type;
 }
 
 

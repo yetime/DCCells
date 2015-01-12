@@ -11,37 +11,25 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "stuff.h"
 
-double rnd();
+int initialize(){
+	printf("ENV INIT\n");
+	srand(time(NULL));
 
-int send_random_number(){
-	
-	if(RAND_INIT==0){
-		srand(time(NULL));
-		RAND_INIT=1;
-	}
-	
-	START_RND_NUMBER_REQ_MESSAGE_LOOP
-		add_rnd_number_message(rnd_number_req_message->recipient_id, rnd());
-	FINISH_RND_NUMBER_REQ_MESSAGE_LOOP
+	coordinate pos;
+	init_coordinate(&pos);
+	pos.x=0;
+	pos.y=0;
+	celldim dim;
+	init_celldim(&dim);
+	dim.xy=pos;
+	dim.diameter=0;
+	add_oc_position_message(dim,-1,-1);
+	add_ob_position_message(dim, -1);
+	RAND_INIT=1;
+	printf("ENV INIT EXIT\n");
 	return 0;
 }
 
-int send_new_oc_id(){
-	START_OC_ID_REQ_MESSAGE_LOOP
-		add_new_oc_id_message(oc_id_req_message->recipient_id, OC_ID_COUNTER++);
-	FINISH_OC_ID_REQ_MESSAGE_LOOP
-	return 0;
-}
 
-int send_new_ob_id(){
-	START_OB_ID_REQ_MESSAGE_LOOP
-			add_new_ob_id_message(ob_id_req_message->recipient_id, OB_ID_COUNTER++);
-	FINISH_OB_ID_REQ_MESSAGE_LOOP
-	return 0;
-}
-
-double rnd()
-{
-    return (double) rand()/(double)RAND_MAX;
-}

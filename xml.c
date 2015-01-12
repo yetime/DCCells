@@ -289,10 +289,10 @@ int read_char_dynamic_array(char * buffer, int /*@unused@*/ buffer_size, int * j
 }
 
 
-/** \fn void read_gridcell(char * buffer, int * j, gridcell * temp_datatype)
- * \brief Reads gridcell datatype.
+/** \fn void read_coordinate(char * buffer, int * j, coordinate * temp_datatype)
+ * \brief Reads coordinate datatype.
  */
-int read_gridcell(char * buffer, int /*@unused@*/ buffer_size, int * j, gridcell * temp_datatype)
+int read_coordinate(char * buffer, int /*@unused@*/ buffer_size, int * j, coordinate * temp_datatype)
 {
 	int array_k;
 	char arraydata[100000];
@@ -306,7 +306,7 @@ int read_gridcell(char * buffer, int /*@unused@*/ buffer_size, int * j, gridcell
 	}
 	(*j)++;
 
-	(*temp_datatype).xcoord = 0;
+	(*temp_datatype).x = 0;
 	array_k = 0;
 	while(buffer[*j] != ',')
 	{
@@ -316,21 +316,9 @@ int read_gridcell(char * buffer, int /*@unused@*/ buffer_size, int * j, gridcell
 		(*j)++;
 	}
 	arraydata[array_k] = '\0';
-	(*temp_datatype).xcoord = atoi(arraydata);
+	(*temp_datatype).x = atoi(arraydata);
 	(*j)++;
-	(*temp_datatype).ycoord = 0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).ycoord = atoi(arraydata);
-	(*j)++;
-	(*temp_datatype).length = 0;
+	(*temp_datatype).y = 0;
 	array_k = 0;
 	while(buffer[*j] != '}')
 	{
@@ -340,17 +328,16 @@ int read_gridcell(char * buffer, int /*@unused@*/ buffer_size, int * j, gridcell
 		(*j)++;
 	}
 	arraydata[array_k] = '\0';
-	(*temp_datatype).length = atoi(arraydata);
+	(*temp_datatype).y = atoi(arraydata);
 	(*j)++;
 
 	return 0;
 }
 
-int read_gridcell_dynamic_array(char * buffer, int buffer_size, int * j, gridcell_array * temp_datatype_array)
+int read_coordinate_dynamic_array(char * buffer, int buffer_size, int * j, coordinate_array * temp_datatype_array)
 {
 	int arraycount = 0;
 	int rc;
-	
 	
 	
 	
@@ -367,9 +354,9 @@ int read_gridcell_dynamic_array(char * buffer, int buffer_size, int * j, gridcel
 	{
 		if(buffer[(*j)] == '{')
 		{
-			add_gridcell(temp_datatype_array, 0, 0, 0);
-			rc = read_gridcell(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
-			if(rc != 0) { printf("Error: reading variable 'gridcell' of type '\n"); return -1; }
+			add_coordinate(temp_datatype_array, 0, 0);
+			rc = read_coordinate(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
+			if(rc != 0) { printf("Error: reading variable 'coordinate' of type '\n"); return -1; }
 			arraycount++;
 			(*j)++;
 		}
@@ -381,7 +368,7 @@ int read_gridcell_dynamic_array(char * buffer, int buffer_size, int * j, gridcel
 	return 0;
 }
 
-int read_gridcell_static_array(char * buffer, int buffer_size, int * j, gridcell * temp_datatype_array, int size)
+int read_coordinate_static_array(char * buffer, int buffer_size, int * j, coordinate * temp_datatype_array, int size)
 {
 	int arraycount;
 	int rc;
@@ -396,8 +383,8 @@ int read_gridcell_static_array(char * buffer, int buffer_size, int * j, gridcell
 
 	for(arraycount = 0; arraycount < size; arraycount++)
 	{
-		rc = read_gridcell(buffer, buffer_size, j, &temp_datatype_array[arraycount]);
-		if(rc != 0) { printf("Error: reading variable 'gridcell' of type '\n"); return -1; }
+		rc = read_coordinate(buffer, buffer_size, j, &temp_datatype_array[arraycount]);
+		if(rc != 0) { printf("Error: reading variable 'coordinate' of type '\n"); return -1; }
 		if(arraycount < (size-1)) while(buffer[(*j)] != '{') { (*j)++; }
 	}
 
@@ -405,14 +392,14 @@ int read_gridcell_static_array(char * buffer, int buffer_size, int * j, gridcell
 	return 0;
 }
 
-/** \fn void read_ps(char * buffer, int * j, ps * temp_datatype)
- * \brief Reads ps datatype.
+/** \fn void read_celldim(char * buffer, int * j, celldim * temp_datatype)
+ * \brief Reads celldim datatype.
  */
-int read_ps(char * buffer, int /*@unused@*/ buffer_size, int * j, ps * temp_datatype)
+int read_celldim(char * buffer, int /*@unused@*/ buffer_size, int * j, celldim * temp_datatype)
 {
 	int array_k;
 	char arraydata[100000];
-	
+	int rc;
 	
 	while(buffer[(*j)] != '{')
 	{
@@ -422,91 +409,11 @@ int read_ps(char * buffer, int /*@unused@*/ buffer_size, int * j, ps * temp_data
 	}
 	(*j)++;
 
-	(*temp_datatype).locationx = 0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).locationx = atoi(arraydata);
+	while(buffer[*j] != '{') (*j)++;
+	rc = read_coordinate(buffer, buffer_size, j, &(*temp_datatype).xy);
+	if(rc != 0) return -1;
 	(*j)++;
-	(*temp_datatype).locationy = 0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).locationy = atoi(arraydata);
-	(*j)++;
-	(*temp_datatype).base_conc = 0.0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).base_conc = atof(arraydata);
-	(*j)++;
-	(*temp_datatype).max_conc = 0.0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).max_conc = atof(arraydata);
-	(*j)++;
-	(*temp_datatype).current_conc = 0.0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).current_conc = atof(arraydata);
-	(*j)++;
-	(*temp_datatype).decay_exp = 0.0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).decay_exp = atof(arraydata);
-	(*j)++;
-	(*temp_datatype).gradient_power = 0;
-	array_k = 0;
-	while(buffer[*j] != ',')
-	{
-		if(buffer[(*j)] == '\0') return -1;
-		arraydata[array_k] = buffer[*j];
-		array_k++;
-		(*j)++;
-	}
-	arraydata[array_k] = '\0';
-	(*temp_datatype).gradient_power = atoi(arraydata);
-	(*j)++;
-	(*temp_datatype).lifetime = 0;
+	(*temp_datatype).diameter = 0;
 	array_k = 0;
 	while(buffer[*j] != '}')
 	{
@@ -516,23 +423,20 @@ int read_ps(char * buffer, int /*@unused@*/ buffer_size, int * j, ps * temp_data
 		(*j)++;
 	}
 	arraydata[array_k] = '\0';
-	(*temp_datatype).lifetime = atoi(arraydata);
+	(*temp_datatype).diameter = atoi(arraydata);
 	(*j)++;
 
 	return 0;
 }
 
-int read_ps_dynamic_array(char * buffer, int buffer_size, int * j, ps_array * temp_datatype_array)
+int read_celldim_dynamic_array(char * buffer, int buffer_size, int * j, celldim_array * temp_datatype_array)
 {
 	int arraycount = 0;
 	int rc;
-	
-	
-	
-	
-	
-	
-	
+	coordinate xy;
+# ifndef S_SPLINT_S
+	init_coordinate(&xy);
+# endif
 	
 	
 
@@ -548,9 +452,9 @@ int read_ps_dynamic_array(char * buffer, int buffer_size, int * j, ps_array * te
 	{
 		if(buffer[(*j)] == '{')
 		{
-			add_ps(temp_datatype_array, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0);
-			rc = read_ps(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
-			if(rc != 0) { printf("Error: reading variable 'ps' of type '\n"); return -1; }
+			add_celldim(temp_datatype_array, &xy, 0);
+			rc = read_celldim(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
+			if(rc != 0) { printf("Error: reading variable 'celldim' of type '\n"); return -1; }
 			arraycount++;
 			(*j)++;
 		}
@@ -562,7 +466,7 @@ int read_ps_dynamic_array(char * buffer, int buffer_size, int * j, ps_array * te
 	return 0;
 }
 
-int read_ps_static_array(char * buffer, int buffer_size, int * j, ps * temp_datatype_array, int size)
+int read_celldim_static_array(char * buffer, int buffer_size, int * j, celldim * temp_datatype_array, int size)
 {
 	int arraycount;
 	int rc;
@@ -577,8 +481,8 @@ int read_ps_static_array(char * buffer, int buffer_size, int * j, ps * temp_data
 
 	for(arraycount = 0; arraycount < size; arraycount++)
 	{
-		rc = read_ps(buffer, buffer_size, j, &temp_datatype_array[arraycount]);
-		if(rc != 0) { printf("Error: reading variable 'ps' of type '\n"); return -1; }
+		rc = read_celldim(buffer, buffer_size, j, &temp_datatype_array[arraycount]);
+		if(rc != 0) { printf("Error: reading variable 'celldim' of type '\n"); return -1; }
 		if(arraycount < (size-1)) while(buffer[(*j)] != '{') { (*j)++; }
 	}
 
@@ -596,8 +500,16 @@ int readEnvironmentXML(char * location)
 	int index = 0;
 	int in_environment = 0;
 	int in_worldsize = 0;
-	int in_unitum = 0;
-	int in_OC_speed = 0;
+	int in_oc_lifespan = 0;
+	int in_ob_lifespan = 0;
+	int in_bmu_lifespan = 0;
+	int in_oc_creation_freq = 0;
+	int in_ob_creation_freq = 0;
+	int in_oc_diameter = 0;
+	int in_ob_diameter = 0;
+	int in_oc_type = 0;
+	int in_ob_type = 0;
+	int in_bmu_type = 0;
 	
 
 	buffer[0] = '\0';
@@ -621,10 +533,26 @@ int readEnvironmentXML(char * location)
 			if(strcmp(buffer, "/environment") == 0) in_environment = 0;
 			if(strcmp(buffer, "worldsize") == 0) in_worldsize = 1;
 			if(strcmp(buffer, "/worldsize") == 0) in_worldsize = 0;
-			if(strcmp(buffer, "unitum") == 0) in_unitum = 1;
-			if(strcmp(buffer, "/unitum") == 0) in_unitum = 0;
-			if(strcmp(buffer, "OC_speed") == 0) in_OC_speed = 1;
-			if(strcmp(buffer, "/OC_speed") == 0) in_OC_speed = 0;
+			if(strcmp(buffer, "oc_lifespan") == 0) in_oc_lifespan = 1;
+			if(strcmp(buffer, "/oc_lifespan") == 0) in_oc_lifespan = 0;
+			if(strcmp(buffer, "ob_lifespan") == 0) in_ob_lifespan = 1;
+			if(strcmp(buffer, "/ob_lifespan") == 0) in_ob_lifespan = 0;
+			if(strcmp(buffer, "bmu_lifespan") == 0) in_bmu_lifespan = 1;
+			if(strcmp(buffer, "/bmu_lifespan") == 0) in_bmu_lifespan = 0;
+			if(strcmp(buffer, "oc_creation_freq") == 0) in_oc_creation_freq = 1;
+			if(strcmp(buffer, "/oc_creation_freq") == 0) in_oc_creation_freq = 0;
+			if(strcmp(buffer, "ob_creation_freq") == 0) in_ob_creation_freq = 1;
+			if(strcmp(buffer, "/ob_creation_freq") == 0) in_ob_creation_freq = 0;
+			if(strcmp(buffer, "oc_diameter") == 0) in_oc_diameter = 1;
+			if(strcmp(buffer, "/oc_diameter") == 0) in_oc_diameter = 0;
+			if(strcmp(buffer, "ob_diameter") == 0) in_ob_diameter = 1;
+			if(strcmp(buffer, "/ob_diameter") == 0) in_ob_diameter = 0;
+			if(strcmp(buffer, "oc_type") == 0) in_oc_type = 1;
+			if(strcmp(buffer, "/oc_type") == 0) in_oc_type = 0;
+			if(strcmp(buffer, "ob_type") == 0) in_ob_type = 1;
+			if(strcmp(buffer, "/ob_type") == 0) in_ob_type = 0;
+			if(strcmp(buffer, "bmu_type") == 0) in_bmu_type = 1;
+			if(strcmp(buffer, "/bmu_type") == 0) in_bmu_type = 0;
 			
 			index = 0;
 			buffer[index] = '\0';
@@ -635,8 +563,16 @@ int readEnvironmentXML(char * location)
 			if(in_environment == 1)
 			{
 				if(in_worldsize == 1) { FLAME_environment_variable_worldsize = atoi(buffer); }
-				if(in_unitum == 1) { FLAME_environment_variable_unitum = atoi(buffer); }
-				if(in_OC_speed == 1) { FLAME_environment_variable_OC_speed = atoi(buffer); }
+				if(in_oc_lifespan == 1) { FLAME_environment_variable_oc_lifespan = atoi(buffer); }
+				if(in_ob_lifespan == 1) { FLAME_environment_variable_ob_lifespan = atoi(buffer); }
+				if(in_bmu_lifespan == 1) { FLAME_environment_variable_bmu_lifespan = atoi(buffer); }
+				if(in_oc_creation_freq == 1) { FLAME_environment_variable_oc_creation_freq = atof(buffer); }
+				if(in_ob_creation_freq == 1) { FLAME_environment_variable_ob_creation_freq = atof(buffer); }
+				if(in_oc_diameter == 1) { FLAME_environment_variable_oc_diameter = atoi(buffer); }
+				if(in_ob_diameter == 1) { FLAME_environment_variable_ob_diameter = atoi(buffer); }
+				if(in_oc_type == 1) { FLAME_environment_variable_oc_type = atoi(buffer); }
+				if(in_ob_type == 1) { FLAME_environment_variable_ob_type = atoi(buffer); }
+				if(in_bmu_type == 1) { FLAME_environment_variable_bmu_type = atoi(buffer); }
 				
 			}
 			index = 0;
@@ -672,24 +608,33 @@ int readAgentXML(char * location,
 	int in_itno = 0;
 	int FLAME_in_xagent = 0;
 	int FLAME_in_name = 0;
-	int in_dcc_agent = 0;
-	int in_ob_agent = 0;
 	int in_oc_agent = 0;
-	int in_pointsource_agent = 0;
+	int in_ob_agent = 0;
+	int in_bmu_agent = 0;
+	int in_environment_agent = 0;
 	
-	int in_DiD_MFI = 0;
-	int in_geo = 0;
-	int in_dormant = 0;
-	int in_celltype = 0;
-	int in_id = 0;
-	int in_descrip = 0;
-	int in_active = 0;
-	int in_source_start = 0;
+	int in_oc_dim = 0;
+	int in_oc_age = 0;
+	int in_oc_nuclei = 0;
+	int in_oc_id = 0;
+	int in_oc_death_prob = 0;
+	int in_oc_mybmu = 0;
+	int in_ob_dim = 0;
+	int in_ob_age = 0;
+	int in_ob_id = 0;
+	int in_ob_death_prob = 0;
+	int in_ob_mybmu = 0;
+	int in_bmu_id = 0;
+	int in_direction = 0;
+	int in_bmu_speed = 0;
+	int in_bmu_position = 0;
+	int in_bmu_length = 0;
+	int in_rand_init = 0;
 	
-	xmachine_memory_dcc * current_dcc_agent = NULL;
-	xmachine_memory_ob * current_ob_agent = NULL;
 	xmachine_memory_oc * current_oc_agent = NULL;
-	xmachine_memory_pointsource * current_pointsource_agent = NULL;
+	xmachine_memory_ob * current_ob_agent = NULL;
+	xmachine_memory_bmu * current_bmu_agent = NULL;
+	xmachine_memory_environment * current_environment_agent = NULL;
 	
 	/* Things for round-robin partitioning */
 	int geometric = 1;
@@ -729,9 +674,9 @@ int readAgentXML(char * location,
 			}
 			if(strcmp(buffer, "/xagent") == 0)
 			{	
-				if(strcmp(agentname, "dcc") == 0)
+				if(strcmp(agentname, "oc") == 0)
 				{
-					if(current_dcc_agent == NULL) { printf("Memory error reading dcc agent\n"); exit(0); }
+					if(current_oc_agent == NULL) { printf("Memory error reading oc agent\n"); exit(0); }
 					
 					posx = (double)0.0;
 					posy = (double)0.0;
@@ -742,7 +687,7 @@ int readAgentXML(char * location,
 					if( flag == 0 )
 					{
 						/* Next line should be commented out? */
-						add_dcc_agent_internal(current_dcc_agent, dcc_start_state);
+						add_oc_agent_internal(current_oc_agent, oc_start_state);
 
 						/* Update the cloud data */
 						if ( posx < cloud_data[0] ) cloud_data[0] = posx;
@@ -765,14 +710,14 @@ int readAgentXML(char * location,
 								((current_node->partition_data[5] == SPINF) || (current_node->partition_data[5] != SPINF && posz < current_node->partition_data[5]))
 							)
 							{
-								add_dcc_agent_internal(current_dcc_agent, dcc_start_state);
+								add_oc_agent_internal(current_oc_agent, oc_start_state);
 							}
 						}
 						else if (partition_method == other)
 						{
 							if (agent_count % number_partitions == 0)
 							{
-								add_dcc_agent_internal(current_dcc_agent, dcc_start_state);
+								add_oc_agent_internal(current_oc_agent, oc_start_state);
 							}
 							++agent_count;
 						}
@@ -827,9 +772,9 @@ int readAgentXML(char * location,
 						}
 					}
 				}
-				else if(strcmp(agentname, "oc") == 0)
+				else if(strcmp(agentname, "bmu") == 0)
 				{
-					if(current_oc_agent == NULL) { printf("Memory error reading oc agent\n"); exit(0); }
+					if(current_bmu_agent == NULL) { printf("Memory error reading bmu agent\n"); exit(0); }
 					
 					posx = (double)0.0;
 					posy = (double)0.0;
@@ -840,7 +785,7 @@ int readAgentXML(char * location,
 					if( flag == 0 )
 					{
 						/* Next line should be commented out? */
-						add_oc_agent_internal(current_oc_agent, oc_start_state);
+						add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
 
 						/* Update the cloud data */
 						if ( posx < cloud_data[0] ) cloud_data[0] = posx;
@@ -863,22 +808,22 @@ int readAgentXML(char * location,
 								((current_node->partition_data[5] == SPINF) || (current_node->partition_data[5] != SPINF && posz < current_node->partition_data[5]))
 							)
 							{
-								add_oc_agent_internal(current_oc_agent, oc_start_state);
+								add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
 							}
 						}
 						else if (partition_method == other)
 						{
 							if (agent_count % number_partitions == 0)
 							{
-								add_oc_agent_internal(current_oc_agent, oc_start_state);
+								add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
 							}
 							++agent_count;
 						}
 					}
 				}
-				else if(strcmp(agentname, "pointsource") == 0)
+				else if(strcmp(agentname, "environment") == 0)
 				{
-					if(current_pointsource_agent == NULL) { printf("Memory error reading pointsource agent\n"); exit(0); }
+					if(current_environment_agent == NULL) { printf("Memory error reading environment agent\n"); exit(0); }
 					
 					posx = (double)0.0;
 					posy = (double)0.0;
@@ -889,7 +834,7 @@ int readAgentXML(char * location,
 					if( flag == 0 )
 					{
 						/* Next line should be commented out? */
-						add_pointsource_agent_internal(current_pointsource_agent, pointsource_start_state);
+						add_environment_agent_internal(current_environment_agent, environment_start_state);
 
 						/* Update the cloud data */
 						if ( posx < cloud_data[0] ) cloud_data[0] = posx;
@@ -912,14 +857,14 @@ int readAgentXML(char * location,
 								((current_node->partition_data[5] == SPINF) || (current_node->partition_data[5] != SPINF && posz < current_node->partition_data[5]))
 							)
 							{
-								add_pointsource_agent_internal(current_pointsource_agent, pointsource_start_state);
+								add_environment_agent_internal(current_environment_agent, environment_start_state);
 							}
 						}
 						else if (partition_method == other)
 						{
 							if (agent_count % number_partitions == 0)
 							{
-								add_pointsource_agent_internal(current_pointsource_agent, pointsource_start_state);
+								add_environment_agent_internal(current_environment_agent, environment_start_state);
 							}
 							++agent_count;
 						}
@@ -932,30 +877,48 @@ int readAgentXML(char * location,
 				}
 				agentname[0] = '\0';
 				FLAME_in_xagent = 0;
-				in_dcc_agent = 0;
-				in_ob_agent = 0;
 				in_oc_agent = 0;
-				in_pointsource_agent = 0;
+				in_ob_agent = 0;
+				in_bmu_agent = 0;
+				in_environment_agent = 0;
 				
 			}
 			if(strcmp(buffer, "name") == 0) FLAME_in_name = 1;
 			if(strcmp(buffer, "/name") == 0) FLAME_in_name = 0;
-			if(strcmp(buffer, "DiD_MFI") == 0) { in_DiD_MFI = 1; }
-			if(strcmp(buffer, "/DiD_MFI") == 0) { in_DiD_MFI = 0; }
-			if(strcmp(buffer, "geo") == 0) { in_geo = 1; }
-			if(strcmp(buffer, "/geo") == 0) { in_geo = 0; }
-			if(strcmp(buffer, "dormant") == 0) { in_dormant = 1; }
-			if(strcmp(buffer, "/dormant") == 0) { in_dormant = 0; }
-			if(strcmp(buffer, "celltype") == 0) { in_celltype = 1; }
-			if(strcmp(buffer, "/celltype") == 0) { in_celltype = 0; }
-			if(strcmp(buffer, "id") == 0) { in_id = 1; }
-			if(strcmp(buffer, "/id") == 0) { in_id = 0; }
-			if(strcmp(buffer, "descrip") == 0) { in_descrip = 1; }
-			if(strcmp(buffer, "/descrip") == 0) { in_descrip = 0; }
-			if(strcmp(buffer, "active") == 0) { in_active = 1; }
-			if(strcmp(buffer, "/active") == 0) { in_active = 0; }
-			if(strcmp(buffer, "source_start") == 0) { in_source_start = 1; }
-			if(strcmp(buffer, "/source_start") == 0) { in_source_start = 0; }
+			if(strcmp(buffer, "oc_dim") == 0) { in_oc_dim = 1; }
+			if(strcmp(buffer, "/oc_dim") == 0) { in_oc_dim = 0; }
+			if(strcmp(buffer, "oc_age") == 0) { in_oc_age = 1; }
+			if(strcmp(buffer, "/oc_age") == 0) { in_oc_age = 0; }
+			if(strcmp(buffer, "oc_nuclei") == 0) { in_oc_nuclei = 1; }
+			if(strcmp(buffer, "/oc_nuclei") == 0) { in_oc_nuclei = 0; }
+			if(strcmp(buffer, "oc_id") == 0) { in_oc_id = 1; }
+			if(strcmp(buffer, "/oc_id") == 0) { in_oc_id = 0; }
+			if(strcmp(buffer, "oc_death_prob") == 0) { in_oc_death_prob = 1; }
+			if(strcmp(buffer, "/oc_death_prob") == 0) { in_oc_death_prob = 0; }
+			if(strcmp(buffer, "oc_mybmu") == 0) { in_oc_mybmu = 1; }
+			if(strcmp(buffer, "/oc_mybmu") == 0) { in_oc_mybmu = 0; }
+			if(strcmp(buffer, "ob_dim") == 0) { in_ob_dim = 1; }
+			if(strcmp(buffer, "/ob_dim") == 0) { in_ob_dim = 0; }
+			if(strcmp(buffer, "ob_age") == 0) { in_ob_age = 1; }
+			if(strcmp(buffer, "/ob_age") == 0) { in_ob_age = 0; }
+			if(strcmp(buffer, "ob_id") == 0) { in_ob_id = 1; }
+			if(strcmp(buffer, "/ob_id") == 0) { in_ob_id = 0; }
+			if(strcmp(buffer, "ob_death_prob") == 0) { in_ob_death_prob = 1; }
+			if(strcmp(buffer, "/ob_death_prob") == 0) { in_ob_death_prob = 0; }
+			if(strcmp(buffer, "ob_mybmu") == 0) { in_ob_mybmu = 1; }
+			if(strcmp(buffer, "/ob_mybmu") == 0) { in_ob_mybmu = 0; }
+			if(strcmp(buffer, "bmu_id") == 0) { in_bmu_id = 1; }
+			if(strcmp(buffer, "/bmu_id") == 0) { in_bmu_id = 0; }
+			if(strcmp(buffer, "direction") == 0) { in_direction = 1; }
+			if(strcmp(buffer, "/direction") == 0) { in_direction = 0; }
+			if(strcmp(buffer, "bmu_speed") == 0) { in_bmu_speed = 1; }
+			if(strcmp(buffer, "/bmu_speed") == 0) { in_bmu_speed = 0; }
+			if(strcmp(buffer, "bmu_position") == 0) { in_bmu_position = 1; }
+			if(strcmp(buffer, "/bmu_position") == 0) { in_bmu_position = 0; }
+			if(strcmp(buffer, "bmu_length") == 0) { in_bmu_length = 1; }
+			if(strcmp(buffer, "/bmu_length") == 0) { in_bmu_length = 0; }
+			if(strcmp(buffer, "rand_init") == 0) { in_rand_init = 1; }
+			if(strcmp(buffer, "/rand_init") == 0) { in_rand_init = 0; }
 			
 			index = 0;
 			buffer[index] = '\0';
@@ -971,25 +934,25 @@ int readAgentXML(char * location,
 				{
 					strcpy(agentname, buffer);
 
-					if(strcmp(agentname, "dcc") == 0)
+					if(strcmp(agentname, "oc") == 0)
 					{
-						current_dcc_agent = init_dcc_agent();
-						in_dcc_agent = 1;
+						current_oc_agent = init_oc_agent();
+						in_oc_agent = 1;
 					}
 					else if(strcmp(agentname, "ob") == 0)
 					{
 						current_ob_agent = init_ob_agent();
 						in_ob_agent = 1;
 					}
-					else if(strcmp(agentname, "oc") == 0)
+					else if(strcmp(agentname, "bmu") == 0)
 					{
-						current_oc_agent = init_oc_agent();
-						in_oc_agent = 1;
+						current_bmu_agent = init_bmu_agent();
+						in_bmu_agent = 1;
 					}
-					else if(strcmp(agentname, "pointsource") == 0)
+					else if(strcmp(agentname, "environment") == 0)
 					{
-						current_pointsource_agent = init_pointsource_agent();
-						in_pointsource_agent = 1;
+						current_environment_agent = init_environment_agent();
+						in_environment_agent = 1;
 					}
 					else
 					{
@@ -997,32 +960,39 @@ int readAgentXML(char * location,
 						exit(0);
 					}
 				}
-				else if(in_dcc_agent == 1)
+				else if(in_oc_agent == 1)
 				{
-					if(in_DiD_MFI) { current_dcc_agent->DiD_MFI = atoi(buffer); }
-					if(in_geo) { j = 0;
-						rc = read_gridcell(buffer, index, &j, &current_dcc_agent->geo);
-						if(rc != 0) { printf("Error: reading 'dcc' agent variable 'geo' of type 'gridcell'\n"); exit(0); } }
-					if(in_dormant) { current_dcc_agent->dormant = atoi(buffer); }
+					if(in_oc_dim) { j = 0;
+						rc = read_celldim(buffer, index, &j, &current_oc_agent->oc_dim);
+						if(rc != 0) { printf("Error: reading 'oc' agent variable 'oc_dim' of type 'celldim'\n"); exit(0); } }
+					if(in_oc_age) { current_oc_agent->oc_age = atoi(buffer); }
+					if(in_oc_nuclei) { current_oc_agent->oc_nuclei = atoi(buffer); }
+					if(in_oc_id) { current_oc_agent->oc_id = atoi(buffer); }
+					if(in_oc_death_prob) { current_oc_agent->oc_death_prob = atof(buffer); }
+					if(in_oc_mybmu) { current_oc_agent->oc_mybmu = atoi(buffer); }
 				 }else if(in_ob_agent == 1)
 				{
-					if(in_geo) { j = 0;
-						rc = read_gridcell(buffer, index, &j, &current_ob_agent->geo);
-						if(rc != 0) { printf("Error: reading 'ob' agent variable 'geo' of type 'gridcell'\n"); exit(0); } }
-					if(in_celltype) { current_ob_agent->celltype = atoi(buffer); }
-				 }else if(in_oc_agent == 1)
+					if(in_ob_dim) { j = 0;
+						rc = read_celldim(buffer, index, &j, &current_ob_agent->ob_dim);
+						if(rc != 0) { printf("Error: reading 'ob' agent variable 'ob_dim' of type 'celldim'\n"); exit(0); } }
+					if(in_ob_age) { current_ob_agent->ob_age = atoi(buffer); }
+					if(in_ob_id) { current_ob_agent->ob_id = atoi(buffer); }
+					if(in_ob_death_prob) { current_ob_agent->ob_death_prob = atof(buffer); }
+					if(in_ob_mybmu) { current_ob_agent->ob_mybmu = atoi(buffer); }
+				 }else if(in_bmu_agent == 1)
 				{
-					if(in_id) { current_oc_agent->id = (buffer[0]); }
-					if(in_geo) { j = 0;
-						rc = read_gridcell(buffer, index, &j, &current_oc_agent->geo);
-						if(rc != 0) { printf("Error: reading 'oc' agent variable 'geo' of type 'gridcell'\n"); exit(0); } }
-				 }else if(in_pointsource_agent == 1)
+					if(in_bmu_id) { current_bmu_agent->bmu_id = atoi(buffer); }
+					if(in_direction) { j = 0;
+						rc = read_coordinate(buffer, index, &j, &current_bmu_agent->direction);
+						if(rc != 0) { printf("Error: reading 'bmu' agent variable 'direction' of type 'coordinate'\n"); exit(0); } }
+					if(in_bmu_speed) { current_bmu_agent->bmu_speed = atof(buffer); }
+					if(in_bmu_position) { j = 0;
+						rc = read_coordinate(buffer, index, &j, &current_bmu_agent->bmu_position);
+						if(rc != 0) { printf("Error: reading 'bmu' agent variable 'bmu_position' of type 'coordinate'\n"); exit(0); } }
+					if(in_bmu_length) { current_bmu_agent->bmu_length = atoi(buffer); }
+				 }else if(in_environment_agent == 1)
 				{
-					if(in_descrip) { j = 0;
-						rc = read_ps(buffer, index, &j, &current_pointsource_agent->descrip);
-						if(rc != 0) { printf("Error: reading 'pointsource' agent variable 'descrip' of type 'ps'\n"); exit(0); } }
-					if(in_active) { current_pointsource_agent->active = atoi(buffer); }
-					if(in_source_start) { current_pointsource_agent->source_start = atoi(buffer); }
+					if(in_rand_init) { current_environment_agent->rand_init = atoi(buffer); }
 				 }
 			}
 			index = 0;
@@ -1136,8 +1106,16 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 
 	/* Initialise environment vars */
 	FLAME_environment_variable_worldsize = 0;
-	FLAME_environment_variable_unitum = 0;
-	FLAME_environment_variable_OC_speed = 0;
+	FLAME_environment_variable_oc_lifespan = 0;
+	FLAME_environment_variable_ob_lifespan = 0;
+	FLAME_environment_variable_bmu_lifespan = 0;
+	FLAME_environment_variable_oc_creation_freq = 0.0;
+	FLAME_environment_variable_ob_creation_freq = 0.0;
+	FLAME_environment_variable_oc_diameter = 0;
+	FLAME_environment_variable_ob_diameter = 0;
+	FLAME_environment_variable_oc_type = 0;
+	FLAME_environment_variable_ob_type = 0;
+	FLAME_environment_variable_bmu_type = 0;
 	
 
 	/* Open config file to read-only */
@@ -1324,10 +1302,10 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 					}
 					if(FLAME_in_name == 1)
 					{
-						if(strcmp("dcc", buffer) == 0) current_FLAME_output->type = 1;
+						if(strcmp("oc", buffer) == 0) current_FLAME_output->type = 1;
 						else if(strcmp("ob", buffer) == 0) current_FLAME_output->type = 2;
-						else if(strcmp("oc", buffer) == 0) current_FLAME_output->type = 3;
-						else if(strcmp("pointsource", buffer) == 0) current_FLAME_output->type = 4;
+						else if(strcmp("bmu", buffer) == 0) current_FLAME_output->type = 3;
+						else if(strcmp("environment", buffer) == 0) current_FLAME_output->type = 4;
 						else 
 						{
 							printf("Error: output name is not an agent name: '%s'\n", buffer);
@@ -1397,10 +1375,10 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 	{
 		printf("output: type='");
 		if(current_FLAME_output->type == 0) printf("snapshot");
-		else if(current_FLAME_output->type == 1) printf("agent' name='dcc");
+		else if(current_FLAME_output->type == 1) printf("agent' name='oc");
 		else if(current_FLAME_output->type == 2) printf("agent' name='ob");
-		else if(current_FLAME_output->type == 3) printf("agent' name='oc");
-		else if(current_FLAME_output->type == 4) printf("agent' name='pointsource");
+		else if(current_FLAME_output->type == 3) printf("agent' name='bmu");
+		else if(current_FLAME_output->type == 4) printf("agent' name='environment");
 		else printf("undefined");
 		printf("' format='");
 		if(current_FLAME_output->format == 0) printf("xml");
@@ -1567,100 +1545,85 @@ void write_char_dynamic_array(FILE *file, char_array * temp)
 	}
 }
 
-/** \fn void write_gridcell(FILE *file, gridcell * temp_datatype)
- * \brief Writes gridcell datatype.
+/** \fn void write_coordinate(FILE *file, coordinate * temp_datatype)
+ * \brief Writes coordinate datatype.
  */
-void write_gridcell(FILE *file, gridcell * temp_datatype)
+void write_coordinate(FILE *file, coordinate * temp_datatype)
 {
 	char data[1000];
 
 	fputs("{", file);
-	sprintf(data, "%i", (*temp_datatype).xcoord);
+	sprintf(data, "%i", (*temp_datatype).x);
 	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).ycoord);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).length);
+	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).y);
 	fputs(data, file);
 	fputs("}", file);
 }
 
-void write_gridcell_static_array(FILE *file, gridcell * temp_datatype, int size)
+void write_coordinate_static_array(FILE *file, coordinate * temp_datatype, int size)
 {
 	int i;
 
 	fputs("{", file);
 	for(i = 0; i < size; i++)
 	{
-		write_gridcell(file, &temp_datatype[i]);
+		write_coordinate(file, &temp_datatype[i]);
 
 		if(i < size - 1) fputs(", ", file);
 	}
 	fputs("}", file);
 }
 
-void write_gridcell_dynamic_array(FILE *file, gridcell_array * temp_datatype)
+void write_coordinate_dynamic_array(FILE *file, coordinate_array * temp_datatype)
 {
 	int i;
 
 	fputs("{", file);
 	for(i = 0; i < (*temp_datatype).size; i++)
 	{
-		write_gridcell(file, &(*temp_datatype).array[i]);
+		write_coordinate(file, &(*temp_datatype).array[i]);
 
 		if(i < (*temp_datatype).size - 1) fputs(", ", file);
 	}
 	fputs("}", file);
 }
 
-/** \fn void write_ps(FILE *file, ps * temp_datatype)
- * \brief Writes ps datatype.
+/** \fn void write_celldim(FILE *file, celldim * temp_datatype)
+ * \brief Writes celldim datatype.
  */
-void write_ps(FILE *file, ps * temp_datatype)
+void write_celldim(FILE *file, celldim * temp_datatype)
 {
 	char data[1000];
 
 	fputs("{", file);
-	sprintf(data, "%i", (*temp_datatype).locationx);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).locationy);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).base_conc);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).max_conc);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).current_conc);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).decay_exp);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).gradient_power);
-	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).lifetime);
+	write_coordinate(file, &(*temp_datatype).xy);
+	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).diameter);
 	fputs(data, file);
 	fputs("}", file);
 }
 
-void write_ps_static_array(FILE *file, ps * temp_datatype, int size)
+void write_celldim_static_array(FILE *file, celldim * temp_datatype, int size)
 {
 	int i;
 
 	fputs("{", file);
 	for(i = 0; i < size; i++)
 	{
-		write_ps(file, &temp_datatype[i]);
+		write_celldim(file, &temp_datatype[i]);
 
 		if(i < size - 1) fputs(", ", file);
 	}
 	fputs("}", file);
 }
 
-void write_ps_dynamic_array(FILE *file, ps_array * temp_datatype)
+void write_celldim_dynamic_array(FILE *file, celldim_array * temp_datatype)
 {
 	int i;
 
 	fputs("{", file);
 	for(i = 0; i < (*temp_datatype).size; i++)
 	{
-		write_ps(file, &(*temp_datatype).array[i]);
+		write_celldim(file, &(*temp_datatype).array[i]);
 
 		if(i < (*temp_datatype).size - 1) fputs(", ", file);
 	}
@@ -1669,22 +1632,34 @@ void write_ps_dynamic_array(FILE *file, ps_array * temp_datatype)
 
 
 
-void write_dcc_agent(FILE *file, xmachine_memory_dcc * current)
+void write_oc_agent(FILE *file, xmachine_memory_oc * current)
 {
 	char data[1000];
 	fputs("<xagent>\n" , file);
-	fputs("<name>dcc</name>\n", file);
-		fputs("<DiD_MFI>", file);
-	sprintf(data, "%i", current->DiD_MFI);
+	fputs("<name>oc</name>\n", file);
+		fputs("<oc_dim>", file);
+	write_celldim(file, &current->oc_dim);
+	fputs("</oc_dim>\n", file);
+		fputs("<oc_age>", file);
+	sprintf(data, "%i", current->oc_age);
 	fputs(data, file);
-	fputs("</DiD_MFI>\n", file);
-		fputs("<geo>", file);
-	write_gridcell(file, &current->geo);
-	fputs("</geo>\n", file);
-		fputs("<dormant>", file);
-	sprintf(data, "%i", current->dormant);
+	fputs("</oc_age>\n", file);
+		fputs("<oc_nuclei>", file);
+	sprintf(data, "%i", current->oc_nuclei);
 	fputs(data, file);
-	fputs("</dormant>\n", file);
+	fputs("</oc_nuclei>\n", file);
+		fputs("<oc_id>", file);
+	sprintf(data, "%i", current->oc_id);
+	fputs(data, file);
+	fputs("</oc_id>\n", file);
+		fputs("<oc_death_prob>", file);
+	sprintf(data, "%f", current->oc_death_prob);
+	fputs(data, file);
+	fputs("</oc_death_prob>\n", file);
+		fputs("<oc_mybmu>", file);
+	sprintf(data, "%i", current->oc_mybmu);
+	fputs(data, file);
+	fputs("</oc_mybmu>\n", file);
 
 	fputs("</xagent>\n", file);
 }
@@ -1694,49 +1669,65 @@ void write_ob_agent(FILE *file, xmachine_memory_ob * current)
 	char data[1000];
 	fputs("<xagent>\n" , file);
 	fputs("<name>ob</name>\n", file);
-		fputs("<geo>", file);
-	write_gridcell(file, &current->geo);
-	fputs("</geo>\n", file);
-		fputs("<celltype>", file);
-	sprintf(data, "%i", current->celltype);
+		fputs("<ob_dim>", file);
+	write_celldim(file, &current->ob_dim);
+	fputs("</ob_dim>\n", file);
+		fputs("<ob_age>", file);
+	sprintf(data, "%i", current->ob_age);
 	fputs(data, file);
-	fputs("</celltype>\n", file);
+	fputs("</ob_age>\n", file);
+		fputs("<ob_id>", file);
+	sprintf(data, "%i", current->ob_id);
+	fputs(data, file);
+	fputs("</ob_id>\n", file);
+		fputs("<ob_death_prob>", file);
+	sprintf(data, "%f", current->ob_death_prob);
+	fputs(data, file);
+	fputs("</ob_death_prob>\n", file);
+		fputs("<ob_mybmu>", file);
+	sprintf(data, "%i", current->ob_mybmu);
+	fputs(data, file);
+	fputs("</ob_mybmu>\n", file);
 
 	fputs("</xagent>\n", file);
 }
 
-void write_oc_agent(FILE *file, xmachine_memory_oc * current)
+void write_bmu_agent(FILE *file, xmachine_memory_bmu * current)
 {
 	char data[1000];
 	fputs("<xagent>\n" , file);
-	fputs("<name>oc</name>\n", file);
-		fputs("<id>", file);
-	sprintf(data, "%c", current->id);
+	fputs("<name>bmu</name>\n", file);
+		fputs("<bmu_id>", file);
+	sprintf(data, "%i", current->bmu_id);
 	fputs(data, file);
-	fputs("</id>\n", file);
-		fputs("<geo>", file);
-	write_gridcell(file, &current->geo);
-	fputs("</geo>\n", file);
+	fputs("</bmu_id>\n", file);
+		fputs("<direction>", file);
+	write_coordinate(file, &current->direction);
+	fputs("</direction>\n", file);
+		fputs("<bmu_speed>", file);
+	sprintf(data, "%f", current->bmu_speed);
+	fputs(data, file);
+	fputs("</bmu_speed>\n", file);
+		fputs("<bmu_position>", file);
+	write_coordinate(file, &current->bmu_position);
+	fputs("</bmu_position>\n", file);
+		fputs("<bmu_length>", file);
+	sprintf(data, "%i", current->bmu_length);
+	fputs(data, file);
+	fputs("</bmu_length>\n", file);
 
 	fputs("</xagent>\n", file);
 }
 
-void write_pointsource_agent(FILE *file, xmachine_memory_pointsource * current)
+void write_environment_agent(FILE *file, xmachine_memory_environment * current)
 {
 	char data[1000];
 	fputs("<xagent>\n" , file);
-	fputs("<name>pointsource</name>\n", file);
-		fputs("<descrip>", file);
-	write_ps(file, &current->descrip);
-	fputs("</descrip>\n", file);
-		fputs("<active>", file);
-	sprintf(data, "%i", current->active);
+	fputs("<name>environment</name>\n", file);
+		fputs("<rand_init>", file);
+	sprintf(data, "%i", current->rand_init);
 	fputs(data, file);
-	fputs("</active>\n", file);
-		fputs("<source_start>", file);
-	sprintf(data, "%i", current->source_start);
-	fputs(data, file);
-	fputs("</source_start>\n", file);
+	fputs("</rand_init>\n", file);
 
 	fputs("</xagent>\n", file);
 }
@@ -1769,26 +1760,58 @@ void FLAME_write_xml(char * location, int iteration_number, int * output_types, 
 		sprintf(data, "%i", FLAME_environment_variable_worldsize);
 		fputs(data, file);
 		fputs("</worldsize>\n", file);
-			fputs("<unitum>", file);
-		sprintf(data, "%i", FLAME_environment_variable_unitum);
+			fputs("<oc_lifespan>", file);
+		sprintf(data, "%i", FLAME_environment_variable_oc_lifespan);
 		fputs(data, file);
-		fputs("</unitum>\n", file);
-			fputs("<OC_speed>", file);
-		sprintf(data, "%i", FLAME_environment_variable_OC_speed);
+		fputs("</oc_lifespan>\n", file);
+			fputs("<ob_lifespan>", file);
+		sprintf(data, "%i", FLAME_environment_variable_ob_lifespan);
 		fputs(data, file);
-		fputs("</OC_speed>\n", file);
+		fputs("</ob_lifespan>\n", file);
+			fputs("<bmu_lifespan>", file);
+		sprintf(data, "%i", FLAME_environment_variable_bmu_lifespan);
+		fputs(data, file);
+		fputs("</bmu_lifespan>\n", file);
+			fputs("<oc_creation_freq>", file);
+		sprintf(data, "%f", FLAME_environment_variable_oc_creation_freq);
+		fputs(data, file);
+		fputs("</oc_creation_freq>\n", file);
+			fputs("<ob_creation_freq>", file);
+		sprintf(data, "%f", FLAME_environment_variable_ob_creation_freq);
+		fputs(data, file);
+		fputs("</ob_creation_freq>\n", file);
+			fputs("<oc_diameter>", file);
+		sprintf(data, "%i", FLAME_environment_variable_oc_diameter);
+		fputs(data, file);
+		fputs("</oc_diameter>\n", file);
+			fputs("<ob_diameter>", file);
+		sprintf(data, "%i", FLAME_environment_variable_ob_diameter);
+		fputs(data, file);
+		fputs("</ob_diameter>\n", file);
+			fputs("<oc_type>", file);
+		sprintf(data, "%i", FLAME_environment_variable_oc_type);
+		fputs(data, file);
+		fputs("</oc_type>\n", file);
+			fputs("<ob_type>", file);
+		sprintf(data, "%i", FLAME_environment_variable_ob_type);
+		fputs(data, file);
+		fputs("</ob_type>\n", file);
+			fputs("<bmu_type>", file);
+		sprintf(data, "%i", FLAME_environment_variable_bmu_type);
+		fputs(data, file);
+		fputs("</bmu_type>\n", file);
 			fputs("</environment>\n" , file);
 	}
 	
 	
 	if(FLAME_integer_in_array(0, output_types, output_type_size) || FLAME_integer_in_array(1, output_types, output_type_size))
 	{
-		current_xmachine_dcc_holder = dcc_start_state->agents;
-			while(current_xmachine_dcc_holder)
+		current_xmachine_oc_holder = oc_start_state->agents;
+			while(current_xmachine_oc_holder)
 			{
-				write_dcc_agent(file, current_xmachine_dcc_holder->agent);
+				write_oc_agent(file, current_xmachine_oc_holder->agent);
 
-				current_xmachine_dcc_holder = current_xmachine_dcc_holder->next;
+				current_xmachine_oc_holder = current_xmachine_oc_holder->next;
 			}
 	}
 	
@@ -1805,23 +1828,23 @@ void FLAME_write_xml(char * location, int iteration_number, int * output_types, 
 	
 	if(FLAME_integer_in_array(0, output_types, output_type_size) || FLAME_integer_in_array(3, output_types, output_type_size))
 	{
-		current_xmachine_oc_holder = oc_start_state->agents;
-			while(current_xmachine_oc_holder)
+		current_xmachine_bmu_holder = bmu_start_state->agents;
+			while(current_xmachine_bmu_holder)
 			{
-				write_oc_agent(file, current_xmachine_oc_holder->agent);
+				write_bmu_agent(file, current_xmachine_bmu_holder->agent);
 
-				current_xmachine_oc_holder = current_xmachine_oc_holder->next;
+				current_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
 			}
 	}
 	
 	if(FLAME_integer_in_array(0, output_types, output_type_size) || FLAME_integer_in_array(4, output_types, output_type_size))
 	{
-		current_xmachine_pointsource_holder = pointsource_start_state->agents;
-			while(current_xmachine_pointsource_holder)
+		current_xmachine_environment_holder = environment_start_state->agents;
+			while(current_xmachine_environment_holder)
 			{
-				write_pointsource_agent(file, current_xmachine_pointsource_holder->agent);
+				write_environment_agent(file, current_xmachine_environment_holder->agent);
 
-				current_xmachine_pointsource_holder = current_xmachine_pointsource_holder->next;
+				current_xmachine_environment_holder = current_xmachine_environment_holder->next;
 			}
 	}
 	
