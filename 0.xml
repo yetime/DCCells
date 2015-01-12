@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<states>
+<itno>0</itno>
+
+<environment>
+    <worldsize>2500</worldsize>
+    <oc_lifespan>14400</oc_lifespan>
+    <ob_lifespan>11520</ob_lifespan>
+    <bmu_lifespan>200</bmu_lifespan>
+    <oc_creation_freq>0</oc_creation_freq>
+    <ob_creation_freq>0</ob_creation_freq>
+    <oc_speed>10</oc_speed>
+    <oc_type>1</oc_type>
+    <ob_type>2</ob_type>
+    <bmu_type>3</bmu_type>
+</environment>
+
+<agents>
+<xagent>
+	<name>bmu</name>
+    <id>bmu1</id>
+    <direction>{1,1}</direction>
+    <position>{2,2}</position>
+    <bmu_start>{0,0}</bmu_start>
+    <length>3000</length>
+</xagent>
+<xagent>
+	<name>environment</name>
+	<rand_init>0</rand_init>
+	<oc_id_counter>0</oc_id_counter>
+	<ob_id_counter>0</ob_id_counter>
+</xagent>
+
+</agents>
+</states>
