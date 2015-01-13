@@ -18,7 +18,6 @@
  * on the outcome of request ids and rnd numbers
  */
 int create(){
-	printf("BMU CREATE \n");
 		coordinate ob_pos;
 		init_coordinate(&ob_pos);
 		copy_coordinate(&BMU_POSITION,&ob_pos);
@@ -37,7 +36,6 @@ int create(){
 		oc_dim.diameter=OC_DIAMETER;
 		add_oc_agent(oc_dim,0,1,get_new_oc_id(), 0, BMU_ID, BMU_DIRECTION);
 
-	printf("BMU CREATE EXIT\n");
 	return 0;
 }
 

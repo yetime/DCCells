@@ -368,14 +368,6 @@
 							<value>0</value>
 						</rhs>
 					</condition>
-					<outputs>
-						<output>
-							<messageName>oc_position</messageName>
-						</output>
-						<output>
-							<messageName>ob_position</messageName>
-						</output>
-					</outputs>
 				</function>
 			</functions>
 		</xagent>

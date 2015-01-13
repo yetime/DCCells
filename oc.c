@@ -11,15 +11,14 @@
 #include "header.h"
 #include "oc_agent_header.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 #include <math.h>
 #include "stuff.h"
 
 
 int initialize_oc(){
-	printf("OC INIT\n");
 	OC_AGE=1;
-	printf("OC INIT EXIT\n");
 	return 0;
 }
 
@@ -27,11 +26,9 @@ int initialize_oc(){
  * Announces the current position to the agents in the system
  */
 int signal_oc_position(){
-	printf("OC POSITION\n");
 	if(OC_AGE!=0) {
 		add_oc_position_message(OC_DIM,OC_ID,OC_NUCLEI);
 	}
-	printf("OC POSITIION EXIT\n");
 		return 0;
 }
 
@@ -40,7 +37,6 @@ int signal_oc_position(){
  * of +- 2 days around the maximum age
  */
 int oc_get_older(){
-	printf("OC GET OLDER \n");
 	int min=OC_LIFESPAN-2*1440;
 	int max=OC_LIFESPAN-2*1440;
 
@@ -49,7 +45,6 @@ int oc_get_older(){
 		OC_DEATH_PROB=OC_DEATH_PROB+1/1440;
 	}
 	OC_AGE=OC_AGE+1;
-	printf("OC GET OLDER EXIT\n");
 	return 0;
 }
 
@@ -59,7 +54,6 @@ int oc_get_older(){
  * over the last two days of a cells life
  */
 int oc_die(){
-	printf("OC DIE\n");
 	double rndnr=rnd_numbers();
 
 	if(OC_AGE>OC_LIFESPAN){
@@ -68,7 +62,6 @@ int oc_die(){
 	if(rndnr<OC_DEATH_PROB) {
 		return 1;
 	}
-	printf("OC DIE EXIT\n");
 	return 0;
 }
 
@@ -78,7 +71,6 @@ int oc_die(){
  */
 
 int check_fusions(){
-	printf("OC FUSE\n");
 	int fused=0;
 	int other_cell_id=0;
 	START_OC_POSITION_MESSAGE_LOOP
@@ -90,13 +82,16 @@ int check_fusions(){
 	    }
 	FINISH_OC_POSITION_MESSAGE_LOOP
 
+
+
 	if(fused!=0) add_fusion_message(OC_ID, other_cell_id);
 
-	printf("OC FUSE EXIT\n");
 	return 0;
 }
 
 int fuse(){
+	START_FUSION_MESSAGE_LOOP
+	FINISH_FUSION_MESSAGE_LOOP
 	return 0;
 }
 
@@ -104,7 +99,6 @@ int fuse(){
  * Moves the osteoclasts in the same direction as the BMU randomly asigned BMU direction... (later on: along microcracks?
  */
 int oc_move(){
-	printf("OC_move\n");
 	//determine new position and put a bit of randomization onto it
 	int current_x=OC_DIRECTION.x;
 	int current_y=OC_DIRECTION.y;

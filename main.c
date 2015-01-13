@@ -267,15 +267,13 @@ printf("Iterations: %i\n", iteration_total);
 
 
 	/* For each message check if their exists agents that input/output the message */
+	/* Disable this check (if cond.) cause it messes up situations where agents are not created yet... let's see what the consequences are ;-) */
 	FLAME_oc_position_message_board_write = 0;
-	FLAME_oc_position_message_board_read = 0;
-	/* Sending agents */
-	if(oc_start_state->agents != NULL) FLAME_oc_position_message_board_write = 1;
-	if(environment_start_state->agents != NULL) FLAME_oc_position_message_board_write = 1;
-	
-	/* Reading agents */
-	if(oc_start_state->agents != NULL) FLAME_oc_position_message_board_read = 1;
-	if(bmu_start_state->agents != NULL) FLAME_oc_position_message_board_read = 1;
+	FLAME_oc_position_message_board_read = 0; 
+	 FLAME_oc_position_message_board_write = 1;
+	 
+	 FLAME_oc_position_message_board_read = 1;
+	 FLAME_oc_position_message_board_read = 1;
 	
 	/* Call message board library with details */
 	if(FLAME_oc_position_message_board_write == 0 &&
@@ -316,13 +314,10 @@ printf("Iterations: %i\n", iteration_total);
 	}
 	#endif
 	FLAME_ob_position_message_board_write = 0;
-	FLAME_ob_position_message_board_read = 0;
-	/* Sending agents */
-	if(ob_start_state->agents != NULL) FLAME_ob_position_message_board_write = 1;
-	if(environment_start_state->agents != NULL) FLAME_ob_position_message_board_write = 1;
-	
-	/* Reading agents */
-	if(bmu_start_state->agents != NULL) FLAME_ob_position_message_board_read = 1;
+	FLAME_ob_position_message_board_read = 0; 
+	 FLAME_ob_position_message_board_write = 1;
+	 
+	 FLAME_ob_position_message_board_read = 1;
 	
 	/* Call message board library with details */
 	if(FLAME_ob_position_message_board_write == 0 &&
@@ -363,12 +358,10 @@ printf("Iterations: %i\n", iteration_total);
 	}
 	#endif
 	FLAME_fusion_message_board_write = 0;
-	FLAME_fusion_message_board_read = 0;
-	/* Sending agents */
-	if(oc_start_state->agents != NULL) FLAME_fusion_message_board_write = 1;
-	
-	/* Reading agents */
-	if(oc_start_state->agents != NULL) FLAME_fusion_message_board_read = 1;
+	FLAME_fusion_message_board_read = 0; 
+	 FLAME_fusion_message_board_write = 1;
+	 
+	 FLAME_fusion_message_board_read = 1;
 	
 	/* Call message board library with details */
 	if(FLAME_fusion_message_board_write == 0 &&
@@ -622,6 +615,41 @@ printf("Iterations: %i\n", iteration_total);
 	}
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish signal_oc_position\n");
 
+	if(FLAME_oc_position_message_board_write == 1)
+	{
+
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_oc_position)\n");
+		rc = MB_SyncStart(b_oc_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_oc_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'oc_position' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
+
 
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start signal_ob_position\n");
 	current_xmachine_ob_holder = ob_start_state->agents;
@@ -662,6 +690,41 @@ printf("Iterations: %i\n", iteration_total);
 	}
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish signal_ob_position\n");
 
+	if(FLAME_ob_position_message_board_write == 1)
+	{
+
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_ob_position)\n");
+		rc = MB_SyncStart(b_ob_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_ob_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'ob_position' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
+
 
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start initialize\n");
 	current_xmachine_environment_holder = environment_start_state->agents;
@@ -701,76 +764,6 @@ printf("Iterations: %i\n", iteration_total);
 		current_xmachine_environment_holder = temp_xmachine_environment_holder;
 	}
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish initialize\n");
-
-	if(FLAME_ob_position_message_board_write == 1)
-	{
-
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_ob_position)\n");
-		rc = MB_SyncStart(b_ob_position);
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_ob_position)\n");
-		#ifdef ERRCHECK
-		if (rc != MB_SUCCESS)
-		{
-		   fprintf(stderr, "ERROR: Could not start sync of 'ob_position' board\n");
-		   switch(rc) {
-			   case MB_ERR_INVALID:
-				   fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
-				   break;
-			   case MB_ERR_LOCKED:
-				   fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
-				   break;
-			   case MB_ERR_MEMALLOC:
-				   fprintf(stderr, "\t reason: out of memory\n");
-				   break;
-			   case MB_ERR_INTERNAL:
-				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-				   break;
-			   default:
-				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
-				   break;
-		   }
-
-			
-			exit(rc);
-		}
-		#endif
-    }
-    
-
-	if(FLAME_oc_position_message_board_write == 1)
-	{
-
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_oc_position)\n");
-		rc = MB_SyncStart(b_oc_position);
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_oc_position)\n");
-		#ifdef ERRCHECK
-		if (rc != MB_SUCCESS)
-		{
-		   fprintf(stderr, "ERROR: Could not start sync of 'oc_position' board\n");
-		   switch(rc) {
-			   case MB_ERR_INVALID:
-				   fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
-				   break;
-			   case MB_ERR_LOCKED:
-				   fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
-				   break;
-			   case MB_ERR_MEMALLOC:
-				   fprintf(stderr, "\t reason: out of memory\n");
-				   break;
-			   case MB_ERR_INTERNAL:
-				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-				   break;
-			   default:
-				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
-				   break;
-		   }
-
-			
-			exit(rc);
-		}
-		#endif
-    }
-    
 
 
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start initialize_ob\n");
