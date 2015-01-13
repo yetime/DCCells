@@ -37,6 +37,8 @@ int main(int argc, char * argv[])
 	int FLAME_ob_position_message_board_read;
 	int FLAME_fusion_message_board_write;
 	int FLAME_fusion_message_board_read;
+	int FLAME_fusion_signal_message_board_write;
+	int FLAME_fusion_signal_message_board_read;
 
 	/* Particle cloud data */
 	double cloud_data[6] = {0.0,0.0,0.0,0.0,0.0,0.0};
@@ -401,6 +403,50 @@ printf("Iterations: %i\n", iteration_total);
 		   exit(rc);
 	}
 	#endif
+	FLAME_fusion_signal_message_board_write = 0;
+	FLAME_fusion_signal_message_board_read = 0; 
+	 FLAME_fusion_signal_message_board_write = 1;
+	 
+	 FLAME_fusion_signal_message_board_read = 1;
+	
+	/* Call message board library with details */
+	if(FLAME_fusion_signal_message_board_write == 0 &&
+		FLAME_fusion_signal_message_board_read == 0)
+			rc = MB_SetAccessMode(b_fusion_signal, MB_MODE_IDLE);
+	if(FLAME_fusion_signal_message_board_write == 1 &&
+		FLAME_fusion_signal_message_board_read == 0)
+			rc = MB_SetAccessMode(b_fusion_signal, MB_MODE_WRITEONLY);
+	if(FLAME_fusion_signal_message_board_write == 0 &&
+		FLAME_fusion_signal_message_board_read == 1)
+			rc = MB_SetAccessMode(b_fusion_signal, MB_MODE_READONLY);
+	if(FLAME_fusion_signal_message_board_write == 1 &&
+		FLAME_fusion_signal_message_board_read == 1)
+			rc = MB_SetAccessMode(b_fusion_signal, MB_MODE_READWRITE);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not set access mode of 'fusion_signal' board\n");
+	   switch(rc) {
+		   case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+			   break;
+		   case MB_ERR_LOCKED:
+			   fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+		   
+		   exit(rc);
+	}
+	#endif
 	
 	
 	/* Start timing */
@@ -510,6 +556,43 @@ printf("Iterations: %i\n", iteration_total);
 					   break;
 				   case MB_ERR_LOCKED:
 					   fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+					   break;
+				   case MB_ERR_MEMALLOC:
+					   fprintf(stderr, "\t reason: out of memory\n");
+					   break;
+				   case MB_ERR_INTERNAL:
+					   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+					   break;
+				   default:
+					   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+					   break;
+			   }
+			   
+					   
+					   exit(rc);
+			   }
+			   #endif
+		}
+		
+		/* Start sync message boards that don't write */
+		if(FLAME_fusion_signal_message_board_write == 0)
+		{
+			/*printf("%d> fusion_signal message board sync start early as no agents sending any messages of this type\n", node_number);*/
+			
+			/* ********** sync message board here **********  */
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_fusion_signal)\n");
+			rc = MB_SyncStart(b_fusion_signal);
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_fusion_signal)\n");
+			#ifdef ERRCHECK
+			if (rc != MB_SUCCESS)
+			{
+			   fprintf(stderr, "ERROR: Could not start sync of 'fusion_signal' board\n");
+			   switch(rc) {
+				   case MB_ERR_INVALID:
+					   fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+					   break;
+				   case MB_ERR_LOCKED:
+					   fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
 					   break;
 				   case MB_ERR_MEMALLOC:
 					   fprintf(stderr, "\t reason: out of memory\n");
@@ -1450,6 +1533,12 @@ if(FLAME_ob_position_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish ob_die\n");
 
 
+/* End of layer number 2 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+
 	/* If mb is not read then leave sync complete until last possible moment */
 	if(FLAME_fusion_message_board_read == 1)
 	{
@@ -1484,19 +1573,19 @@ if(FLAME_ob_position_message_board_read == 0)
     
 	}
 	
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start fuse\n");
-	current_xmachine_oc_holder = oc_2_state->agents;
-	while(current_xmachine_oc_holder)
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start calc_fusions\n");
+	current_xmachine_bmu_holder = bmu_2_state->agents;
+	while(current_xmachine_bmu_holder)
 	{
-		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		current_xmachine_oc = current_xmachine_oc_holder->agent;
-		current_xmachine_oc_next_state = oc_3_state;
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_3_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
 		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
 		current_xmachine->xmachine_environment = NULL;
-		current_xmachine->xmachine_oc = current_xmachine_oc;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
 
 		
 
@@ -1538,7 +1627,7 @@ if(FLAME_ob_position_message_board_read == 0)
 		
 		
 
-			i = fuse();
+			i = calc_fusions();
 
 		
 		    rc = MB_Iterator_Delete(&i_fusion);
@@ -1566,22 +1655,57 @@ if(FLAME_ob_position_message_board_read == 0)
 
 			if(i == 1)
 			{
-				free_oc_agent(current_xmachine_oc_holder, oc_2_state);
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_2_state);
 			}
 			else
 			{
-				transition_oc_agent(current_xmachine_oc_holder, oc_2_state, oc_3_state);
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_2_state, bmu_3_state);
 			}
 		
 
-		current_xmachine_oc = NULL;
+		current_xmachine_bmu = NULL;
 
-		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish fuse\n");
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish calc_fusions\n");
+
+	if(FLAME_fusion_signal_message_board_write == 1)
+	{
+
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_fusion_signal)\n");
+		rc = MB_SyncStart(b_fusion_signal);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_fusion_signal)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'fusion_signal' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
 
 
-/* End of layer number 2 */
+/* End of layer number 3 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
@@ -1648,7 +1772,7 @@ if(FLAME_fusion_message_board_read == 0)
 
 
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_move\n");
-	current_xmachine_bmu_holder = bmu_2_state->agents;
+	current_xmachine_bmu_holder = bmu_3_state->agents;
 	while(current_xmachine_bmu_holder)
 	{
 		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
@@ -1671,11 +1795,11 @@ if(FLAME_fusion_message_board_read == 0)
 
 			if(i == 1)
 			{
-				free_bmu_agent(current_xmachine_bmu_holder, bmu_2_state);
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_3_state);
 			}
 			else
 			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_2_state, bmu_end_state);
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_3_state, bmu_end_state);
 			}
 		
 
@@ -1684,6 +1808,203 @@ if(FLAME_fusion_message_board_read == 0)
 		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_move\n");
+
+
+	/* If mb is not read then leave sync complete until last possible moment */
+	if(FLAME_fusion_signal_message_board_read == 1)
+	{
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_fusion_signal)\n");
+		rc = MB_SyncComplete(b_fusion_signal);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_fusion_signal)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not complete sync of 'fusion_signal' board\n");
+		   switch(rc) {
+				case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+	
+		   
+		   exit(rc);
+		}
+		#endif
+    
+    
+    
+	}
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start fuse\n");
+	current_xmachine_oc_holder = oc_2_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		current_xmachine_oc = current_xmachine_oc_holder->agent;
+		current_xmachine_oc_next_state = oc_3_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_oc = current_xmachine_oc;
+
+		
+
+		
+		
+		
+		  rc = MB_Iterator_Create(b_fusion_signal, &i_fusion_signal);
+		  
+		
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not create Iterator for 'fusion_signal'\n");
+		   switch(rc) {
+		       case MB_ERR_INVALID:
+		           fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+		           break;
+		       case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+	           
+               
+                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
+               
+                   break;
+		   }
+
+		   
+           exit(rc);
+		}
+		#endif
+		
+		
+
+			i = fuse();
+
+		
+		    rc = MB_Iterator_Delete(&i_fusion_signal);
+		    #ifdef ERRCHECK
+		    if (rc != MB_SUCCESS)
+		    {
+		       fprintf(stderr, "ERROR: Could not delete 'fusion_signal' iterator\n");
+		       switch(rc) {
+		           case MB_ERR_INVALID:
+		               fprintf(stderr, "\t reason: 'fusion_signal' iterator is invalid\n");
+		               break;
+		           case MB_ERR_INTERNAL:
+		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+		               break;
+		           default:
+                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+                       break;
+		       }
+
+		       
+               exit(rc);
+		    }
+		    #endif
+		
+
+			if(i == 1)
+			{
+				free_oc_agent(current_xmachine_oc_holder, oc_2_state);
+			}
+			else
+			{
+				transition_oc_agent(current_xmachine_oc_holder, oc_2_state, oc_3_state);
+			}
+		
+
+		current_xmachine_oc = NULL;
+
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish fuse\n");
+
+
+/* End of layer number 4 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+if(FLAME_fusion_signal_message_board_read == 0)
+{
+	/*printf("%d> fusion_signal message board sync complete late as no agents reading any messages of this type\n", node_number);*/
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_fusion_signal)\n");
+	rc = MB_SyncComplete(b_fusion_signal);
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_fusion_signal)\n");
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not complete sync of 'fusion_signal' board\n");
+	   switch(rc) {
+			case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+
+	   
+	   exit(rc);
+	}
+	#endif
+}
+
+    /* Delete any search trees */
+
+    rc = MB_Clear(b_fusion_signal);
+    #ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not clear 'fusion_signal' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+           default:
+               fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+
+       }
+
+       
+       exit(rc);
+    }
+    #endif
 
 
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_move\n");
@@ -1725,7 +2046,7 @@ if(FLAME_fusion_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_move\n");
 
 
-/* End of layer number 3 */
+/* End of layer number 5 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
@@ -1770,7 +2091,7 @@ if(FLAME_fusion_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_get_older\n");
 
 
-/* End of layer number 4 */
+/* End of layer number 6 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
@@ -1815,7 +2136,7 @@ if(FLAME_fusion_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_die\n");
 
 
-/* End of layer number 5 */
+/* End of layer number 7 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
@@ -1857,6 +2178,9 @@ if(FLAME_fusion_message_board_read == 0)
 
 	/*printf("bmu_end_state->count = %d\n", bmu_end_state->count);*/
 	bmu_end_state->count = 0;
+
+	/*printf("bmu_3_state->count = %d\n", bmu_3_state->count);*/
+	bmu_3_state->count = 0;
 
 	/*printf("bmu_2_state->count = %d\n", bmu_2_state->count);*/
 	bmu_2_state->count = 0;

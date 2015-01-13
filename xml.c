@@ -306,7 +306,7 @@ int read_coordinate(char * buffer, int /*@unused@*/ buffer_size, int * j, coordi
 	}
 	(*j)++;
 
-	(*temp_datatype).x = 0;
+	(*temp_datatype).x = 0.0;
 	array_k = 0;
 	while(buffer[*j] != ',')
 	{
@@ -316,9 +316,9 @@ int read_coordinate(char * buffer, int /*@unused@*/ buffer_size, int * j, coordi
 		(*j)++;
 	}
 	arraydata[array_k] = '\0';
-	(*temp_datatype).x = atoi(arraydata);
+	(*temp_datatype).x = atof(arraydata);
 	(*j)++;
-	(*temp_datatype).y = 0;
+	(*temp_datatype).y = 0.0;
 	array_k = 0;
 	while(buffer[*j] != '}')
 	{
@@ -328,7 +328,7 @@ int read_coordinate(char * buffer, int /*@unused@*/ buffer_size, int * j, coordi
 		(*j)++;
 	}
 	arraydata[array_k] = '\0';
-	(*temp_datatype).y = atoi(arraydata);
+	(*temp_datatype).y = atof(arraydata);
 	(*j)++;
 
 	return 0;
@@ -354,7 +354,7 @@ int read_coordinate_dynamic_array(char * buffer, int buffer_size, int * j, coord
 	{
 		if(buffer[(*j)] == '{')
 		{
-			add_coordinate(temp_datatype_array, 0, 0);
+			add_coordinate(temp_datatype_array, 0.0, 0.0);
 			rc = read_coordinate(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
 			if(rc != 0) { printf("Error: reading variable 'coordinate' of type '\n"); return -1; }
 			arraycount++;
@@ -413,7 +413,7 @@ int read_celldim(char * buffer, int /*@unused@*/ buffer_size, int * j, celldim *
 	rc = read_coordinate(buffer, buffer_size, j, &(*temp_datatype).xy);
 	if(rc != 0) return -1;
 	(*j)++;
-	(*temp_datatype).diameter = 0;
+	(*temp_datatype).diameter = 0.0;
 	array_k = 0;
 	while(buffer[*j] != '}')
 	{
@@ -423,7 +423,7 @@ int read_celldim(char * buffer, int /*@unused@*/ buffer_size, int * j, celldim *
 		(*j)++;
 	}
 	arraydata[array_k] = '\0';
-	(*temp_datatype).diameter = atoi(arraydata);
+	(*temp_datatype).diameter = atof(arraydata);
 	(*j)++;
 
 	return 0;
@@ -452,7 +452,7 @@ int read_celldim_dynamic_array(char * buffer, int buffer_size, int * j, celldim_
 	{
 		if(buffer[(*j)] == '{')
 		{
-			add_celldim(temp_datatype_array, &xy, 0);
+			add_celldim(temp_datatype_array, &xy, 0.0);
 			rc = read_celldim(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
 			if(rc != 0) { printf("Error: reading variable 'celldim' of type '\n"); return -1; }
 			arraycount++;
@@ -1569,9 +1569,9 @@ void write_coordinate(FILE *file, coordinate * temp_datatype)
 	char data[1000];
 
 	fputs("{", file);
-	sprintf(data, "%i", (*temp_datatype).x);
+	sprintf(data, "%f", (*temp_datatype).x);
 	fputs(data, file);
-	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).y);
+	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).y);
 	fputs(data, file);
 	fputs("}", file);
 }
@@ -1613,7 +1613,7 @@ void write_celldim(FILE *file, celldim * temp_datatype)
 
 	fputs("{", file);
 	write_coordinate(file, &(*temp_datatype).xy);
-	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).diameter);
+	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).diameter);
 	fputs(data, file);
 	fputs("}", file);
 }

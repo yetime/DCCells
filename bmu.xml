@@ -95,11 +95,11 @@
 				<variables>
 					<variable>
 						<name>x</name>
-						<type>int</type>
+						<type>double</type>
 					</variable>
 					<variable>
 						<name>y</name>
-						<type>int</type>
+						<type>double</type>
 					</variable>
 				</variables>
 			</dataType>
@@ -114,7 +114,7 @@
 					<variable>
 						<description>Diameter of the cell</description>
 						<name>diameter</name>
-						<type>int</type>
+						<type>double</type>
 					</variable>
 				</variables>
 			</dataType>
@@ -205,7 +205,7 @@
 					<nextState>3</nextState>
 					<inputs>
 						<input>
-							<messageName>fusion</messageName>
+							<messageName>fusion_signal</messageName>
 						</input>
 					</inputs>
 				</function>
@@ -338,8 +338,23 @@
 					<nextState>2</nextState>
 				</function>
 				<function>
-					<name>bmu_move</name>
+					<name>calc_fusions</name>
 					<currentState>2</currentState>
+					<nextState>3</nextState>
+					<inputs>
+						<input>
+							<messageName>fusion</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>fusion_signal</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>bmu_move</name>
+					<currentState>3</currentState>
 					<nextState>end</nextState>
 				</function>
 			</functions>
@@ -390,6 +405,10 @@
 					<name>nuclei</name>
 					<type>int</type>
 				</variable>
+				<variable>
+					<name>bmu_scope</name>
+					<type>int</type>
+				</variable>
 			</variables>
 		</message>
 		<message>
@@ -414,6 +433,27 @@
 				</variable>
 				<variable>
 					<name>id2</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>f_bmu_id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+			<message>
+			<name>fusion_signal</name>
+			<variables>
+				<variable>
+					<name>id1</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>f_signal</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>f_bmu_id</name>
 					<type>int</type>
 				</variable>
 			</variables>

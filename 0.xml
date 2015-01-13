@@ -10,7 +10,7 @@
     <oc_creation_freq>0</oc_creation_freq>
     <ob_creation_freq>0</ob_creation_freq>
     <oc_speed>0.00694</oc_speed>
-    <oc_displ_stdev>0.01</oc_displ_stdev>
+    <oc_displ_stdev>0.1</oc_displ_stdev>
     <oc_type>1</oc_type>
     <ob_type>2</ob_type>
     <bmu_type>3</bmu_type>
@@ -20,9 +20,9 @@
 <xagent>
 	<name>bmu</name>
     <id>bmu1</id>
-    <bmu_direction>{1,1}</bmu_direction>
-    <position>{2,2}</position>
-    <bmu_start>{0,0}</bmu_start>
+    <bmu_direction>{1.0,1.0}</bmu_direction>
+    <position>{2.0,2.0}</position>
+    <bmu_start>{2.0,2.0}</bmu_start>
     <length>3000</length>
 </xagent>
 <xagent>

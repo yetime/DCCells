@@ -55,17 +55,17 @@ void unittest_fuse_2_3()
 	int rc;
 	
 	
-	rc = MB_Iterator_Create(b_fusion, &i_fusion);
+	rc = MB_Iterator_Create(b_fusion_signal, &i_fusion_signal);
 	#ifdef ERRCHECK
 	if (rc != MB_SUCCESS)
 	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'fusion'\n");
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'fusion_signal'\n");
 	   switch(rc) {
 	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
+	           fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
 	           break;
 	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+               fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
                break;
            case MB_ERR_MEMALLOC:
                fprintf(stderr, "\t reason: out of memory\n");
@@ -189,7 +189,37 @@ void unittest_bmu_die_1_2()
 	//return bmu_die();
 }
 
-void unittest_bmu_move_2_end()
+void unittest_calc_fusions_2_3()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_fusion, &i_fusion);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'fusion'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return calc_fusions();
+}
+
+void unittest_bmu_move_3_end()
 {
 	
 	
@@ -269,6 +299,31 @@ void free_messages()
 	               break;
 	           case MB_ERR_LOCKED:
 	               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	    rc = MB_Clear(b_fusion_signal);
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not clear 'fusion_signal' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: 'fusion_signal' board is invalid\n");
+	               break;
+	           case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
 	               break;
 	           case MB_ERR_INTERNAL:
 	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -376,6 +431,34 @@ int rc;
 	    }
 	    #endif
 	
+	/* Initialise message sync composite params as NULL */
+	FLAME_m_fusion_signal_composite_params = NULL;
+
+	    rc = MB_Create(&b_fusion_signal, sizeof(m_fusion_signal));
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not create 'fusion_signal' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: Invalid message size\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
 	oc_5_state = init_oc_state();
 
 	oc_4_state = init_oc_state();
@@ -399,6 +482,8 @@ int rc;
 	ob_start_state = init_ob_state();
 
 	bmu_end_state = init_bmu_state();
+
+	bmu_3_state = init_bmu_state();
 
 	bmu_2_state = init_bmu_state();
 
@@ -572,8 +657,8 @@ void init_char_static_array(/*@out@*/ char * array, int size)
 
 void init_coordinate(/*@out@*/ coordinate * temp)
 {
-	(*temp).x = 0;
-	(*temp).y = 0;
+	(*temp).x = 0.0;
+	(*temp).y = 0.0;
 
 }
 
@@ -616,7 +701,7 @@ void copy_coordinate_static_array(coordinate * from, coordinate * to, int size)
 void init_celldim(/*@out@*/ celldim * temp)
 {
 	init_coordinate(&(*temp).xy);
-	(*temp).diameter = 0;
+	(*temp).diameter = 0.0;
 
 }
 
@@ -1067,6 +1152,14 @@ void free_bmu_agents()
 		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
 	bmu_end_state->count = 0;
+	current_xmachine_bmu_holder = bmu_3_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_3_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_3_state->count = 0;
 	current_xmachine_bmu_holder = bmu_2_state->agents;
 	while(current_xmachine_bmu_holder)
 	{
@@ -1096,6 +1189,7 @@ void free_bmu_agents()
 void free_bmu_states()
 {
 	free(bmu_end_state);
+	free(bmu_3_state);
 	free(bmu_2_state);
 	free(bmu_1_state);
 	free(bmu_start_state);
@@ -1742,6 +1836,7 @@ void add_node(int node_id, double minx, double maxx, double miny, double maxy, d
 	current->oc_position_messages = NULL;
 	current->ob_position_messages = NULL;
 	current->fusion_messages = NULL;
+	current->fusion_signal_messages = NULL;
 
 
 	current->partition_data[0] = minx;
@@ -1860,6 +1955,31 @@ void clean_up(int code)
                break;
            case MB_ERR_LOCKED:
                fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+
+	       
+       	   exit(rc);
+    }
+    #endif
+
+	rc = MB_Delete(&b_fusion_signal);
+	#ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not delete 'fusion_signal' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'fusion_signal' board has not been created?\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
                break;
            case MB_ERR_INTERNAL:
                fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -2606,12 +2726,12 @@ void copy_coordinate_array(coordinate_array * from, coordinate_array * to)
 	}
 }
 
-/** \fn void add_coordinate(coordinate_array * array, int x, int y)
+/** \fn void add_coordinate(coordinate_array * array, double x, double y)
 * \brief Add an coordinate to the dynamic coordinate array.
 * \param array Pointer to the dynamic coordinate array.
 * \param new_int The coordinate to add
 */
-void add_coordinate(coordinate_array * array,  int x,  int y)
+void add_coordinate(coordinate_array * array,  double x,  double y)
 {
 	if((*array).size == (*array).total_size)
 	{
@@ -2697,12 +2817,12 @@ void copy_celldim_array(celldim_array * from, celldim_array * to)
 	}
 }
 
-/** \fn void add_celldim(celldim_array * array, coordinate * xy, int diameter)
+/** \fn void add_celldim(celldim_array * array, coordinate * xy, double diameter)
 * \brief Add an celldim to the dynamic celldim array.
 * \param array Pointer to the dynamic celldim array.
 * \param new_int The celldim to add
 */
-void add_celldim(celldim_array * array, /*@out@*/ coordinate * xy,  int diameter)
+void add_celldim(celldim_array * array, /*@out@*/ coordinate * xy,  double diameter)
 {
 	if((*array).size == (*array).total_size)
 	{

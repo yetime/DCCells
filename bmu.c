@@ -20,7 +20,8 @@
 int create(){
 		coordinate ob_pos;
 		init_coordinate(&ob_pos);
-		copy_coordinate(&BMU_POSITION,&ob_pos);
+		ob_pos.x=BMU_POSITION.x;
+		ob_pos.y=BMU_POSITION.y;
 		celldim ob_dim;
 		init_celldim(&ob_dim);
 		ob_dim.xy=ob_pos;
@@ -29,12 +30,17 @@ int create(){
 
 		coordinate oc_pos;
 		init_coordinate(&oc_pos);
-		copy_coordinate(&BMU_POSITION,&oc_pos);
+		oc_pos.x=BMU_POSITION.x;
+		oc_pos.y=BMU_POSITION.y;
 		celldim oc_dim;
 		init_celldim(&oc_dim);
 		oc_dim.xy=oc_pos;
 		oc_dim.diameter=OC_DIAMETER;
-		add_oc_agent(oc_dim,0,1,get_new_oc_id(), 0, BMU_ID, BMU_DIRECTION);
+		coordinate oc_dir;
+		init_coordinate(&oc_dir);
+		oc_dir.x=BMU_DIRECTION.x;
+		oc_dir.y=BMU_DIRECTION.y;
+		add_oc_agent(oc_dim,0,1,get_new_oc_id(), 0, BMU_ID, oc_dir);
 
 	return 0;
 }
@@ -46,5 +52,15 @@ int bmu_die(){
 int bmu_move(){
 	return 0;
 }
+
+int calc_fusions(){
+	if(DCC_DEBUG==1) printf("CALC_FUSIONS\n");
+	START_FUSION_MESSAGE_LOOP
+	FINISH_FUSION_MESSAGE_LOOP
+
+	add_fusion_signal_message(0,0,0);
+	return 0;
+}
+
 
 

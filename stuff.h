@@ -8,6 +8,7 @@
  */
 
 #define PI 3.141593
+#define DCC_DEBUG 1
 
 int sim_ob_counter;
 int sim_oc_counter;

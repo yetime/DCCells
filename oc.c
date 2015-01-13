@@ -16,6 +16,8 @@
 #include <math.h>
 #include "stuff.h"
 
+#define OC_DEATH_SIG 1
+#define OC_FUSE_SIG 2
 
 int initialize_oc(){
 	OC_AGE=1;
@@ -27,7 +29,7 @@ int initialize_oc(){
  */
 int signal_oc_position(){
 	if(OC_AGE!=0) {
-		add_oc_position_message(OC_DIM,OC_ID,OC_NUCLEI);
+		add_oc_position_message(OC_DIM,OC_ID,OC_NUCLEI, OC_MYBMU);
 	}
 		return 0;
 }
@@ -71,27 +73,26 @@ int oc_die(){
  */
 
 int check_fusions(){
-	int fused=0;
 	int other_cell_id=0;
 	START_OC_POSITION_MESSAGE_LOOP
-		coordinate other_oc=oc_position_message->oc_dimension.xy;
-	    double distance=eucl_distance(OC_DIM.xy.x, other_oc.x, OC_DIM.xy.y, other_oc.y);
-	    if(distance>=OC_DIM.diameter/2+oc_position_message->oc_dimension.diameter/2){
-	    	fused=1;
-	    	other_cell_id=oc_position_message->id;
+		other_cell_id=oc_position_message->id;
+	    if (other_cell_id!=OC_ID && OC_MYBMU==oc_position_message->bmu_scope){
+	    	printf("Cell ID: %d , Other Cell %d\n\n", OC_ID, other_cell_id);
+	    	coordinate other_oc=oc_position_message->oc_dimension.xy;
+	    	double distance=eucl_distance(OC_DIM.xy.x, other_oc.x, OC_DIM.xy.y, other_oc.y);
+	    	if(distance>=OC_DIM.diameter/2+oc_position_message->oc_dimension.diameter/2){
+	    		add_fusion_message(OC_ID, other_cell_id, OC_MYBMU);
+	    	}
 	    }
 	FINISH_OC_POSITION_MESSAGE_LOOP
-
-
-
-	if(fused!=0) add_fusion_message(OC_ID, other_cell_id);
 
 	return 0;
 }
 
 int fuse(){
-	START_FUSION_MESSAGE_LOOP
-	FINISH_FUSION_MESSAGE_LOOP
+	START_FUSION_SIGNAL_MESSAGE_LOOP
+
+	FINISH_FUSION_SIGNAL_MESSAGE_LOOP
 	return 0;
 }
 
@@ -103,13 +104,22 @@ int oc_move(){
 	int current_x=OC_DIRECTION.x;
 	int current_y=OC_DIRECTION.y;
 
+	if(DCC_DEBUG==1) printf("OC_Direction x: %f y: %f\n", OC_DIRECTION.x, OC_DIRECTION.y);
+
 	double angle=PI/2*rnd_numbers_normal(OC_DISPL_STDEV);
 
-	int new_x=sin(angle)/current_x*OC_SPEED;
-	int new_y=sin(PI/2-angle)/current_y*OC_SPEED;
+	if(DCC_DEBUG==1) printf("angle: %f\n", angle*180/PI);
+
+	double new_x=sin(angle)/current_x*OC_SPEED;
+	double new_y=sin(PI/2-angle)/current_y*OC_SPEED;
+
+	if(DCC_DEBUG==1) printf("new_x: %f new_y: %f\n", new_x, new_y);
 
 	OC_DIM.xy.x=OC_DIM.xy.x+new_x;
 	OC_DIM.xy.y=OC_DIM.xy.y+new_y;
+
+	if(DCC_DEBUG==1) printf("OC_Position x: %f y: %f\n\n", OC_DIM.xy.x, OC_DIM.xy.y);
+
 	return 0;
 }
 
