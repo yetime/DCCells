@@ -219,11 +219,18 @@ void unittest_calc_fusions_2_3()
 	//return calc_fusions();
 }
 
-void unittest_bmu_move_3_end()
+void unittest_bmu_move_3_4()
 {
 	
 	
 	//return bmu_move();
+}
+
+void unittest_bmu_getolder_4_end()
+{
+	
+	
+	//return bmu_getolder();
 }
 
 void unittest_initialize_start_end()
@@ -482,6 +489,8 @@ int rc;
 	ob_start_state = init_ob_state();
 
 	bmu_end_state = init_bmu_state();
+
+	bmu_4_state = init_bmu_state();
 
 	bmu_3_state = init_bmu_state();
 
@@ -1103,6 +1112,7 @@ xmachine_memory_bmu * init_bmu_agent()
 	current->bmu_speed = 0.0;
 	init_coordinate(&current->bmu_position);
 	current->bmu_length = 0;
+	current->bmu_age = 0;
 
 	return current;
 }
@@ -1131,6 +1141,7 @@ void unittest_init_bmu_agent()
 		current_xmachine_bmu->bmu_speed = 0.0;
 		init_coordinate(&current_xmachine_bmu->bmu_position);
 		current_xmachine_bmu->bmu_length = 0;
+		current_xmachine_bmu->bmu_age = 0;
 	
 }
 
@@ -1152,6 +1163,14 @@ void free_bmu_agents()
 		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
 	bmu_end_state->count = 0;
+	current_xmachine_bmu_holder = bmu_4_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_4_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_4_state->count = 0;
 	current_xmachine_bmu_holder = bmu_3_state->agents;
 	while(current_xmachine_bmu_holder)
 	{
@@ -1189,6 +1208,7 @@ void free_bmu_agents()
 void free_bmu_states()
 {
 	free(bmu_end_state);
+	free(bmu_4_state);
 	free(bmu_3_state);
 	free(bmu_2_state);
 	free(bmu_1_state);
@@ -1220,15 +1240,16 @@ void add_bmu_agent_internal(xmachine_memory_bmu * agent, xmachine_memory_bmu_sta
 
 }
 
-/** \fn void add_bmu_agent(int bmu_id, coordinate * bmu_direction, double bmu_speed, coordinate * bmu_position, int bmu_length)
+/** \fn void add_bmu_agent(int bmu_id, coordinate * bmu_direction, double bmu_speed, coordinate * bmu_position, int bmu_length, int bmu_age)
  * \brief Add bmu X-machine to the current being used X-machine list.
  * \param bmu_id Variable for the X-machine memory.
  * \param bmu_direction Variable for the X-machine memory.
  * \param bmu_speed Variable for the X-machine memory.
  * \param bmu_position Variable for the X-machine memory.
  * \param bmu_length Variable for the X-machine memory.
+ * \param bmu_age Variable for the X-machine memory.
  */
-void add_bmu_agent(int bmu_id, coordinate bmu_direction, double bmu_speed, coordinate bmu_position, int bmu_length)
+void add_bmu_agent(int bmu_id, coordinate bmu_direction, double bmu_speed, coordinate bmu_position, int bmu_length, int bmu_age)
 {
 	xmachine_memory_bmu * current;
 
@@ -1242,6 +1263,7 @@ void add_bmu_agent(int bmu_id, coordinate bmu_direction, double bmu_speed, coord
 	current->bmu_speed = bmu_speed;
 	copy_coordinate(&bmu_position, &current->bmu_position);
 	current->bmu_length = bmu_length;
+	current->bmu_age = bmu_age;
 }
 
 xmachine_memory_environment_state * init_environment_state()
@@ -1697,6 +1719,28 @@ void set_bmu_length(int bmu_length)
 int get_bmu_length()
 {
 	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_length;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_bmu_age(int bmu_age)
+ * \brief Set bmu_age memory variable for current X-machine.
+ * \param bmu_age New value for variable.
+ */
+void set_bmu_age(int bmu_age)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_age = bmu_age;
+}
+
+/** \fn int get_bmu_age()
+ * \brief Get bmu_age memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_bmu_age()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_age;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /

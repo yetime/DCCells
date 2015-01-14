@@ -106,14 +106,33 @@ int oc_move(){
 
 	if(DCC_DEBUG==1) printf("OC_Direction x: %f y: %f\n", OC_DIRECTION.x, OC_DIRECTION.y);
 
-	double angle=PI/2*rnd_numbers_normal(OC_DISPL_STDEV);
+	double offset_x=rnd_numbers_normal(OC_DISPL_STDEV);
+	double offset_y=rnd_numbers_normal(OC_DISPL_STDEV);
 
-	if(DCC_DEBUG==1) printf("angle: %f\n", angle*180/PI);
+	if(DCC_DEBUG==1) printf("offset x: %f and y: %f\n", offset_x, offset_y);
 
-	double new_x=sin(angle)/current_x*OC_SPEED;
-	double new_y=sin(PI/2-angle)/current_y*OC_SPEED;
+	double new_x=offset_x+current_x;
+	double new_y=offset_y+current_y;
 
 	if(DCC_DEBUG==1) printf("new_x: %f new_y: %f\n", new_x, new_y);
+
+	double alpha = atan(new_y/new_x);
+
+	new_y=sin(alpha)*OC_SPEED;
+	new_x=cos(alpha)*OC_SPEED;
+
+	if(current_x<0 && current_y<0) {
+		new_x=new_x*-1;
+		new_y=new_y*-1;
+	}
+	else if(current_x<0 && current_y>0){
+		new_x=new_x*-1;
+		new_y=new_y*-1;
+	}
+
+
+	if(DCC_DEBUG==1) printf("old_x: %f old_y: %f\n", OC_DIM.xy.x,OC_DIM.xy.y);
+
 
 	OC_DIM.xy.x=OC_DIM.xy.x+new_x;
 	OC_DIM.xy.y=OC_DIM.xy.y+new_y;

@@ -638,6 +638,7 @@ int readAgentXML(char * location,
 	int in_bmu_speed = 0;
 	int in_bmu_position = 0;
 	int in_bmu_length = 0;
+	int in_bmu_age = 0;
 	int in_rand_init = 0;
 	
 	xmachine_memory_oc * current_oc_agent = NULL;
@@ -928,6 +929,8 @@ int readAgentXML(char * location,
 			if(strcmp(buffer, "/bmu_position") == 0) { in_bmu_position = 0; }
 			if(strcmp(buffer, "bmu_length") == 0) { in_bmu_length = 1; }
 			if(strcmp(buffer, "/bmu_length") == 0) { in_bmu_length = 0; }
+			if(strcmp(buffer, "bmu_age") == 0) { in_bmu_age = 1; }
+			if(strcmp(buffer, "/bmu_age") == 0) { in_bmu_age = 0; }
 			if(strcmp(buffer, "rand_init") == 0) { in_rand_init = 1; }
 			if(strcmp(buffer, "/rand_init") == 0) { in_rand_init = 0; }
 			
@@ -1004,6 +1007,7 @@ int readAgentXML(char * location,
 						rc = read_coordinate(buffer, index, &j, &current_bmu_agent->bmu_position);
 						if(rc != 0) { printf("Error: reading 'bmu' agent variable 'bmu_position' of type 'coordinate'\n"); exit(0); } }
 					if(in_bmu_length) { current_bmu_agent->bmu_length = atoi(buffer); }
+					if(in_bmu_age) { current_bmu_agent->bmu_age = atoi(buffer); }
 				 }else if(in_environment_agent == 1)
 				{
 					if(in_rand_init) { current_environment_agent->rand_init = atoi(buffer); }
@@ -1734,6 +1738,10 @@ void write_bmu_agent(FILE *file, xmachine_memory_bmu * current)
 	sprintf(data, "%i", current->bmu_length);
 	fputs(data, file);
 	fputs("</bmu_length>\n", file);
+		fputs("<bmu_age>", file);
+	sprintf(data, "%i", current->bmu_age);
+	fputs(data, file);
+	fputs("</bmu_age>\n", file);
 
 	fputs("</xagent>\n", file);
 }

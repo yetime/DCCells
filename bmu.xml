@@ -317,6 +317,10 @@
 					<name>bmu_length</name>
 					<type>int</type>
 				</variable>
+				<variable>
+					<name>bmu_age</name>
+					<type>int</type>
+				</variable>
 			</memory>
 			<functions>
 				<function>
@@ -355,6 +359,11 @@
 				<function>
 					<name>bmu_move</name>
 					<currentState>3</currentState>
+					<nextState>4</nextState>
+				</function>
+				<function>
+					<name>bmu_getolder</name>
+					<currentState>4</currentState>
 					<nextState>end</nextState>
 				</function>
 			</functions>

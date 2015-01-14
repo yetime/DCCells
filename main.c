@@ -1777,7 +1777,7 @@ if(FLAME_fusion_message_board_read == 0)
 	{
 		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
 		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
-		current_xmachine_bmu_next_state = bmu_end_state;
+		current_xmachine_bmu_next_state = bmu_4_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
 		current_xmachine->xmachine_ob = NULL;
@@ -1799,7 +1799,7 @@ if(FLAME_fusion_message_board_read == 0)
 			}
 			else
 			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_3_state, bmu_end_state);
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_3_state, bmu_4_state);
 			}
 		
 
@@ -2007,6 +2007,45 @@ if(FLAME_fusion_signal_message_board_read == 0)
     #endif
 
 
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_getolder\n");
+	current_xmachine_bmu_holder = bmu_4_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_end_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
+
+		
+
+		
+
+			i = bmu_getolder();
+
+		
+
+			if(i == 1)
+			{
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_4_state);
+			}
+			else
+			{
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_4_state, bmu_end_state);
+			}
+		
+
+		current_xmachine_bmu = NULL;
+
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_getolder\n");
+
+
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_move\n");
 	current_xmachine_oc_holder = oc_3_state->agents;
 	while(current_xmachine_oc_holder)
@@ -2178,6 +2217,9 @@ if(FLAME_fusion_signal_message_board_read == 0)
 
 	/*printf("bmu_end_state->count = %d\n", bmu_end_state->count);*/
 	bmu_end_state->count = 0;
+
+	/*printf("bmu_4_state->count = %d\n", bmu_4_state->count);*/
+	bmu_4_state->count = 0;
 
 	/*printf("bmu_3_state->count = %d\n", bmu_3_state->count);*/
 	bmu_3_state->count = 0;
