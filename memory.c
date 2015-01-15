@@ -115,14 +115,44 @@ void unittest_signal_ob_position_start_1()
 	//return signal_ob_position();
 }
 
-void unittest_ob_get_older_1_2()
+void unittest_ob_move_1_2()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_new_ob_position, &i_new_ob_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'new_ob_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'new_ob_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'new_ob_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return ob_move();
+}
+
+void unittest_ob_get_older_2_3()
 {
 	
 	
 	//return ob_get_older();
 }
 
-void unittest_ob_die_2_end()
+void unittest_ob_die_3_end()
 {
 	
 	
@@ -189,7 +219,37 @@ void unittest_bmu_die_1_2()
 	//return bmu_die();
 }
 
-void unittest_calc_fusions_2_3()
+void unittest_ob_push_check_2_3()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_ob_position, &i_ob_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'ob_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return ob_push_check();
+}
+
+void unittest_calc_fusions_3_4()
 {
 	int rc;
 	
@@ -219,14 +279,14 @@ void unittest_calc_fusions_2_3()
 	//return calc_fusions();
 }
 
-void unittest_bmu_move_3_4()
+void unittest_bmu_move_4_5()
 {
 	
 	
 	//return bmu_move();
 }
 
-void unittest_bmu_getolder_4_end()
+void unittest_bmu_getolder_5_end()
 {
 	
 	
@@ -331,6 +391,31 @@ void free_messages()
 	               break;
 	           case MB_ERR_LOCKED:
 	               fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	    rc = MB_Clear(b_new_ob_position);
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not clear 'new_ob_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: 'new_ob_position' board is invalid\n");
+	               break;
+	           case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'new_ob_position' board is locked\n");
 	               break;
 	           case MB_ERR_INTERNAL:
 	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -466,6 +551,34 @@ int rc;
 	    }
 	    #endif
 	
+	/* Initialise message sync composite params as NULL */
+	FLAME_m_new_ob_position_composite_params = NULL;
+
+	    rc = MB_Create(&b_new_ob_position, sizeof(m_new_ob_position));
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not create 'new_ob_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: Invalid message size\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
 	oc_5_state = init_oc_state();
 
 	oc_4_state = init_oc_state();
@@ -480,6 +593,8 @@ int rc;
 
 	oc_start_state = init_oc_state();
 
+	ob_3_state = init_ob_state();
+
 	ob_2_state = init_ob_state();
 
 	ob_1_state = init_ob_state();
@@ -489,6 +604,8 @@ int rc;
 	ob_start_state = init_ob_state();
 
 	bmu_end_state = init_bmu_state();
+
+	bmu_5_state = init_bmu_state();
 
 	bmu_4_state = init_bmu_state();
 
@@ -751,6 +868,50 @@ void copy_celldim_static_array(celldim * from, celldim * to, int size)
 }
 
 
+void init_dim_id(/*@out@*/ dim_id * temp)
+{
+	init_celldim(&(*temp).dims);
+	(*temp).id = 0;
+
+}
+
+void init_dim_id_static_array(/*@out@*/ dim_id * array, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++) init_dim_id(&array[i]);
+}
+
+void free_dim_id(dim_id * temp)
+{
+	free_celldim(&(*temp).dims);
+
+}
+
+void free_dim_id_static_array(dim_id * array, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++) free_dim_id(&array[i]);
+}
+
+void copy_dim_id(dim_id * from, dim_id * to)
+{
+	copy_celldim(&(*from).dims, &(*to).dims);
+	(*to).id = (*from).id;
+}
+
+void copy_dim_id_static_array(dim_id * from, dim_id * to, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++)
+	{
+		copy_dim_id(&from[i], &to[i]);
+	}
+}
+
+
 
 xmachine_memory_oc_state * init_oc_state()
 {
@@ -961,6 +1122,8 @@ xmachine_memory_ob * init_ob_agent()
 	current->ob_id = 0;
 	current->ob_death_prob = 0.0;
 	current->ob_mybmu = 0;
+	init_coordinate(&current->ob_direction);
+	current->ob_moved_flag = 0;
 
 	return current;
 }
@@ -972,6 +1135,7 @@ void free_ob_agent(xmachine_memory_ob_holder * tmp, xmachine_memory_ob_state * s
 	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
 
 	free_celldim(&tmp->agent->ob_dim);
+	free_coordinate(&tmp->agent->ob_direction);
 	
 
 	free(tmp->agent);
@@ -988,18 +1152,29 @@ void unittest_init_ob_agent()
 		current_xmachine_ob->ob_id = 0;
 		current_xmachine_ob->ob_death_prob = 0.0;
 		current_xmachine_ob->ob_mybmu = 0;
+		init_coordinate(&current_xmachine_ob->ob_direction);
+		current_xmachine_ob->ob_moved_flag = 0;
 	
 }
 
 void unittest_free_ob_agent()
 {
 	free_celldim(&current_xmachine_ob->ob_dim);
+	free_coordinate(&current_xmachine_ob->ob_direction);
 	
 	free(current_xmachine_ob);
 }
 
 void free_ob_agents()
 {
+	current_xmachine_ob_holder = ob_3_state->agents;
+	while(current_xmachine_ob_holder)
+	{
+		temp_xmachine_ob_holder = current_xmachine_ob_holder->next;
+		free_ob_agent(current_xmachine_ob_holder, ob_3_state);
+		current_xmachine_ob_holder = temp_xmachine_ob_holder;
+	}
+	ob_3_state->count = 0;
 	current_xmachine_ob_holder = ob_2_state->agents;
 	while(current_xmachine_ob_holder)
 	{
@@ -1036,6 +1211,7 @@ void free_ob_agents()
 
 void free_ob_states()
 {
+	free(ob_3_state);
 	free(ob_2_state);
 	free(ob_1_state);
 	free(ob_end_state);
@@ -1067,15 +1243,17 @@ void add_ob_agent_internal(xmachine_memory_ob * agent, xmachine_memory_ob_state 
 
 }
 
-/** \fn void add_ob_agent(celldim * ob_dim, int ob_age, int ob_id, double ob_death_prob, int ob_mybmu)
+/** \fn void add_ob_agent(celldim * ob_dim, int ob_age, int ob_id, double ob_death_prob, int ob_mybmu, coordinate * ob_direction, int ob_moved_flag)
  * \brief Add ob X-machine to the current being used X-machine list.
  * \param ob_dim Variable for the X-machine memory.
  * \param ob_age Variable for the X-machine memory.
  * \param ob_id Variable for the X-machine memory.
  * \param ob_death_prob Variable for the X-machine memory.
  * \param ob_mybmu Variable for the X-machine memory.
+ * \param ob_direction Variable for the X-machine memory.
+ * \param ob_moved_flag Variable for the X-machine memory.
  */
-void add_ob_agent(celldim ob_dim, int ob_age, int ob_id, double ob_death_prob, int ob_mybmu)
+void add_ob_agent(celldim ob_dim, int ob_age, int ob_id, double ob_death_prob, int ob_mybmu, coordinate ob_direction, int ob_moved_flag)
 {
 	xmachine_memory_ob * current;
 
@@ -1089,6 +1267,8 @@ void add_ob_agent(celldim ob_dim, int ob_age, int ob_id, double ob_death_prob, i
 	current->ob_id = ob_id;
 	current->ob_death_prob = ob_death_prob;
 	current->ob_mybmu = ob_mybmu;
+	copy_coordinate(&ob_direction, &current->ob_direction);
+	current->ob_moved_flag = ob_moved_flag;
 }
 
 xmachine_memory_bmu_state * init_bmu_state()
@@ -1163,6 +1343,14 @@ void free_bmu_agents()
 		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
 	}
 	bmu_end_state->count = 0;
+	current_xmachine_bmu_holder = bmu_5_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_5_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_5_state->count = 0;
 	current_xmachine_bmu_holder = bmu_4_state->agents;
 	while(current_xmachine_bmu_holder)
 	{
@@ -1208,6 +1396,7 @@ void free_bmu_agents()
 void free_bmu_states()
 {
 	free(bmu_end_state);
+	free(bmu_5_state);
 	free(bmu_4_state);
 	free(bmu_3_state);
 	free(bmu_2_state);
@@ -1633,6 +1822,41 @@ int get_ob_mybmu()
     return (int)0;
 }
 
+/** \fn coordinate get_ob_direction()
+ * \brief Get ob_direction memory variable from current X-machine.
+ * \return Value for variable.
+ */
+coordinate * get_ob_direction()
+{
+	if(current_xmachine->xmachine_ob) return &(*current_xmachine->xmachine_ob).ob_direction;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return NULL;
+}
+
+/** \fn void set_ob_moved_flag(int ob_moved_flag)
+ * \brief Set ob_moved_flag memory variable for current X-machine.
+ * \param ob_moved_flag New value for variable.
+ */
+void set_ob_moved_flag(int ob_moved_flag)
+{
+	if(current_xmachine->xmachine_ob) (*current_xmachine->xmachine_ob).ob_moved_flag = ob_moved_flag;
+}
+
+/** \fn int get_ob_moved_flag()
+ * \brief Get ob_moved_flag memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_ob_moved_flag()
+{
+	if(current_xmachine->xmachine_ob) return (*current_xmachine->xmachine_ob).ob_moved_flag;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
 /** \fn void set_bmu_id(int bmu_id)
  * \brief Set bmu_id memory variable for current X-machine.
  * \param bmu_id New value for variable.
@@ -1881,6 +2105,7 @@ void add_node(int node_id, double minx, double maxx, double miny, double maxy, d
 	current->ob_position_messages = NULL;
 	current->fusion_messages = NULL;
 	current->fusion_signal_messages = NULL;
+	current->new_ob_position_messages = NULL;
 
 
 	current->partition_data[0] = minx;
@@ -2024,6 +2249,31 @@ void clean_up(int code)
                break;
            case MB_ERR_LOCKED:
                fprintf(stderr, "\t reason: 'fusion_signal' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+
+	       
+       	   exit(rc);
+    }
+    #endif
+
+	rc = MB_Delete(&b_new_ob_position);
+	#ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not delete 'new_ob_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'new_ob_position' board has not been created?\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'new_ob_position' board is locked\n");
                break;
            case MB_ERR_INTERNAL:
                fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -2898,6 +3148,97 @@ void remove_celldim(celldim_array * array, int index)
 		for(i = index; i < (*array).size - 1; i++)
 		{
 			copy_celldim(&(*array).array[i+1], &(*array).array[i]);
+		}
+		(*array).size--;
+	}
+}
+/* Functions for the dim_id datatype */
+/** \fn dim_id_array * init_dim_id_array()
+ * \brief Allocate memory for a dynamic dim_id array.
+ * \return dim_id_array Pointer to the new dynamic dim_id array.
+ */
+void init_dim_id_array(dim_id_array * array)
+{
+	(*array).size = 0;
+	(*array).total_size = ARRAY_BLOCK_SIZE;
+	(*array).array = (dim_id *)malloc(ARRAY_BLOCK_SIZE * sizeof(dim_id));
+	CHECK_POINTER((*array).array);
+}
+
+/** \fn void reset_dim_id_array(dim_id_array* array)
+* \brief Reset the dim_id array to hold nothing.
+* \param array Pointer to the dynamic dim_id array.
+*/
+void reset_dim_id_array(dim_id_array * array)
+{
+	(*array).size = 0;
+}
+
+/** \fn void free_dim_id_array(dim_id_array * array)
+* \brief Free the memory of a dynamic dim_id array.
+* \param array Pointer to the dynamic dim_id array.
+*/
+void free_dim_id_array(dim_id_array * array)
+{
+	int i;
+	
+	for(i = 0; i < array->size; i++)
+	{
+		free_dim_id(&(*array).array[i]);
+	}
+	
+	free((*array).array);
+}
+
+void copy_dim_id_array(dim_id_array * from, dim_id_array * to)
+{
+	int i;
+
+	//to = init_dim_id_array();
+
+	for(i = 0; i < (*from).size; i++)
+	{
+		add_dim_id(to, &(*from).array[i].dims, (*from).array[i].id);
+	}
+}
+
+/** \fn void add_dim_id(dim_id_array * array, celldim * dims, int id)
+* \brief Add an dim_id to the dynamic dim_id array.
+* \param array Pointer to the dynamic dim_id array.
+* \param new_int The dim_id to add
+*/
+void add_dim_id(dim_id_array * array, /*@out@*/ celldim * dims,  int id)
+{
+	if((*array).size == (*array).total_size)
+	{
+		(*array).total_size = (int)((*array).total_size * ARRAY_GROWTH_RATE);
+		(*array).array = (dim_id *)realloc((*array).array, ((*array).total_size * sizeof(dim_id)));
+	}
+	init_dim_id(&(*array).array[(*array).size]);
+	copy_celldim(dims, &(*array).array[(*array).size].dims);
+	(*array).array[(*array).size].id = id;
+
+	(*array).size++;
+}
+
+/** \fn void remove_dim_id(dim_id_array * array, int index)
+ * \brief Remove an dim_id from a dynamic dim_id array.
+ * \param array Pointer to the dynamic dim_id array.
+ * \param index The index of the dim_id to remove.
+ */
+void remove_dim_id(dim_id_array * array, int index)
+{
+	int i;
+
+	/* Free element at index index */
+	free_dim_id(&(*array).array[index]);
+
+	/* Copy all elements up by one */
+	if(index < (*array).size)
+	{
+		for(i = index; i < (*array).size - 1; i++)
+		{
+			copy_dim_id(&(*array).array[i+1], &(*array).array[i]);
 		}
 		(*array).size--;
 	}

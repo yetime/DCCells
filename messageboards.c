@@ -558,3 +558,139 @@ m_fusion_signal * get_next_fusion_signal_message(m_fusion_signal * current)
 	return getInternalMessage_fusion_signal();
 }
 
+
+/* Box filtering functions */
+
+
+
+
+union pu_new_ob_position 
+{
+    m_new_ob_position *ptr;
+    void *ptr_anon;
+};
+
+/** \fn void add_new_ob_position_message(int push_id, celldim dims)
+ * \brief Add new_ob_position message by calling internal and processing.
+ * \param push_id Message variable.
+ * \param dims Message variable.
+ */
+void add_new_ob_position_message(int push_id, celldim dims)
+{
+    int rc;
+	m_new_ob_position msg;
+    
+    msg.push_id = push_id;
+    copy_celldim(&dims, &msg.dims);
+    
+    
+    rc = MB_AddMessage(b_new_ob_position, &msg);
+    #ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not add message to 'new_ob_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'new_ob_position' board has not been created?\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'new_ob_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_AddMessage returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	   }
+	      
+	   
+       exit(rc);
+    }
+    #endif
+}
+
+inline static m_new_ob_position* getInternalMessage_new_ob_position(void)
+{
+    static m_new_ob_position *msg_prev = NULL;
+    union pu_new_ob_position msg_pu;
+    int rc;
+    
+    /* deallocate previously returned message */
+    if (msg_prev != NULL) 
+    {
+        free(msg_prev);
+    }
+    else 
+    {
+        rc = MB_Iterator_Rewind(i_new_ob_position); 
+        #ifdef ERRCHECK
+        if (rc != MB_SUCCESS)
+        {
+            fprintf(stderr, "ERROR: Could not rewind 'new_ob_position' Iterator\n");
+            switch(rc) {
+                case MB_ERR_INVALID:
+                    fprintf(stderr, "\t reason: 'new_ob_position' Iterator has not been created?\n");
+                    break;
+	            default:
+                    fprintf(stderr, "\t MB_Iterator_Rewind returned error code: %d (see libmboard docs for details)\n", rc);
+                    break;
+	        }
+	       
+	       
+       	   exit(rc);
+        }
+        #endif
+    }
+    
+    /* get next message from iterator */
+    rc = MB_Iterator_GetMessage(i_new_ob_position, &(msg_pu.ptr_anon));
+    #ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not get message from 'new_ob_position' Iterator\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'new_ob_position' Iterator has not been created?\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Iterator_GetMessage returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+	       
+	       
+       	   exit(rc);
+    }
+    #endif
+    
+    /* store pointer so memory can be deallocated later */
+    msg_prev = msg_pu.ptr;
+    
+    return msg_pu.ptr;
+}
+
+/** \fn xmachine_message_new_ob_position * get_first_new_ob_position_message()
+ * \brief Get the first new_ob_position message in the new_ob_position message list.
+ * \return The first message in the list.
+ */
+m_new_ob_position * get_first_new_ob_position_message()
+{
+	return getInternalMessage_new_ob_position();
+}
+
+/** \fn xmachine_message_new_ob_position * get_next_new_ob_position_message(xmachine_message_new_ob_position * current)
+ * \brief Get the next new_ob_position message in the new_ob_position message list after the current message.
+ * \param current The current message in the list.
+ * \return The next message in the list.
+ */
+m_new_ob_position * get_next_new_ob_position_message(m_new_ob_position * current)
+{
+	return getInternalMessage_new_ob_position();
+}
+

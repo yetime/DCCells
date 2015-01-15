@@ -77,7 +77,6 @@ int check_fusions(){
 	START_OC_POSITION_MESSAGE_LOOP
 		other_cell_id=oc_position_message->id;
 	    if (other_cell_id!=OC_ID && OC_MYBMU==oc_position_message->bmu_scope){
-	    	printf("Cell ID: %d , Other Cell %d\n\n", OC_ID, other_cell_id);
 	    	coordinate other_oc=oc_position_message->oc_dimension.xy;
 	    	double distance=eucl_distance(OC_DIM.xy.x, other_oc.x, OC_DIM.xy.y, other_oc.y);
 	    	if(distance>=OC_DIM.diameter/2+oc_position_message->oc_dimension.diameter/2){
@@ -104,17 +103,11 @@ int oc_move(){
 	int current_x=OC_DIRECTION.x;
 	int current_y=OC_DIRECTION.y;
 
-	if(DCC_DEBUG==1) printf("OC_Direction x: %f y: %f\n", OC_DIRECTION.x, OC_DIRECTION.y);
-
 	double offset_x=rnd_numbers_normal(OC_DISPL_STDEV);
 	double offset_y=rnd_numbers_normal(OC_DISPL_STDEV);
 
-	if(DCC_DEBUG==1) printf("offset x: %f and y: %f\n", offset_x, offset_y);
-
 	double new_x=offset_x+current_x;
 	double new_y=offset_y+current_y;
-
-	if(DCC_DEBUG==1) printf("new_x: %f new_y: %f\n", new_x, new_y);
 
 	double alpha = atan(new_y/new_x);
 
@@ -130,14 +123,9 @@ int oc_move(){
 		new_y=new_y*-1;
 	}
 
-
-	if(DCC_DEBUG==1) printf("old_x: %f old_y: %f\n", OC_DIM.xy.x,OC_DIM.xy.y);
-
-
 	OC_DIM.xy.x=OC_DIM.xy.x+new_x;
 	OC_DIM.xy.y=OC_DIM.xy.y+new_y;
 
-	if(DCC_DEBUG==1) printf("OC_Position x: %f y: %f\n\n", OC_DIM.xy.x, OC_DIM.xy.y);
 
 	return 0;
 }

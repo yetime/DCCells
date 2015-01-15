@@ -490,6 +490,104 @@ int read_celldim_static_array(char * buffer, int buffer_size, int * j, celldim *
 	return 0;
 }
 
+/** \fn void read_dim_id(char * buffer, int * j, dim_id * temp_datatype)
+ * \brief Reads dim_id datatype.
+ */
+int read_dim_id(char * buffer, int /*@unused@*/ buffer_size, int * j, dim_id * temp_datatype)
+{
+	int array_k;
+	char arraydata[100000];
+	int rc;
+	
+	while(buffer[(*j)] != '{')
+	{
+		if(buffer[(*j)] != ' ') return -1;
+		else if(buffer[(*j)] == '\0') return -1;
+		else (*j)++;
+	}
+	(*j)++;
+
+	while(buffer[*j] != '{') (*j)++;
+	rc = read_celldim(buffer, buffer_size, j, &(*temp_datatype).dims);
+	if(rc != 0) return -1;
+	(*j)++;
+	(*temp_datatype).id = 0;
+	array_k = 0;
+	while(buffer[*j] != '}')
+	{
+		if(buffer[(*j)] == '\0') return -1;
+		arraydata[array_k] = buffer[*j];
+		array_k++;
+		(*j)++;
+	}
+	arraydata[array_k] = '\0';
+	(*temp_datatype).id = atoi(arraydata);
+	(*j)++;
+
+	return 0;
+}
+
+int read_dim_id_dynamic_array(char * buffer, int buffer_size, int * j, dim_id_array * temp_datatype_array)
+{
+	int arraycount = 0;
+	int rc;
+	celldim dims;
+# ifndef S_SPLINT_S
+	init_celldim(&dims);
+# endif
+	
+	
+
+	while(buffer[(*j)] != '{')
+	{
+		if(buffer[(*j)] != ' ') return -1;
+		else if(buffer[(*j)] == '\0') return -1;
+		else (*j)++;
+	}
+	(*j)++;
+
+	while(buffer[(*j)] != '\0' && buffer[(*j)] != '}')
+	{
+		if(buffer[(*j)] == '{')
+		{
+			add_dim_id(temp_datatype_array, &dims, 0);
+			rc = read_dim_id(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
+			if(rc != 0) { printf("Error: reading variable 'dim_id' of type '\n"); return -1; }
+			arraycount++;
+			(*j)++;
+		}
+		while(buffer[(*j)] != '}' && buffer[(*j)] != '\0' && buffer[(*j)] != '{') { (*j)++; }
+	}
+
+	
+	
+	return 0;
+}
+
+int read_dim_id_static_array(char * buffer, int buffer_size, int * j, dim_id * temp_datatype_array, int size)
+{
+	int arraycount;
+	int rc;
+
+	while(buffer[(*j)] != '{')
+	{
+		if(buffer[(*j)] != ' ') return -1;
+		else if(buffer[(*j)] == '\0') return -1;
+		else (*j)++;
+	}
+	(*j)++;
+
+	for(arraycount = 0; arraycount < size; arraycount++)
+	{
+		rc = read_dim_id(buffer, buffer_size, j, &temp_datatype_array[arraycount]);
+		if(rc != 0) { printf("Error: reading variable 'dim_id' of type '\n"); return -1; }
+		if(arraycount < (size-1)) while(buffer[(*j)] != '{') { (*j)++; }
+	}
+
+	(*j)++;
+	return 0;
+}
+
 
 
 int readEnvironmentXML(char * location)
@@ -633,6 +731,8 @@ int readAgentXML(char * location,
 	int in_ob_id = 0;
 	int in_ob_death_prob = 0;
 	int in_ob_mybmu = 0;
+	int in_ob_direction = 0;
+	int in_ob_moved_flag = 0;
 	int in_bmu_id = 0;
 	int in_bmu_direction = 0;
 	int in_bmu_speed = 0;
@@ -919,6 +1019,10 @@ int readAgentXML(char * location,
 			if(strcmp(buffer, "/ob_death_prob") == 0) { in_ob_death_prob = 0; }
 			if(strcmp(buffer, "ob_mybmu") == 0) { in_ob_mybmu = 1; }
 			if(strcmp(buffer, "/ob_mybmu") == 0) { in_ob_mybmu = 0; }
+			if(strcmp(buffer, "ob_direction") == 0) { in_ob_direction = 1; }
+			if(strcmp(buffer, "/ob_direction") == 0) { in_ob_direction = 0; }
+			if(strcmp(buffer, "ob_moved_flag") == 0) { in_ob_moved_flag = 1; }
+			if(strcmp(buffer, "/ob_moved_flag") == 0) { in_ob_moved_flag = 0; }
 			if(strcmp(buffer, "bmu_id") == 0) { in_bmu_id = 1; }
 			if(strcmp(buffer, "/bmu_id") == 0) { in_bmu_id = 0; }
 			if(strcmp(buffer, "bmu_direction") == 0) { in_bmu_direction = 1; }
@@ -996,6 +1100,10 @@ int readAgentXML(char * location,
 					if(in_ob_id) { current_ob_agent->ob_id = atoi(buffer); }
 					if(in_ob_death_prob) { current_ob_agent->ob_death_prob = atof(buffer); }
 					if(in_ob_mybmu) { current_ob_agent->ob_mybmu = atoi(buffer); }
+					if(in_ob_direction) { j = 0;
+						rc = read_coordinate(buffer, index, &j, &current_ob_agent->ob_direction);
+						if(rc != 0) { printf("Error: reading 'ob' agent variable 'ob_direction' of type 'coordinate'\n"); exit(0); } }
+					if(in_ob_moved_flag) { current_ob_agent->ob_moved_flag = atoi(buffer); }
 				 }else if(in_bmu_agent == 1)
 				{
 					if(in_bmu_id) { current_bmu_agent->bmu_id = atoi(buffer); }
@@ -1650,6 +1758,48 @@ void write_celldim_dynamic_array(FILE *file, celldim_array * temp_datatype)
 	fputs("}", file);
 }
 
+/** \fn void write_dim_id(FILE *file, dim_id * temp_datatype)
+ * \brief Writes dim_id datatype.
+ */
+void write_dim_id(FILE *file, dim_id * temp_datatype)
+{
+	char data[1000];
+
+	fputs("{", file);
+	write_celldim(file, &(*temp_datatype).dims);
+	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).id);
+	fputs(data, file);
+	fputs("}", file);
+}
+
+void write_dim_id_static_array(FILE *file, dim_id * temp_datatype, int size)
+{
+	int i;
+
+	fputs("{", file);
+	for(i = 0; i < size; i++)
+	{
+		write_dim_id(file, &temp_datatype[i]);
+
+		if(i < size - 1) fputs(", ", file);
+	}
+	fputs("}", file);
+}
+
+void write_dim_id_dynamic_array(FILE *file, dim_id_array * temp_datatype)
+{
+	int i;
+
+	fputs("{", file);
+	for(i = 0; i < (*temp_datatype).size; i++)
+	{
+		write_dim_id(file, &(*temp_datatype).array[i]);
+
+		if(i < (*temp_datatype).size - 1) fputs(", ", file);
+	}
+	fputs("}", file);
+}
+
 
 
 void write_oc_agent(FILE *file, xmachine_memory_oc * current)
@@ -1711,6 +1861,13 @@ void write_ob_agent(FILE *file, xmachine_memory_ob * current)
 	sprintf(data, "%i", current->ob_mybmu);
 	fputs(data, file);
 	fputs("</ob_mybmu>\n", file);
+		fputs("<ob_direction>", file);
+	write_coordinate(file, &current->ob_direction);
+	fputs("</ob_direction>\n", file);
+		fputs("<ob_moved_flag>", file);
+	sprintf(data, "%i", current->ob_moved_flag);
+	fputs(data, file);
+	fputs("</ob_moved_flag>\n", file);
 
 	fputs("</xagent>\n", file);
 }

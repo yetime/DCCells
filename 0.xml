@@ -6,15 +6,16 @@
     <worldsize>2500</worldsize>
     <oc_lifespan>14400</oc_lifespan>
     <ob_lifespan>11520</ob_lifespan>
-    <bmu_lifespan>200</bmu_lifespan>
-    <oc_creation_freq>0.1</oc_creation_freq>
-    <ob_creation_freq>0</ob_creation_freq>
-    <oc_speed>10</oc_speed>
+    <bmu_lifespan>500</bmu_lifespan>
+    <oc_creation_freq>0.2</oc_creation_freq>
+    <ob_creation_freq>0.1</ob_creation_freq>
+    <oc_speed>5</oc_speed>
     <oc_displ_stdev>1</oc_displ_stdev>
     <oc_type>1</oc_type>
     <ob_type>2</ob_type>
     <bmu_type>3</bmu_type>
     <oc_diameter>20</oc_diameter>
+    <ob_diameter>30</ob_diameter>
 </environment>
 
 <agents>
@@ -22,10 +23,11 @@
 	<name>bmu</name>
     <id>bmu1</id>
     <bmu_direction>{1.0,1.0}</bmu_direction>
-    <bmu_position>{1000.0,1000.0}</bmu_position>
-    <bmu_start>{1000.0,1000.0}</bmu_start>
+    <bmu_position>{50,50}</bmu_position>
+    <bmu_start>{50,50}</bmu_start>
     <length>3000</length>
     <bmu_age>1</bmu_age>
+    <bmu_speed>0.5</bmu_speed>
 </xagent>
 <xagent>
 	<name>environment</name>

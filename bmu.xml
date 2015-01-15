@@ -118,6 +118,19 @@
 					</variable>
 				</variables>
 			</dataType>
+			<dataType>
+				<name>dim_id</name>
+				<variables>
+					<variable>
+						<name>dims</name>
+						<type>celldim</type>
+					</variable>
+					<variable>
+						<name>id</name>
+						<type>int</type>
+					</variable>
+				</variables>
+			</dataType>
 		</dataTypes>
 
 	</environment>
@@ -251,6 +264,14 @@
 					<name>ob_mybmu</name>
 					<type>int</type>
 				</variable>
+				<variable>
+					<name>ob_direction</name>
+					<type>coordinate</type>
+				</variable>
+				<variable>
+					<name>ob_moved_flag</name>
+					<type>int</type>
+				</variable>
 			</memory>
 
 			<functions>
@@ -279,14 +300,24 @@
 						</output>
 					</outputs>
 				</function>
-					<function>
-					<name>ob_get_older</name>
+				<function>
+					<name>ob_move</name>
 					<currentState>1</currentState>
 					<nextState>2</nextState>
+					<inputs>
+						<input>
+							<messageName>new_ob_position</messageName>
+						</input>
+					</inputs>
+				</function>
+				<function>
+					<name>ob_get_older</name>
+					<currentState>2</currentState>
+					<nextState>3</nextState>
 				</function>
 				<function>
 					<name>ob_die</name>
-					<currentState>2</currentState>
+					<currentState>3</currentState>
 					<nextState>end</nextState>
 				</function>
 			</functions>
@@ -342,9 +373,24 @@
 					<nextState>2</nextState>
 				</function>
 				<function>
-					<name>calc_fusions</name>
+					<name>ob_push_check</name>
 					<currentState>2</currentState>
 					<nextState>3</nextState>
+					<inputs>
+						<input>
+							<messageName>ob_position</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>new_ob_position</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>calc_fusions</name>
+					<currentState>3</currentState>
+					<nextState>4</nextState>
 					<inputs>
 						<input>
 							<messageName>fusion</messageName>
@@ -358,12 +404,12 @@
 				</function>
 				<function>
 					<name>bmu_move</name>
-					<currentState>3</currentState>
-					<nextState>4</nextState>
+					<currentState>4</currentState>
+					<nextState>5</nextState>
 				</function>
 				<function>
 					<name>bmu_getolder</name>
-					<currentState>4</currentState>
+					<currentState>5</currentState>
 					<nextState>end</nextState>
 				</function>
 			</functions>
@@ -450,7 +496,7 @@
 				</variable>
 			</variables>
 		</message>
-			<message>
+		<message>
 			<name>fusion_signal</name>
 			<variables>
 				<variable>
@@ -465,6 +511,19 @@
 					<name>f_bmu_id</name>
 					<type>int</type>
 				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>new_ob_position</name>
+			<variables>
+			<variable>
+				<name>push_id</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>dims</name>
+				<type>celldim</type>
+			</variable>
 			</variables>
 		</message>
 	</messages>
