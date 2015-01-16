@@ -20,37 +20,7 @@ void unittest_signal_oc_position_start_1()
 	//return signal_oc_position();
 }
 
-void unittest_check_fusions_1_2()
-{
-	int rc;
-	
-	
-	rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	//return check_fusions();
-}
-
-void unittest_fuse_2_3()
+void unittest_fuse_1_2()
 {
 	int rc;
 	
@@ -80,21 +50,21 @@ void unittest_fuse_2_3()
 	//return fuse();
 }
 
-void unittest_oc_move_3_4()
+void unittest_oc_move_2_3()
 {
 	
 	
 	//return oc_move();
 }
 
-void unittest_oc_get_older_4_5()
+void unittest_oc_get_older_3_4()
 {
 	
 	
 	//return oc_get_older();
 }
 
-void unittest_oc_die_5_end()
+void unittest_oc_die_4_end()
 {
 	
 	
@@ -254,17 +224,17 @@ void unittest_calc_fusions_3_4()
 	int rc;
 	
 	
-	rc = MB_Iterator_Create(b_fusion, &i_fusion);
+	rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
 	#ifdef ERRCHECK
 	if (rc != MB_SUCCESS)
 	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'fusion'\n");
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
 	   switch(rc) {
 	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
+	           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
 	           break;
 	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
+               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
                break;
            case MB_ERR_MEMALLOC:
                fprintf(stderr, "\t reason: out of memory\n");
@@ -341,31 +311,6 @@ void free_messages()
 	               break;
 	           case MB_ERR_LOCKED:
 	               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
-	               break;
-	           case MB_ERR_INTERNAL:
-	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-	               break;
-	           default:
-                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
-                   break;
-	       }
-
-	       
-       	   exit(rc);
-	    }
-	    #endif
-	
-	    rc = MB_Clear(b_fusion);
-	    #ifdef ERRCHECK
-	    if (rc != MB_SUCCESS)
-	    {
-	       fprintf(stderr, "ERROR: Could not clear 'fusion' board\n");
-	       switch(rc) {
-	           case MB_ERR_INVALID:
-	               fprintf(stderr, "\t reason: 'fusion' board is invalid\n");
-	               break;
-	           case MB_ERR_LOCKED:
-	               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
 	               break;
 	           case MB_ERR_INTERNAL:
 	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -496,34 +441,6 @@ int rc;
 	    #endif
 	
 	/* Initialise message sync composite params as NULL */
-	FLAME_m_fusion_composite_params = NULL;
-
-	    rc = MB_Create(&b_fusion, sizeof(m_fusion));
-	    #ifdef ERRCHECK
-	    if (rc != MB_SUCCESS)
-	    {
-	       fprintf(stderr, "ERROR: Could not create 'fusion' board\n");
-	       switch(rc) {
-	           case MB_ERR_INVALID:
-	               fprintf(stderr, "\t reason: Invalid message size\n");
-	               break;
-	           case MB_ERR_MEMALLOC:
-	               fprintf(stderr, "\t reason: out of memory\n");
-	               break;
-	           case MB_ERR_INTERNAL:
-	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-	               break;
-	           default:
-                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
-                   break;
-	       }
-
-	       
-       	   exit(rc);
-	    }
-	    #endif
-	
-	/* Initialise message sync composite params as NULL */
 	FLAME_m_fusion_signal_composite_params = NULL;
 
 	    rc = MB_Create(&b_fusion_signal, sizeof(m_fusion_signal));
@@ -579,8 +496,6 @@ int rc;
 	    }
 	    #endif
 	
-	oc_5_state = init_oc_state();
-
 	oc_4_state = init_oc_state();
 
 	oc_3_state = init_oc_state();
@@ -828,6 +743,7 @@ void init_celldim(/*@out@*/ celldim * temp)
 {
 	init_coordinate(&(*temp).xy);
 	(*temp).diameter = 0.0;
+	(*temp).nuclei = 0;
 
 }
 
@@ -855,6 +771,7 @@ void copy_celldim(celldim * from, celldim * to)
 {
 	copy_coordinate(&(*from).xy, &(*to).xy);
 	(*to).diameter = (*from).diameter;
+	(*to).nuclei = (*from).nuclei;
 }
 
 void copy_celldim_static_array(celldim * from, celldim * to, int size)
@@ -908,6 +825,57 @@ void copy_dim_id_static_array(dim_id * from, dim_id * to, int size)
 	for(i = 0; i < size; i++)
 	{
 		copy_dim_id(&from[i], &to[i]);
+	}
+}
+
+
+void init_fusion_pair(/*@out@*/ fusion_pair * temp)
+{
+	(*temp).id1 = 0;
+	init_celldim(&(*temp).dim1);
+	(*temp).id2 = 0;
+	init_celldim(&(*temp).dim2);
+	(*temp).overlap = 0.0;
+
+}
+
+void init_fusion_pair_static_array(/*@out@*/ fusion_pair * array, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++) init_fusion_pair(&array[i]);
+}
+
+void free_fusion_pair(fusion_pair * temp)
+{
+	free_celldim(&(*temp).dim1);
+	free_celldim(&(*temp).dim2);
+
+}
+
+void free_fusion_pair_static_array(fusion_pair * array, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++) free_fusion_pair(&array[i]);
+}
+
+void copy_fusion_pair(fusion_pair * from, fusion_pair * to)
+{
+	(*to).id1 = (*from).id1;
+	copy_celldim(&(*from).dim1, &(*to).dim1);
+	(*to).id2 = (*from).id2;
+	copy_celldim(&(*from).dim2, &(*to).dim2);
+	(*to).overlap = (*from).overlap;
+}
+
+void copy_fusion_pair_static_array(fusion_pair * from, fusion_pair * to, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++)
+	{
+		copy_fusion_pair(&from[i], &to[i]);
 	}
 }
 
@@ -979,14 +947,6 @@ void unittest_free_oc_agent()
 
 void free_oc_agents()
 {
-	current_xmachine_oc_holder = oc_5_state->agents;
-	while(current_xmachine_oc_holder)
-	{
-		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
-		free_oc_agent(current_xmachine_oc_holder, oc_5_state);
-		current_xmachine_oc_holder = temp_xmachine_oc_holder;
-	}
-	oc_5_state->count = 0;
 	current_xmachine_oc_holder = oc_4_state->agents;
 	while(current_xmachine_oc_holder)
 	{
@@ -1039,7 +999,6 @@ void free_oc_agents()
 
 void free_oc_states()
 {
-	free(oc_5_state);
 	free(oc_4_state);
 	free(oc_3_state);
 	free(oc_2_state);
@@ -2103,7 +2062,6 @@ void add_node(int node_id, double minx, double maxx, double miny, double maxy, d
 	current->agents = NULL;
 	current->oc_position_messages = NULL;
 	current->ob_position_messages = NULL;
-	current->fusion_messages = NULL;
 	current->fusion_signal_messages = NULL;
 	current->new_ob_position_messages = NULL;
 
@@ -2199,31 +2157,6 @@ void clean_up(int code)
                break;
            case MB_ERR_LOCKED:
                fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	       default:
-               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
-               break;
-	       }
-
-	       
-       	   exit(rc);
-    }
-    #endif
-
-	rc = MB_Delete(&b_fusion);
-	#ifdef ERRCHECK
-    if (rc != MB_SUCCESS)
-    {
-       fprintf(stderr, "ERROR: Could not delete 'fusion' board\n");
-       switch(rc) {
-           case MB_ERR_INVALID:
-               fprintf(stderr, "\t reason: 'fusion' board has not been created?\n");
-               break;
-           case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'fusion' board is locked\n");
                break;
            case MB_ERR_INTERNAL:
                fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -3107,16 +3040,16 @@ void copy_celldim_array(celldim_array * from, celldim_array * to)
 
 	for(i = 0; i < (*from).size; i++)
 	{
-		add_celldim(to, &(*from).array[i].xy, (*from).array[i].diameter);
+		add_celldim(to, &(*from).array[i].xy, (*from).array[i].diameter, (*from).array[i].nuclei);
 	}
 }
 
-/** \fn void add_celldim(celldim_array * array, coordinate * xy, double diameter)
+/** \fn void add_celldim(celldim_array * array, coordinate * xy, double diameter, int nuclei)
 * \brief Add an celldim to the dynamic celldim array.
 * \param array Pointer to the dynamic celldim array.
 * \param new_int The celldim to add
 */
-void add_celldim(celldim_array * array, /*@out@*/ coordinate * xy,  double diameter)
+void add_celldim(celldim_array * array, /*@out@*/ coordinate * xy,  double diameter,  int nuclei)
 {
 	if((*array).size == (*array).total_size)
 	{
@@ -3126,6 +3059,7 @@ void add_celldim(celldim_array * array, /*@out@*/ coordinate * xy,  double diame
 	init_celldim(&(*array).array[(*array).size]);
 	copy_coordinate(xy, &(*array).array[(*array).size].xy);
 	(*array).array[(*array).size].diameter = diameter;
+	(*array).array[(*array).size].nuclei = nuclei;
 
 	(*array).size++;
 }
@@ -3243,6 +3177,100 @@ void remove_dim_id(dim_id_array * array, int index)
 		(*array).size--;
 	}
 }
+/* Functions for the fusion_pair datatype */
+/** \fn fusion_pair_array * init_fusion_pair_array()
+ * \brief Allocate memory for a dynamic fusion_pair array.
+ * \return fusion_pair_array Pointer to the new dynamic fusion_pair array.
+ */
+void init_fusion_pair_array(fusion_pair_array * array)
+{
+	(*array).size = 0;
+	(*array).total_size = ARRAY_BLOCK_SIZE;
+	(*array).array = (fusion_pair *)malloc(ARRAY_BLOCK_SIZE * sizeof(fusion_pair));
+	CHECK_POINTER((*array).array);
+}
+
+/** \fn void reset_fusion_pair_array(fusion_pair_array* array)
+* \brief Reset the fusion_pair array to hold nothing.
+* \param array Pointer to the dynamic fusion_pair array.
+*/
+void reset_fusion_pair_array(fusion_pair_array * array)
+{
+	(*array).size = 0;
+}
+
+/** \fn void free_fusion_pair_array(fusion_pair_array * array)
+* \brief Free the memory of a dynamic fusion_pair array.
+* \param array Pointer to the dynamic fusion_pair array.
+*/
+void free_fusion_pair_array(fusion_pair_array * array)
+{
+	int i;
+	
+	for(i = 0; i < array->size; i++)
+	{
+		free_fusion_pair(&(*array).array[i]);
+	}
+	
+	free((*array).array);
+}
+
+void copy_fusion_pair_array(fusion_pair_array * from, fusion_pair_array * to)
+{
+	int i;
+
+	//to = init_fusion_pair_array();
+
+	for(i = 0; i < (*from).size; i++)
+	{
+		add_fusion_pair(to, (*from).array[i].id1, &(*from).array[i].dim1, (*from).array[i].id2, &(*from).array[i].dim2, (*from).array[i].overlap);
+	}
+}
+
+/** \fn void add_fusion_pair(fusion_pair_array * array, int id1, celldim * dim1, int id2, celldim * dim2, double overlap)
+* \brief Add an fusion_pair to the dynamic fusion_pair array.
+* \param array Pointer to the dynamic fusion_pair array.
+* \param new_int The fusion_pair to add
+*/
+void add_fusion_pair(fusion_pair_array * array,  int id1, /*@out@*/ celldim * dim1,  int id2, /*@out@*/ celldim * dim2,  double overlap)
+{
+	if((*array).size == (*array).total_size)
+	{
+		(*array).total_size = (int)((*array).total_size * ARRAY_GROWTH_RATE);
+		(*array).array = (fusion_pair *)realloc((*array).array, ((*array).total_size * sizeof(fusion_pair)));
+	}
+	init_fusion_pair(&(*array).array[(*array).size]);
+	(*array).array[(*array).size].id1 = id1;
+	copy_celldim(dim1, &(*array).array[(*array).size].dim1);
+	(*array).array[(*array).size].id2 = id2;
+	copy_celldim(dim2, &(*array).array[(*array).size].dim2);
+	(*array).array[(*array).size].overlap = overlap;
+
+	(*array).size++;
+}
+
+/** \fn void remove_fusion_pair(fusion_pair_array * array, int index)
+ * \brief Remove an fusion_pair from a dynamic fusion_pair array.
+ * \param array Pointer to the dynamic fusion_pair array.
+ * \param index The index of the fusion_pair to remove.
+ */
+void remove_fusion_pair(fusion_pair_array * array, int index)
+{
+	int i;
+
+	/* Free element at index index */
+	free_fusion_pair(&(*array).array[index]);
+
+	/* Copy all elements up by one */
+	if(index < (*array).size)
+	{
+		for(i = index; i < (*array).size - 1; i++)
+		{
+			copy_fusion_pair(&(*array).array[i+1], &(*array).array[i]);
+		}
+		(*array).size--;
+	}
+}
 
 /** \fn int idle()
  * \brief an idle function for use by agents.
@@ -3303,6 +3331,10 @@ double FLAME_get_environment_variable_oc_speed()
 double FLAME_get_environment_variable_oc_displ_stdev()
 {
 	return FLAME_environment_variable_oc_displ_stdev;
+}
+int FLAME_get_environment_variable_oc_max_nuclei()
+{
+	return FLAME_environment_variable_oc_max_nuclei;
 }
 
 

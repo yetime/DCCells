@@ -12,6 +12,9 @@
 #define TRUE 1
 #define FALSE 0
 
+#define FUSION_FUSE 0
+#define FUSION_DEL 1
+
 int sim_ob_counter;
 int sim_oc_counter;
 int sim_bmu_counter;

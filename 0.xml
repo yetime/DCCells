@@ -7,7 +7,7 @@
     <oc_lifespan>14400</oc_lifespan>
     <ob_lifespan>11520</ob_lifespan>
     <bmu_lifespan>500</bmu_lifespan>
-    <oc_creation_freq>0.2</oc_creation_freq>
+    <oc_creation_freq>0.05</oc_creation_freq>
     <ob_creation_freq>0.1</ob_creation_freq>
     <oc_speed>5</oc_speed>
     <oc_displ_stdev>1</oc_displ_stdev>
@@ -16,6 +16,7 @@
     <bmu_type>3</bmu_type>
     <oc_diameter>20</oc_diameter>
     <ob_diameter>30</ob_diameter>
+    <oc_max_nuclei>10</oc_max_nuclei>
 </environment>
 
 <agents>

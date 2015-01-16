@@ -68,29 +68,17 @@ int oc_die(){
 }
 
 
-/*
- * Determines if two cells are close enough to fuse into one (probability dependent)
- */
-
-int check_fusions(){
-	int other_cell_id=0;
-	START_OC_POSITION_MESSAGE_LOOP
-		other_cell_id=oc_position_message->id;
-	    if (other_cell_id!=OC_ID && OC_MYBMU==oc_position_message->bmu_scope){
-	    	coordinate other_oc=oc_position_message->oc_dimension.xy;
-	    	double distance=eucl_distance(OC_DIM.xy.x, other_oc.x, OC_DIM.xy.y, other_oc.y);
-	    	if(distance>=OC_DIM.diameter/2+oc_position_message->oc_dimension.diameter/2){
-	    		add_fusion_message(OC_ID, other_cell_id, OC_MYBMU);
-	    	}
-	    }
-	FINISH_OC_POSITION_MESSAGE_LOOP
-
-	return 0;
-}
-
 int fuse(){
 	START_FUSION_SIGNAL_MESSAGE_LOOP
-
+		if(fusion_signal_message->id1==OC_ID && fusion_signal_message->f_bmu_id==OC_MYBMU){
+			if(fusion_signal_message->f_signal==FUSION_DEL) return 1;
+			else {
+				OC_NUCLEI=OC_NUCLEI+fusion_signal_message->f_nuclei;
+				double dia=(2*PI*OC_DIM.diameter/2+2*PI*fusion_signal_message->second_diameter/2)/PI;
+				OC_DIM.diameter=dia;
+				return 0;
+			}
+		}
 	FINISH_FUSION_SIGNAL_MESSAGE_LOOP
 	return 0;
 }

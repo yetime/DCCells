@@ -415,7 +415,7 @@ int read_celldim(char * buffer, int /*@unused@*/ buffer_size, int * j, celldim *
 	(*j)++;
 	(*temp_datatype).diameter = 0.0;
 	array_k = 0;
-	while(buffer[*j] != '}')
+	while(buffer[*j] != ',')
 	{
 		if(buffer[(*j)] == '\0') return -1;
 		arraydata[array_k] = buffer[*j];
@@ -424,6 +424,18 @@ int read_celldim(char * buffer, int /*@unused@*/ buffer_size, int * j, celldim *
 	}
 	arraydata[array_k] = '\0';
 	(*temp_datatype).diameter = atof(arraydata);
+	(*j)++;
+	(*temp_datatype).nuclei = 0;
+	array_k = 0;
+	while(buffer[*j] != '}')
+	{
+		if(buffer[(*j)] == '\0') return -1;
+		arraydata[array_k] = buffer[*j];
+		array_k++;
+		(*j)++;
+	}
+	arraydata[array_k] = '\0';
+	(*temp_datatype).nuclei = atoi(arraydata);
 	(*j)++;
 
 	return 0;
@@ -439,6 +451,7 @@ int read_celldim_dynamic_array(char * buffer, int buffer_size, int * j, celldim_
 # endif
 	
 	
+	
 
 	while(buffer[(*j)] != '{')
 	{
@@ -452,7 +465,7 @@ int read_celldim_dynamic_array(char * buffer, int buffer_size, int * j, celldim_
 	{
 		if(buffer[(*j)] == '{')
 		{
-			add_celldim(temp_datatype_array, &xy, 0.0);
+			add_celldim(temp_datatype_array, &xy, 0.0, 0);
 			rc = read_celldim(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
 			if(rc != 0) { printf("Error: reading variable 'celldim' of type '\n"); return -1; }
 			arraycount++;
@@ -588,6 +601,138 @@ int read_dim_id_static_array(char * buffer, int buffer_size, int * j, dim_id * t
 	return 0;
 }
 
+/** \fn void read_fusion_pair(char * buffer, int * j, fusion_pair * temp_datatype)
+ * \brief Reads fusion_pair datatype.
+ */
+int read_fusion_pair(char * buffer, int /*@unused@*/ buffer_size, int * j, fusion_pair * temp_datatype)
+{
+	int array_k;
+	char arraydata[100000];
+	int rc;
+	
+	while(buffer[(*j)] != '{')
+	{
+		if(buffer[(*j)] != ' ') return -1;
+		else if(buffer[(*j)] == '\0') return -1;
+		else (*j)++;
+	}
+	(*j)++;
+
+	(*temp_datatype).id1 = 0;
+	array_k = 0;
+	while(buffer[*j] != ',')
+	{
+		if(buffer[(*j)] == '\0') return -1;
+		arraydata[array_k] = buffer[*j];
+		array_k++;
+		(*j)++;
+	}
+	arraydata[array_k] = '\0';
+	(*temp_datatype).id1 = atoi(arraydata);
+	(*j)++;
+	while(buffer[*j] != '{') (*j)++;
+	rc = read_celldim(buffer, buffer_size, j, &(*temp_datatype).dim1);
+	if(rc != 0) return -1;
+	(*j)++;
+	(*temp_datatype).id2 = 0;
+	array_k = 0;
+	while(buffer[*j] != ',')
+	{
+		if(buffer[(*j)] == '\0') return -1;
+		arraydata[array_k] = buffer[*j];
+		array_k++;
+		(*j)++;
+	}
+	arraydata[array_k] = '\0';
+	(*temp_datatype).id2 = atoi(arraydata);
+	(*j)++;
+	while(buffer[*j] != '{') (*j)++;
+	rc = read_celldim(buffer, buffer_size, j, &(*temp_datatype).dim2);
+	if(rc != 0) return -1;
+	(*j)++;
+	(*temp_datatype).overlap = 0.0;
+	array_k = 0;
+	while(buffer[*j] != '}')
+	{
+		if(buffer[(*j)] == '\0') return -1;
+		arraydata[array_k] = buffer[*j];
+		array_k++;
+		(*j)++;
+	}
+	arraydata[array_k] = '\0';
+	(*temp_datatype).overlap = atof(arraydata);
+	(*j)++;
+
+	return 0;
+}
+
+int read_fusion_pair_dynamic_array(char * buffer, int buffer_size, int * j, fusion_pair_array * temp_datatype_array)
+{
+	int arraycount = 0;
+	int rc;
+	
+	celldim dim1;
+# ifndef S_SPLINT_S
+	init_celldim(&dim1);
+# endif
+	
+	celldim dim2;
+# ifndef S_SPLINT_S
+	init_celldim(&dim2);
+# endif
+	
+	
+
+	while(buffer[(*j)] != '{')
+	{
+		if(buffer[(*j)] != ' ') return -1;
+		else if(buffer[(*j)] == '\0') return -1;
+		else (*j)++;
+	}
+	(*j)++;
+
+	while(buffer[(*j)] != '\0' && buffer[(*j)] != '}')
+	{
+		if(buffer[(*j)] == '{')
+		{
+			add_fusion_pair(temp_datatype_array, 0, &dim1, 0, &dim2, 0.0);
+			rc = read_fusion_pair(buffer, buffer_size, j, &(*temp_datatype_array).array[arraycount]);
+			if(rc != 0) { printf("Error: reading variable 'fusion_pair' of type '\n"); return -1; }
+			arraycount++;
+			(*j)++;
+		}
+		while(buffer[(*j)] != '}' && buffer[(*j)] != '\0' && buffer[(*j)] != '{') { (*j)++; }
+	}
+
+	
+	
+	return 0;
+}
+
+int read_fusion_pair_static_array(char * buffer, int buffer_size, int * j, fusion_pair * temp_datatype_array, int size)
+{
+	int arraycount;
+	int rc;
+
+	while(buffer[(*j)] != '{')
+	{
+		if(buffer[(*j)] != ' ') return -1;
+		else if(buffer[(*j)] == '\0') return -1;
+		else (*j)++;
+	}
+	(*j)++;
+
+	for(arraycount = 0; arraycount < size; arraycount++)
+	{
+		rc = read_fusion_pair(buffer, buffer_size, j, &temp_datatype_array[arraycount]);
+		if(rc != 0) { printf("Error: reading variable 'fusion_pair' of type '\n"); return -1; }
+		if(arraycount < (size-1)) while(buffer[(*j)] != '{') { (*j)++; }
+	}
+
+	(*j)++;
+	return 0;
+}
+
 
 
 int readEnvironmentXML(char * location)
@@ -610,6 +755,7 @@ int readEnvironmentXML(char * location)
 	int in_bmu_type = 0;
 	int in_oc_speed = 0;
 	int in_oc_displ_stdev = 0;
+	int in_oc_max_nuclei = 0;
 	
 
 	buffer[0] = '\0';
@@ -657,6 +803,8 @@ int readEnvironmentXML(char * location)
 			if(strcmp(buffer, "/oc_speed") == 0) in_oc_speed = 0;
 			if(strcmp(buffer, "oc_displ_stdev") == 0) in_oc_displ_stdev = 1;
 			if(strcmp(buffer, "/oc_displ_stdev") == 0) in_oc_displ_stdev = 0;
+			if(strcmp(buffer, "oc_max_nuclei") == 0) in_oc_max_nuclei = 1;
+			if(strcmp(buffer, "/oc_max_nuclei") == 0) in_oc_max_nuclei = 0;
 			
 			index = 0;
 			buffer[index] = '\0';
@@ -679,6 +827,7 @@ int readEnvironmentXML(char * location)
 				if(in_bmu_type == 1) { FLAME_environment_variable_bmu_type = atoi(buffer); }
 				if(in_oc_speed == 1) { FLAME_environment_variable_oc_speed = atof(buffer); }
 				if(in_oc_displ_stdev == 1) { FLAME_environment_variable_oc_displ_stdev = atof(buffer); }
+				if(in_oc_max_nuclei == 1) { FLAME_environment_variable_oc_max_nuclei = atoi(buffer); }
 				
 			}
 			index = 0;
@@ -1244,6 +1393,7 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 	FLAME_environment_variable_bmu_type = 0;
 	FLAME_environment_variable_oc_speed = 0.0;
 	FLAME_environment_variable_oc_displ_stdev = 0.0;
+	FLAME_environment_variable_oc_max_nuclei = 0;
 	
 
 	/* Open config file to read-only */
@@ -1727,6 +1877,8 @@ void write_celldim(FILE *file, celldim * temp_datatype)
 	write_coordinate(file, &(*temp_datatype).xy);
 	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).diameter);
 	fputs(data, file);
+	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).nuclei);
+	fputs(data, file);
 	fputs("}", file);
 }
 
@@ -1794,6 +1946,53 @@ void write_dim_id_dynamic_array(FILE *file, dim_id_array * temp_datatype)
 	for(i = 0; i < (*temp_datatype).size; i++)
 	{
 		write_dim_id(file, &(*temp_datatype).array[i]);
+
+		if(i < (*temp_datatype).size - 1) fputs(", ", file);
+	}
+	fputs("}", file);
+}
+
+/** \fn void write_fusion_pair(FILE *file, fusion_pair * temp_datatype)
+ * \brief Writes fusion_pair datatype.
+ */
+void write_fusion_pair(FILE *file, fusion_pair * temp_datatype)
+{
+	char data[1000];
+
+	fputs("{", file);
+	sprintf(data, "%i", (*temp_datatype).id1);
+	fputs(data, file);
+	fputs(", ", file);	write_celldim(file, &(*temp_datatype).dim1);
+	fputs(", ", file);	sprintf(data, "%i", (*temp_datatype).id2);
+	fputs(data, file);
+	fputs(", ", file);	write_celldim(file, &(*temp_datatype).dim2);
+	fputs(", ", file);	sprintf(data, "%f", (*temp_datatype).overlap);
+	fputs(data, file);
+	fputs("}", file);
+}
+
+void write_fusion_pair_static_array(FILE *file, fusion_pair * temp_datatype, int size)
+{
+	int i;
+
+	fputs("{", file);
+	for(i = 0; i < size; i++)
+	{
+		write_fusion_pair(file, &temp_datatype[i]);
+
+		if(i < size - 1) fputs(", ", file);
+	}
+	fputs("}", file);
+}
+
+void write_fusion_pair_dynamic_array(FILE *file, fusion_pair_array * temp_datatype)
+{
+	int i;
+
+	fputs("{", file);
+	for(i = 0; i < (*temp_datatype).size; i++)
+	{
+		write_fusion_pair(file, &(*temp_datatype).array[i]);
 
 		if(i < (*temp_datatype).size - 1) fputs(", ", file);
 	}
@@ -1992,6 +2191,10 @@ void FLAME_write_xml(char * location, int iteration_number, int * output_types, 
 		sprintf(data, "%f", FLAME_environment_variable_oc_displ_stdev);
 		fputs(data, file);
 		fputs("</oc_displ_stdev>\n", file);
+			fputs("<oc_max_nuclei>", file);
+		sprintf(data, "%i", FLAME_environment_variable_oc_max_nuclei);
+		fputs(data, file);
+		fputs("</oc_max_nuclei>\n", file);
 			fputs("</environment>\n" , file);
 	}
 	
