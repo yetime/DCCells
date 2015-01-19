@@ -43,11 +43,11 @@
 			</variable>
 			<variable>
 				<name>oc_diameter</name>
-				<type>int</type>
+				<type>double</type>
 			</variable>
 			<variable>
 				<name>ob_diameter</name>
-				<type>int</type>
+				<type>double</type>
 			</variable>
 			<variable>
 				<name>oc_type</name>

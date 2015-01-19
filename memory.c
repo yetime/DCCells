@@ -3304,11 +3304,11 @@ double FLAME_get_environment_variable_ob_creation_freq()
 {
 	return FLAME_environment_variable_ob_creation_freq;
 }
-int FLAME_get_environment_variable_oc_diameter()
+double FLAME_get_environment_variable_oc_diameter()
 {
 	return FLAME_environment_variable_oc_diameter;
 }
-int FLAME_get_environment_variable_ob_diameter()
+double FLAME_get_environment_variable_ob_diameter()
 {
 	return FLAME_environment_variable_ob_diameter;
 }

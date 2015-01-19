@@ -6,8 +6,8 @@ import xml.dom.minidom as xmml
 import pygame
 import time
 
-if (len(sys.argv) !=4):
-  print ("Usage: gengif.py from_xmml to_xmml scale")
+if (len(sys.argv) !=5):
+  print ("Usage: gengif.py from_xmml to_xmml scale timesteps")
   quit()
 
 DCC_COLOUR=(204,0,204)
@@ -27,19 +27,12 @@ pygame.init()
 screen=pygame.display.set_mode((int(worldsize*scale),int(worldsize*scale))) 
 clock=pygame.time.Clock()
 
-xmmls=range(int(sys.argv[1]), int(sys.argv[2])+1)
+xmmls=range(int(sys.argv[1]), int(sys.argv[2])+1, int(sys.argv[4])) 
 for x in xmmls:
     xmmlfile="../"+str(x)+".xml"
     print(xmmlfile)
     xmmltree=xmml.parse(xmmlfile)
     
-
-   
-
-#for env in xmmltree.getElementsByTagName('unitum'):
-#    unitum=int(env.firstChild.nodeValue)
-    
-
 
     rects_dcc=[]
     rects_oc=[]
@@ -92,17 +85,17 @@ for x in xmmls:
     #        if event.type==pygame.QUIT:
     #            done=True
     screen.fill((0,0,0))
-    for r in rects_bmu:
-        pygame.draw.circle(screen,BMU_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
+    
     for r in rects_dcc:
         pygame.draw.circle(screen,DCC_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
     for r in rects_ob:
         pygame.draw.circle(screen,OB_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
     for r in rects_oc:
-            #pygame.draw.rect(screen,OC_COLOUR, r)
         pygame.draw.circle(screen, OC_COLOUR, (int(r[0]), int(r[1])),int(r[2]))
         #print(r[0], r[1]);    
-	#time.sleep(0.01);    
+    for r in rects_bmu:
+        pygame.draw.circle(screen,BMU_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
+    time.sleep(0.2);    
     pygame.display.flip()
     print(next)
 pygame.quit()    

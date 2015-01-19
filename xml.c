@@ -820,8 +820,8 @@ int readEnvironmentXML(char * location)
 				if(in_bmu_lifespan == 1) { FLAME_environment_variable_bmu_lifespan = atoi(buffer); }
 				if(in_oc_creation_freq == 1) { FLAME_environment_variable_oc_creation_freq = atof(buffer); }
 				if(in_ob_creation_freq == 1) { FLAME_environment_variable_ob_creation_freq = atof(buffer); }
-				if(in_oc_diameter == 1) { FLAME_environment_variable_oc_diameter = atoi(buffer); }
-				if(in_ob_diameter == 1) { FLAME_environment_variable_ob_diameter = atoi(buffer); }
+				if(in_oc_diameter == 1) { FLAME_environment_variable_oc_diameter = atof(buffer); }
+				if(in_ob_diameter == 1) { FLAME_environment_variable_ob_diameter = atof(buffer); }
 				if(in_oc_type == 1) { FLAME_environment_variable_oc_type = atoi(buffer); }
 				if(in_ob_type == 1) { FLAME_environment_variable_ob_type = atoi(buffer); }
 				if(in_bmu_type == 1) { FLAME_environment_variable_bmu_type = atoi(buffer); }
@@ -1386,8 +1386,8 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 	FLAME_environment_variable_bmu_lifespan = 0;
 	FLAME_environment_variable_oc_creation_freq = 0.0;
 	FLAME_environment_variable_ob_creation_freq = 0.0;
-	FLAME_environment_variable_oc_diameter = 0;
-	FLAME_environment_variable_ob_diameter = 0;
+	FLAME_environment_variable_oc_diameter = 0.0;
+	FLAME_environment_variable_ob_diameter = 0.0;
 	FLAME_environment_variable_oc_type = 0;
 	FLAME_environment_variable_ob_type = 0;
 	FLAME_environment_variable_bmu_type = 0;
@@ -2164,11 +2164,11 @@ void FLAME_write_xml(char * location, int iteration_number, int * output_types, 
 		fputs(data, file);
 		fputs("</ob_creation_freq>\n", file);
 			fputs("<oc_diameter>", file);
-		sprintf(data, "%i", FLAME_environment_variable_oc_diameter);
+		sprintf(data, "%f", FLAME_environment_variable_oc_diameter);
 		fputs(data, file);
 		fputs("</oc_diameter>\n", file);
 			fputs("<ob_diameter>", file);
-		sprintf(data, "%i", FLAME_environment_variable_ob_diameter);
+		sprintf(data, "%f", FLAME_environment_variable_ob_diameter);
 		fputs(data, file);
 		fputs("</ob_diameter>\n", file);
 			fputs("<oc_type>", file);

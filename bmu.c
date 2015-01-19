@@ -22,12 +22,17 @@
 int replace_fusion_pair(dim_id cell1, dim_id cell2, fusion_pair_array fusp, double overlap);
 double cellid_in_array(fusion_pair_array fusp, int cellid);
 
+/*! \brief Creation of Osteoblast and Osteoclast agents.
+ *
+ * Osteoblasts and Osteoclasts are generated based on their given creation frequency in the models startup file.
+ */
 int create(){
 
 		if(BMU_AGE<=BMU_LIFESPAN){
 		double rnd_ob=rnd_numbers();
 		double rnd_oc=rnd_numbers();
 
+		//OB creation
 		if(rnd_ob<OB_CREATION_FREQ)
 		{
 			coordinate ob_pos;
@@ -42,6 +47,7 @@ int create(){
 			add_ob_agent(ob_dim,0,get_new_ob_id(),0, BMU_ID, BMU_DIRECTION, FALSE);
 		}
 
+		//Osteoclast creation
 		if(rnd_oc<OC_CREATION_FREQ){
 			coordinate oc_pos;
 			init_coordinate(&oc_pos);
@@ -63,12 +69,19 @@ int create(){
 	return 0;
 }
 
+/*! \brief Removal of BMU agents based on their age
+ *
+ */
+
 int bmu_die(){
 	if(BMU_AGE>BMU_LIFESPAN)
 		BMU_SPEED=0;
 	return 0;
 }
 
+/*! \brief Moves the BMU
+ *  Determines the new position of the capilary tip of the BMU as given by the speed and direction of the BMU in the configuration file
+ */
 
 int bmu_move(){
 	double alpha = atan(BMU_DIRECTION.y/BMU_DIRECTION.x);
@@ -84,12 +97,16 @@ int bmu_move(){
 			new_x=new_x*-1;
 			new_y=new_y*-1;
 		}
-		printf("BMUMOVE: x %f y %f\n", new_x, new_y);
 		BMU_POSITION.x=BMU_POSITION.x+new_x;
 		BMU_POSITION.y=BMU_POSITION.y+new_y;
 	return 0;
 }
 
+/*! \brief Determines whether two osteoclasts fuse
+ * Fusing pairs of Osteoclasts are determined based on their current positions and overlap. Fusion
+ * messages are generated to notify the corresponding osteoclasts of the fusion event, one of the agents receives
+ * a death message, while the other takes up its nuclei and grows in size.
+ */
 int calc_fusions(){
 	dim_id_array bmu_ocs;
 	init_dim_id_array(&bmu_ocs);
@@ -186,35 +203,43 @@ int ob_push_check(){
 
 	int solved=FALSE;
 	int iterations_threshold=0;
-	int i;
+	int i,j;
+	double x1,y1,x2,y2;
+	double new_x, new_y, alpha, overlap, dist, sum_radii;
 
-	while(solved==FALSE && iterations_threshold<100){
+	printf("Number of OB: %d\n ", bmu_obs.size);
+
+	while(solved==FALSE && iterations_threshold<1000000){
 
 		solved=TRUE;
-		for(i=0;i<bmu_obs.size-1;i++){
-			double x1=bmu_obs.array[i].dims.xy.x;
-			double y1=bmu_obs.array[i].dims.xy.y;
-			double x2=bmu_obs.array[i+1].dims.xy.x;
-			double y2=bmu_obs.array[i+1].dims.xy.y;
+		for(i=0;i<bmu_obs.size;i++){
+			for(j=0;j<bmu_obs.size;j++){
+				x1=bmu_obs.array[i].dims.xy.x;
+				y1=bmu_obs.array[i].dims.xy.y;
+				x2=bmu_obs.array[j].dims.xy.x;
+				y2=bmu_obs.array[j].dims.xy.y;
 
-			double dist=eucl_distance(x1, y1, x2, y2);
-			if(dist<=bmu_obs.array[i].dims.diameter/2+bmu_obs.array[i+1].dims.diameter/2) {
-				double max=bmu_obs.array[i].dims.diameter/2;
-				if(max<bmu_obs.array[i+1].dims.diameter/2) max=bmu_obs.array[i+1].dims.diameter/2;
+				dist=eucl_distance(x1, y1, x2, y2);
+				sum_radii=bmu_obs.array[i].dims.diameter/2+bmu_obs.array[j].dims.diameter/2;
+				if(dist-sum_radii<0 && dist>0) {
+					//double max=bmu_obs.array[i].dims.diameter/2;
+					//if(max<bmu_obs.array[i+1].dims.diameter/2) max=bmu_obs.array[i+1].dims.diameter/2;
 
-				double overlap=abs(max-bmu_obs.array[i].dims.diameter/2-bmu_obs.array[i+1].dims.diameter/2);
+					overlap=sum_radii-dist;
+					alpha = atan(BMU_DIRECTION.y/BMU_DIRECTION.x);
+					if(rnd_numbers()>0.5) alpha=alpha+PI/2;
+					else alpha=alpha-PI/2;
 
-				double alpha = atan(BMU_DIRECTION.y/BMU_DIRECTION.x);
-				if(rnd_numbers()>0.5) alpha=alpha+PI/2;
-				else alpha=alpha-PI/2;
 
-				double new_y=sin(alpha)*overlap;
-				double new_x=cos(alpha)*overlap;
+					new_y=sin(alpha)*overlap;
+					new_x=cos(alpha)*overlap;
 
-				bmu_obs.array[i+1].dims.xy.x=new_x+bmu_obs.array[i+1].dims.xy.x;
-				bmu_obs.array[i+1].dims.xy.y=new_y+bmu_obs.array[i+1].dims.xy.y;
 
-				solved=FALSE;
+					bmu_obs.array[j].dims.xy.x=new_x+bmu_obs.array[j].dims.xy.x;
+					bmu_obs.array[j].dims.xy.y=new_y+bmu_obs.array[j].dims.xy.y;
+
+					solved=FALSE;
+				}
 			}
 			iterations_threshold=iterations_threshold+1;
 		}

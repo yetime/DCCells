@@ -19,7 +19,6 @@ int initialize_ob(){
 int signal_ob_position(){
 	if(OB_AGE!=0) {
 		add_ob_position_message(OB_DIM,OB_ID);
-		printf("OB POS ID %d: x %f y %f\n", OB_ID, OB_DIM.xy.x, OB_DIM.xy.y);
 	}
 
 	return 0;
@@ -42,15 +41,17 @@ int ob_move(){
  * Age calculations in minutes...
  */
 int ob_get_older(){
-	int min=OB_LIFESPAN-2*1440;
-	int max=OB_LIFESPAN+2*1440; //2 days
-	if(min<0) min=0;
+	//int min=OB_LIFESPAN-2*1440;
+	//int max=OB_LIFESPAN+2*1440; //2 days
+	//if(min<0) min=0;
 
-	if(OB_AGE>=min && OB_AGE<=max){
-		OB_DEATH_PROB=OB_DEATH_PROB+1/1440;
+	//if(OB_AGE>=min && OB_AGE<=max){
+	//	OB_DEATH_PROB=OB_DEATH_PROB+1/1440;
 
-	}
-	OB_AGE=OB_AGE+1;
+	//}
+	//OB_AGE=OB_AGE+1;
+
+	if(OB_AGE>OB_LIFESPAN) return 1;
 	return 0;
 }
 
