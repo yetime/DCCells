@@ -746,6 +746,7 @@ int readEnvironmentXML(char * location)
 	int in_oc_lifespan = 0;
 	int in_ob_lifespan = 0;
 	int in_bmu_lifespan = 0;
+	int in_bmu_av_speed = 0;
 	int in_oc_creation_freq = 0;
 	int in_ob_creation_freq = 0;
 	int in_oc_diameter = 0;
@@ -756,6 +757,10 @@ int readEnvironmentXML(char * location)
 	int in_oc_speed = 0;
 	int in_oc_displ_stdev = 0;
 	int in_oc_max_nuclei = 0;
+	int in_oc_max_frontdist = 0;
+	int in_oc_speed_damp = 0;
+	int in_oc_resorb = 0;
+	int in_ob_synth = 0;
 	
 
 	buffer[0] = '\0';
@@ -785,6 +790,8 @@ int readEnvironmentXML(char * location)
 			if(strcmp(buffer, "/ob_lifespan") == 0) in_ob_lifespan = 0;
 			if(strcmp(buffer, "bmu_lifespan") == 0) in_bmu_lifespan = 1;
 			if(strcmp(buffer, "/bmu_lifespan") == 0) in_bmu_lifespan = 0;
+			if(strcmp(buffer, "bmu_av_speed") == 0) in_bmu_av_speed = 1;
+			if(strcmp(buffer, "/bmu_av_speed") == 0) in_bmu_av_speed = 0;
 			if(strcmp(buffer, "oc_creation_freq") == 0) in_oc_creation_freq = 1;
 			if(strcmp(buffer, "/oc_creation_freq") == 0) in_oc_creation_freq = 0;
 			if(strcmp(buffer, "ob_creation_freq") == 0) in_ob_creation_freq = 1;
@@ -805,6 +812,14 @@ int readEnvironmentXML(char * location)
 			if(strcmp(buffer, "/oc_displ_stdev") == 0) in_oc_displ_stdev = 0;
 			if(strcmp(buffer, "oc_max_nuclei") == 0) in_oc_max_nuclei = 1;
 			if(strcmp(buffer, "/oc_max_nuclei") == 0) in_oc_max_nuclei = 0;
+			if(strcmp(buffer, "oc_max_frontdist") == 0) in_oc_max_frontdist = 1;
+			if(strcmp(buffer, "/oc_max_frontdist") == 0) in_oc_max_frontdist = 0;
+			if(strcmp(buffer, "oc_speed_damp") == 0) in_oc_speed_damp = 1;
+			if(strcmp(buffer, "/oc_speed_damp") == 0) in_oc_speed_damp = 0;
+			if(strcmp(buffer, "oc_resorb") == 0) in_oc_resorb = 1;
+			if(strcmp(buffer, "/oc_resorb") == 0) in_oc_resorb = 0;
+			if(strcmp(buffer, "ob_synth") == 0) in_ob_synth = 1;
+			if(strcmp(buffer, "/ob_synth") == 0) in_ob_synth = 0;
 			
 			index = 0;
 			buffer[index] = '\0';
@@ -818,6 +833,7 @@ int readEnvironmentXML(char * location)
 				if(in_oc_lifespan == 1) { FLAME_environment_variable_oc_lifespan = atoi(buffer); }
 				if(in_ob_lifespan == 1) { FLAME_environment_variable_ob_lifespan = atoi(buffer); }
 				if(in_bmu_lifespan == 1) { FLAME_environment_variable_bmu_lifespan = atoi(buffer); }
+				if(in_bmu_av_speed == 1) { FLAME_environment_variable_bmu_av_speed = atof(buffer); }
 				if(in_oc_creation_freq == 1) { FLAME_environment_variable_oc_creation_freq = atof(buffer); }
 				if(in_ob_creation_freq == 1) { FLAME_environment_variable_ob_creation_freq = atof(buffer); }
 				if(in_oc_diameter == 1) { FLAME_environment_variable_oc_diameter = atof(buffer); }
@@ -828,6 +844,10 @@ int readEnvironmentXML(char * location)
 				if(in_oc_speed == 1) { FLAME_environment_variable_oc_speed = atof(buffer); }
 				if(in_oc_displ_stdev == 1) { FLAME_environment_variable_oc_displ_stdev = atof(buffer); }
 				if(in_oc_max_nuclei == 1) { FLAME_environment_variable_oc_max_nuclei = atoi(buffer); }
+				if(in_oc_max_frontdist == 1) { FLAME_environment_variable_oc_max_frontdist = atoi(buffer); }
+				if(in_oc_speed_damp == 1) { FLAME_environment_variable_oc_speed_damp = atof(buffer); }
+				if(in_oc_resorb == 1) { FLAME_environment_variable_oc_resorb = atof(buffer); }
+				if(in_ob_synth == 1) { FLAME_environment_variable_ob_synth = atof(buffer); }
 				
 			}
 			index = 0;
@@ -864,17 +884,26 @@ int readAgentXML(char * location,
 	int FLAME_in_xagent = 0;
 	int FLAME_in_name = 0;
 	int in_oc_agent = 0;
-	int in_ob_agent = 0;
 	int in_bmu_agent = 0;
+	int in_ob_agent = 0;
 	int in_environment_agent = 0;
 	
 	int in_oc_dim = 0;
 	int in_oc_age = 0;
-	int in_oc_nuclei = 0;
 	int in_oc_id = 0;
 	int in_oc_death_prob = 0;
 	int in_oc_mybmu = 0;
 	int in_oc_direction = 0;
+	int in_bmu_id = 0;
+	int in_bmu_direction = 0;
+	int in_bmu_speed = 0;
+	int in_bmu_position = 0;
+	int in_bmu_length = 0;
+	int in_bmu_age = 0;
+	int in_bmu_width = 0;
+	int in_oc_present = 0;
+	int in_ob_present = 0;
+	int in_z = 0;
 	int in_ob_dim = 0;
 	int in_ob_age = 0;
 	int in_ob_id = 0;
@@ -882,17 +911,12 @@ int readAgentXML(char * location,
 	int in_ob_mybmu = 0;
 	int in_ob_direction = 0;
 	int in_ob_moved_flag = 0;
-	int in_bmu_id = 0;
-	int in_bmu_direction = 0;
-	int in_bmu_speed = 0;
-	int in_bmu_position = 0;
-	int in_bmu_length = 0;
-	int in_bmu_age = 0;
 	int in_rand_init = 0;
+	int in_bmu_freq = 0;
 	
 	xmachine_memory_oc * current_oc_agent = NULL;
-	xmachine_memory_ob * current_ob_agent = NULL;
 	xmachine_memory_bmu * current_bmu_agent = NULL;
+	xmachine_memory_ob * current_ob_agent = NULL;
 	xmachine_memory_environment * current_environment_agent = NULL;
 	
 	/* Things for round-robin partitioning */
@@ -982,6 +1006,55 @@ int readAgentXML(char * location,
 						}
 					}
 				}
+				else if(strcmp(agentname, "bmu") == 0)
+				{
+					if(current_bmu_agent == NULL) { printf("Memory error reading bmu agent\n"); exit(0); }
+					
+					posx = (double)0.0;
+					posy = (double)0.0;
+					posz = (double)current_bmu_agent->z;
+					
+					/* If flag is zero just read the data. We'll partition later.
+					 * If flag is not zero we aleady have partition data so can read and distribute to the current node.*/
+					if( flag == 0 )
+					{
+						/* Next line should be commented out? */
+						add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
+
+						/* Update the cloud data */
+						if ( posx < cloud_data[0] ) cloud_data[0] = posx;
+						if ( posx > cloud_data[1] ) cloud_data[1] = posx;
+						if ( posy < cloud_data[2] ) cloud_data[2] = posy;
+						if ( posy > cloud_data[3] ) cloud_data[3] = posy;
+						if ( posz < cloud_data[2] ) cloud_data[4] = posz;
+						if ( posz > cloud_data[3] ) cloud_data[5] = posz;
+					}
+					else
+					{
+						if(partition_method == geometric)
+						{
+							if (
+								((current_node->partition_data[0] == SPINF) || (current_node->partition_data[0] != SPINF && posx >= current_node->partition_data[0])) &&
+								((current_node->partition_data[1] == SPINF) || (current_node->partition_data[1] != SPINF && posx < current_node->partition_data[1])) &&
+								((current_node->partition_data[2] == SPINF) || (current_node->partition_data[2] != SPINF && posy >= current_node->partition_data[2])) &&
+								((current_node->partition_data[3] == SPINF) || (current_node->partition_data[3] != SPINF && posy < current_node->partition_data[3])) &&
+								((current_node->partition_data[4] == SPINF) || (current_node->partition_data[4] != SPINF && posz >= current_node->partition_data[4])) &&
+								((current_node->partition_data[5] == SPINF) || (current_node->partition_data[5] != SPINF && posz < current_node->partition_data[5]))
+							)
+							{
+								add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
+							}
+						}
+						else if (partition_method == other)
+						{
+							if (agent_count % number_partitions == 0)
+							{
+								add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
+							}
+							++agent_count;
+						}
+					}
+				}
 				else if(strcmp(agentname, "ob") == 0)
 				{
 					if(current_ob_agent == NULL) { printf("Memory error reading ob agent\n"); exit(0); }
@@ -1026,55 +1099,6 @@ int readAgentXML(char * location,
 							if (agent_count % number_partitions == 0)
 							{
 								add_ob_agent_internal(current_ob_agent, ob_start_state);
-							}
-							++agent_count;
-						}
-					}
-				}
-				else if(strcmp(agentname, "bmu") == 0)
-				{
-					if(current_bmu_agent == NULL) { printf("Memory error reading bmu agent\n"); exit(0); }
-					
-					posx = (double)0.0;
-					posy = (double)0.0;
-					posz = (double)0.0;
-					
-					/* If flag is zero just read the data. We'll partition later.
-					 * If flag is not zero we aleady have partition data so can read and distribute to the current node.*/
-					if( flag == 0 )
-					{
-						/* Next line should be commented out? */
-						add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
-
-						/* Update the cloud data */
-						if ( posx < cloud_data[0] ) cloud_data[0] = posx;
-						if ( posx > cloud_data[1] ) cloud_data[1] = posx;
-						if ( posy < cloud_data[2] ) cloud_data[2] = posy;
-						if ( posy > cloud_data[3] ) cloud_data[3] = posy;
-						if ( posz < cloud_data[2] ) cloud_data[4] = posz;
-						if ( posz > cloud_data[3] ) cloud_data[5] = posz;
-					}
-					else
-					{
-						if(partition_method == geometric)
-						{
-							if (
-								((current_node->partition_data[0] == SPINF) || (current_node->partition_data[0] != SPINF && posx >= current_node->partition_data[0])) &&
-								((current_node->partition_data[1] == SPINF) || (current_node->partition_data[1] != SPINF && posx < current_node->partition_data[1])) &&
-								((current_node->partition_data[2] == SPINF) || (current_node->partition_data[2] != SPINF && posy >= current_node->partition_data[2])) &&
-								((current_node->partition_data[3] == SPINF) || (current_node->partition_data[3] != SPINF && posy < current_node->partition_data[3])) &&
-								((current_node->partition_data[4] == SPINF) || (current_node->partition_data[4] != SPINF && posz >= current_node->partition_data[4])) &&
-								((current_node->partition_data[5] == SPINF) || (current_node->partition_data[5] != SPINF && posz < current_node->partition_data[5]))
-							)
-							{
-								add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
-							}
-						}
-						else if (partition_method == other)
-						{
-							if (agent_count % number_partitions == 0)
-							{
-								add_bmu_agent_internal(current_bmu_agent, bmu_start_state);
 							}
 							++agent_count;
 						}
@@ -1137,8 +1161,8 @@ int readAgentXML(char * location,
 				agentname[0] = '\0';
 				FLAME_in_xagent = 0;
 				in_oc_agent = 0;
-				in_ob_agent = 0;
 				in_bmu_agent = 0;
+				in_ob_agent = 0;
 				in_environment_agent = 0;
 				
 			}
@@ -1148,8 +1172,6 @@ int readAgentXML(char * location,
 			if(strcmp(buffer, "/oc_dim") == 0) { in_oc_dim = 0; }
 			if(strcmp(buffer, "oc_age") == 0) { in_oc_age = 1; }
 			if(strcmp(buffer, "/oc_age") == 0) { in_oc_age = 0; }
-			if(strcmp(buffer, "oc_nuclei") == 0) { in_oc_nuclei = 1; }
-			if(strcmp(buffer, "/oc_nuclei") == 0) { in_oc_nuclei = 0; }
 			if(strcmp(buffer, "oc_id") == 0) { in_oc_id = 1; }
 			if(strcmp(buffer, "/oc_id") == 0) { in_oc_id = 0; }
 			if(strcmp(buffer, "oc_death_prob") == 0) { in_oc_death_prob = 1; }
@@ -1158,6 +1180,26 @@ int readAgentXML(char * location,
 			if(strcmp(buffer, "/oc_mybmu") == 0) { in_oc_mybmu = 0; }
 			if(strcmp(buffer, "oc_direction") == 0) { in_oc_direction = 1; }
 			if(strcmp(buffer, "/oc_direction") == 0) { in_oc_direction = 0; }
+			if(strcmp(buffer, "bmu_id") == 0) { in_bmu_id = 1; }
+			if(strcmp(buffer, "/bmu_id") == 0) { in_bmu_id = 0; }
+			if(strcmp(buffer, "bmu_direction") == 0) { in_bmu_direction = 1; }
+			if(strcmp(buffer, "/bmu_direction") == 0) { in_bmu_direction = 0; }
+			if(strcmp(buffer, "bmu_speed") == 0) { in_bmu_speed = 1; }
+			if(strcmp(buffer, "/bmu_speed") == 0) { in_bmu_speed = 0; }
+			if(strcmp(buffer, "bmu_position") == 0) { in_bmu_position = 1; }
+			if(strcmp(buffer, "/bmu_position") == 0) { in_bmu_position = 0; }
+			if(strcmp(buffer, "bmu_length") == 0) { in_bmu_length = 1; }
+			if(strcmp(buffer, "/bmu_length") == 0) { in_bmu_length = 0; }
+			if(strcmp(buffer, "bmu_age") == 0) { in_bmu_age = 1; }
+			if(strcmp(buffer, "/bmu_age") == 0) { in_bmu_age = 0; }
+			if(strcmp(buffer, "bmu_width") == 0) { in_bmu_width = 1; }
+			if(strcmp(buffer, "/bmu_width") == 0) { in_bmu_width = 0; }
+			if(strcmp(buffer, "oc_present") == 0) { in_oc_present = 1; }
+			if(strcmp(buffer, "/oc_present") == 0) { in_oc_present = 0; }
+			if(strcmp(buffer, "ob_present") == 0) { in_ob_present = 1; }
+			if(strcmp(buffer, "/ob_present") == 0) { in_ob_present = 0; }
+			if(strcmp(buffer, "z") == 0) { in_z = 1; }
+			if(strcmp(buffer, "/z") == 0) { in_z = 0; }
 			if(strcmp(buffer, "ob_dim") == 0) { in_ob_dim = 1; }
 			if(strcmp(buffer, "/ob_dim") == 0) { in_ob_dim = 0; }
 			if(strcmp(buffer, "ob_age") == 0) { in_ob_age = 1; }
@@ -1172,20 +1214,10 @@ int readAgentXML(char * location,
 			if(strcmp(buffer, "/ob_direction") == 0) { in_ob_direction = 0; }
 			if(strcmp(buffer, "ob_moved_flag") == 0) { in_ob_moved_flag = 1; }
 			if(strcmp(buffer, "/ob_moved_flag") == 0) { in_ob_moved_flag = 0; }
-			if(strcmp(buffer, "bmu_id") == 0) { in_bmu_id = 1; }
-			if(strcmp(buffer, "/bmu_id") == 0) { in_bmu_id = 0; }
-			if(strcmp(buffer, "bmu_direction") == 0) { in_bmu_direction = 1; }
-			if(strcmp(buffer, "/bmu_direction") == 0) { in_bmu_direction = 0; }
-			if(strcmp(buffer, "bmu_speed") == 0) { in_bmu_speed = 1; }
-			if(strcmp(buffer, "/bmu_speed") == 0) { in_bmu_speed = 0; }
-			if(strcmp(buffer, "bmu_position") == 0) { in_bmu_position = 1; }
-			if(strcmp(buffer, "/bmu_position") == 0) { in_bmu_position = 0; }
-			if(strcmp(buffer, "bmu_length") == 0) { in_bmu_length = 1; }
-			if(strcmp(buffer, "/bmu_length") == 0) { in_bmu_length = 0; }
-			if(strcmp(buffer, "bmu_age") == 0) { in_bmu_age = 1; }
-			if(strcmp(buffer, "/bmu_age") == 0) { in_bmu_age = 0; }
 			if(strcmp(buffer, "rand_init") == 0) { in_rand_init = 1; }
 			if(strcmp(buffer, "/rand_init") == 0) { in_rand_init = 0; }
+			if(strcmp(buffer, "bmu_freq") == 0) { in_bmu_freq = 1; }
+			if(strcmp(buffer, "/bmu_freq") == 0) { in_bmu_freq = 0; }
 			
 			index = 0;
 			buffer[index] = '\0';
@@ -1206,15 +1238,15 @@ int readAgentXML(char * location,
 						current_oc_agent = init_oc_agent();
 						in_oc_agent = 1;
 					}
-					else if(strcmp(agentname, "ob") == 0)
-					{
-						current_ob_agent = init_ob_agent();
-						in_ob_agent = 1;
-					}
 					else if(strcmp(agentname, "bmu") == 0)
 					{
 						current_bmu_agent = init_bmu_agent();
 						in_bmu_agent = 1;
+					}
+					else if(strcmp(agentname, "ob") == 0)
+					{
+						current_ob_agent = init_ob_agent();
+						in_ob_agent = 1;
 					}
 					else if(strcmp(agentname, "environment") == 0)
 					{
@@ -1233,13 +1265,28 @@ int readAgentXML(char * location,
 						rc = read_celldim(buffer, index, &j, &current_oc_agent->oc_dim);
 						if(rc != 0) { printf("Error: reading 'oc' agent variable 'oc_dim' of type 'celldim'\n"); exit(0); } }
 					if(in_oc_age) { current_oc_agent->oc_age = atoi(buffer); }
-					if(in_oc_nuclei) { current_oc_agent->oc_nuclei = atoi(buffer); }
 					if(in_oc_id) { current_oc_agent->oc_id = atoi(buffer); }
 					if(in_oc_death_prob) { current_oc_agent->oc_death_prob = atof(buffer); }
 					if(in_oc_mybmu) { current_oc_agent->oc_mybmu = atoi(buffer); }
 					if(in_oc_direction) { j = 0;
 						rc = read_coordinate(buffer, index, &j, &current_oc_agent->oc_direction);
 						if(rc != 0) { printf("Error: reading 'oc' agent variable 'oc_direction' of type 'coordinate'\n"); exit(0); } }
+				 }else if(in_bmu_agent == 1)
+				{
+					if(in_bmu_id) { current_bmu_agent->bmu_id = atoi(buffer); }
+					if(in_bmu_direction) { j = 0;
+						rc = read_coordinate(buffer, index, &j, &current_bmu_agent->bmu_direction);
+						if(rc != 0) { printf("Error: reading 'bmu' agent variable 'bmu_direction' of type 'coordinate'\n"); exit(0); } }
+					if(in_bmu_speed) { current_bmu_agent->bmu_speed = atof(buffer); }
+					if(in_bmu_position) { j = 0;
+						rc = read_coordinate(buffer, index, &j, &current_bmu_agent->bmu_position);
+						if(rc != 0) { printf("Error: reading 'bmu' agent variable 'bmu_position' of type 'coordinate'\n"); exit(0); } }
+					if(in_bmu_length) { current_bmu_agent->bmu_length = atoi(buffer); }
+					if(in_bmu_age) { current_bmu_agent->bmu_age = atoi(buffer); }
+					if(in_bmu_width) { current_bmu_agent->bmu_width = atoi(buffer); }
+					if(in_oc_present) { current_bmu_agent->oc_present = atoi(buffer); }
+					if(in_ob_present) { current_bmu_agent->ob_present = atoi(buffer); }
+					if(in_z) { current_bmu_agent->z = atof(buffer); }
 				 }else if(in_ob_agent == 1)
 				{
 					if(in_ob_dim) { j = 0;
@@ -1253,21 +1300,10 @@ int readAgentXML(char * location,
 						rc = read_coordinate(buffer, index, &j, &current_ob_agent->ob_direction);
 						if(rc != 0) { printf("Error: reading 'ob' agent variable 'ob_direction' of type 'coordinate'\n"); exit(0); } }
 					if(in_ob_moved_flag) { current_ob_agent->ob_moved_flag = atoi(buffer); }
-				 }else if(in_bmu_agent == 1)
-				{
-					if(in_bmu_id) { current_bmu_agent->bmu_id = atoi(buffer); }
-					if(in_bmu_direction) { j = 0;
-						rc = read_coordinate(buffer, index, &j, &current_bmu_agent->bmu_direction);
-						if(rc != 0) { printf("Error: reading 'bmu' agent variable 'bmu_direction' of type 'coordinate'\n"); exit(0); } }
-					if(in_bmu_speed) { current_bmu_agent->bmu_speed = atof(buffer); }
-					if(in_bmu_position) { j = 0;
-						rc = read_coordinate(buffer, index, &j, &current_bmu_agent->bmu_position);
-						if(rc != 0) { printf("Error: reading 'bmu' agent variable 'bmu_position' of type 'coordinate'\n"); exit(0); } }
-					if(in_bmu_length) { current_bmu_agent->bmu_length = atoi(buffer); }
-					if(in_bmu_age) { current_bmu_agent->bmu_age = atoi(buffer); }
 				 }else if(in_environment_agent == 1)
 				{
 					if(in_rand_init) { current_environment_agent->rand_init = atoi(buffer); }
+					if(in_bmu_freq) { current_environment_agent->bmu_freq = atof(buffer); }
 				 }
 			}
 			index = 0;
@@ -1384,6 +1420,7 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 	FLAME_environment_variable_oc_lifespan = 0;
 	FLAME_environment_variable_ob_lifespan = 0;
 	FLAME_environment_variable_bmu_lifespan = 0;
+	FLAME_environment_variable_bmu_av_speed = 0.0;
 	FLAME_environment_variable_oc_creation_freq = 0.0;
 	FLAME_environment_variable_ob_creation_freq = 0.0;
 	FLAME_environment_variable_oc_diameter = 0.0;
@@ -1394,6 +1431,10 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 	FLAME_environment_variable_oc_speed = 0.0;
 	FLAME_environment_variable_oc_displ_stdev = 0.0;
 	FLAME_environment_variable_oc_max_nuclei = 0;
+	FLAME_environment_variable_oc_max_frontdist = 0;
+	FLAME_environment_variable_oc_speed_damp = 0.0;
+	FLAME_environment_variable_oc_resorb = 0.0;
+	FLAME_environment_variable_ob_synth = 0.0;
 	
 
 	/* Open config file to read-only */
@@ -1581,8 +1622,8 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 					if(FLAME_in_name == 1)
 					{
 						if(strcmp("oc", buffer) == 0) current_FLAME_output->type = 1;
-						else if(strcmp("ob", buffer) == 0) current_FLAME_output->type = 2;
-						else if(strcmp("bmu", buffer) == 0) current_FLAME_output->type = 3;
+						else if(strcmp("bmu", buffer) == 0) current_FLAME_output->type = 2;
+						else if(strcmp("ob", buffer) == 0) current_FLAME_output->type = 3;
 						else if(strcmp("environment", buffer) == 0) current_FLAME_output->type = 4;
 						else 
 						{
@@ -1654,8 +1695,8 @@ void readinitialstates(char * filename, char * filelocation, int * itno, double 
 		printf("output: type='");
 		if(current_FLAME_output->type == 0) printf("snapshot");
 		else if(current_FLAME_output->type == 1) printf("agent' name='oc");
-		else if(current_FLAME_output->type == 2) printf("agent' name='ob");
-		else if(current_FLAME_output->type == 3) printf("agent' name='bmu");
+		else if(current_FLAME_output->type == 2) printf("agent' name='bmu");
+		else if(current_FLAME_output->type == 3) printf("agent' name='ob");
 		else if(current_FLAME_output->type == 4) printf("agent' name='environment");
 		else printf("undefined");
 		printf("' format='");
@@ -2013,10 +2054,6 @@ void write_oc_agent(FILE *file, xmachine_memory_oc * current)
 	sprintf(data, "%i", current->oc_age);
 	fputs(data, file);
 	fputs("</oc_age>\n", file);
-		fputs("<oc_nuclei>", file);
-	sprintf(data, "%i", current->oc_nuclei);
-	fputs(data, file);
-	fputs("</oc_nuclei>\n", file);
 		fputs("<oc_id>", file);
 	sprintf(data, "%i", current->oc_id);
 	fputs(data, file);
@@ -2032,6 +2069,53 @@ void write_oc_agent(FILE *file, xmachine_memory_oc * current)
 		fputs("<oc_direction>", file);
 	write_coordinate(file, &current->oc_direction);
 	fputs("</oc_direction>\n", file);
+
+	fputs("</xagent>\n", file);
+}
+
+void write_bmu_agent(FILE *file, xmachine_memory_bmu * current)
+{
+	char data[1000];
+	fputs("<xagent>\n" , file);
+	fputs("<name>bmu</name>\n", file);
+		fputs("<bmu_id>", file);
+	sprintf(data, "%i", current->bmu_id);
+	fputs(data, file);
+	fputs("</bmu_id>\n", file);
+		fputs("<bmu_direction>", file);
+	write_coordinate(file, &current->bmu_direction);
+	fputs("</bmu_direction>\n", file);
+		fputs("<bmu_speed>", file);
+	sprintf(data, "%f", current->bmu_speed);
+	fputs(data, file);
+	fputs("</bmu_speed>\n", file);
+		fputs("<bmu_position>", file);
+	write_coordinate(file, &current->bmu_position);
+	fputs("</bmu_position>\n", file);
+		fputs("<bmu_length>", file);
+	sprintf(data, "%i", current->bmu_length);
+	fputs(data, file);
+	fputs("</bmu_length>\n", file);
+		fputs("<bmu_age>", file);
+	sprintf(data, "%i", current->bmu_age);
+	fputs(data, file);
+	fputs("</bmu_age>\n", file);
+		fputs("<bmu_width>", file);
+	sprintf(data, "%i", current->bmu_width);
+	fputs(data, file);
+	fputs("</bmu_width>\n", file);
+		fputs("<oc_present>", file);
+	sprintf(data, "%i", current->oc_present);
+	fputs(data, file);
+	fputs("</oc_present>\n", file);
+		fputs("<ob_present>", file);
+	sprintf(data, "%i", current->ob_present);
+	fputs(data, file);
+	fputs("</ob_present>\n", file);
+		fputs("<z>", file);
+	sprintf(data, "%f", current->z);
+	fputs(data, file);
+	fputs("</z>\n", file);
 
 	fputs("</xagent>\n", file);
 }
@@ -2071,37 +2155,6 @@ void write_ob_agent(FILE *file, xmachine_memory_ob * current)
 	fputs("</xagent>\n", file);
 }
 
-void write_bmu_agent(FILE *file, xmachine_memory_bmu * current)
-{
-	char data[1000];
-	fputs("<xagent>\n" , file);
-	fputs("<name>bmu</name>\n", file);
-		fputs("<bmu_id>", file);
-	sprintf(data, "%i", current->bmu_id);
-	fputs(data, file);
-	fputs("</bmu_id>\n", file);
-		fputs("<bmu_direction>", file);
-	write_coordinate(file, &current->bmu_direction);
-	fputs("</bmu_direction>\n", file);
-		fputs("<bmu_speed>", file);
-	sprintf(data, "%f", current->bmu_speed);
-	fputs(data, file);
-	fputs("</bmu_speed>\n", file);
-		fputs("<bmu_position>", file);
-	write_coordinate(file, &current->bmu_position);
-	fputs("</bmu_position>\n", file);
-		fputs("<bmu_length>", file);
-	sprintf(data, "%i", current->bmu_length);
-	fputs(data, file);
-	fputs("</bmu_length>\n", file);
-		fputs("<bmu_age>", file);
-	sprintf(data, "%i", current->bmu_age);
-	fputs(data, file);
-	fputs("</bmu_age>\n", file);
-
-	fputs("</xagent>\n", file);
-}
-
 void write_environment_agent(FILE *file, xmachine_memory_environment * current)
 {
 	char data[1000];
@@ -2111,6 +2164,10 @@ void write_environment_agent(FILE *file, xmachine_memory_environment * current)
 	sprintf(data, "%i", current->rand_init);
 	fputs(data, file);
 	fputs("</rand_init>\n", file);
+		fputs("<bmu_freq>", file);
+	sprintf(data, "%f", current->bmu_freq);
+	fputs(data, file);
+	fputs("</bmu_freq>\n", file);
 
 	fputs("</xagent>\n", file);
 }
@@ -2155,6 +2212,10 @@ void FLAME_write_xml(char * location, int iteration_number, int * output_types, 
 		sprintf(data, "%i", FLAME_environment_variable_bmu_lifespan);
 		fputs(data, file);
 		fputs("</bmu_lifespan>\n", file);
+			fputs("<bmu_av_speed>", file);
+		sprintf(data, "%f", FLAME_environment_variable_bmu_av_speed);
+		fputs(data, file);
+		fputs("</bmu_av_speed>\n", file);
 			fputs("<oc_creation_freq>", file);
 		sprintf(data, "%f", FLAME_environment_variable_oc_creation_freq);
 		fputs(data, file);
@@ -2195,6 +2256,22 @@ void FLAME_write_xml(char * location, int iteration_number, int * output_types, 
 		sprintf(data, "%i", FLAME_environment_variable_oc_max_nuclei);
 		fputs(data, file);
 		fputs("</oc_max_nuclei>\n", file);
+			fputs("<oc_max_frontdist>", file);
+		sprintf(data, "%i", FLAME_environment_variable_oc_max_frontdist);
+		fputs(data, file);
+		fputs("</oc_max_frontdist>\n", file);
+			fputs("<oc_speed_damp>", file);
+		sprintf(data, "%f", FLAME_environment_variable_oc_speed_damp);
+		fputs(data, file);
+		fputs("</oc_speed_damp>\n", file);
+			fputs("<oc_resorb>", file);
+		sprintf(data, "%f", FLAME_environment_variable_oc_resorb);
+		fputs(data, file);
+		fputs("</oc_resorb>\n", file);
+			fputs("<ob_synth>", file);
+		sprintf(data, "%f", FLAME_environment_variable_ob_synth);
+		fputs(data, file);
+		fputs("</ob_synth>\n", file);
 			fputs("</environment>\n" , file);
 	}
 	
@@ -2212,23 +2289,23 @@ void FLAME_write_xml(char * location, int iteration_number, int * output_types, 
 	
 	if(FLAME_integer_in_array(0, output_types, output_type_size) || FLAME_integer_in_array(2, output_types, output_type_size))
 	{
-		current_xmachine_ob_holder = ob_start_state->agents;
-			while(current_xmachine_ob_holder)
-			{
-				write_ob_agent(file, current_xmachine_ob_holder->agent);
-
-				current_xmachine_ob_holder = current_xmachine_ob_holder->next;
-			}
-	}
-	
-	if(FLAME_integer_in_array(0, output_types, output_type_size) || FLAME_integer_in_array(3, output_types, output_type_size))
-	{
 		current_xmachine_bmu_holder = bmu_start_state->agents;
 			while(current_xmachine_bmu_holder)
 			{
 				write_bmu_agent(file, current_xmachine_bmu_holder->agent);
 
 				current_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+			}
+	}
+	
+	if(FLAME_integer_in_array(0, output_types, output_type_size) || FLAME_integer_in_array(3, output_types, output_type_size))
+	{
+		current_xmachine_ob_holder = ob_start_state->agents;
+			while(current_xmachine_ob_holder)
+			{
+				write_ob_agent(file, current_xmachine_ob_holder->agent);
+
+				current_xmachine_ob_holder = current_xmachine_ob_holder->next;
 			}
 	}
 	

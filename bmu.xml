@@ -3,7 +3,7 @@
 
   <name>Dormant Cancer Cells</name>
   <author>Christine Seeliger</author>
-  <description>Dormant Cancer cell model with non-cell based BMU concept</description>
+  <description>Dormant Cancer cell model with cell based BMU concept</description>
   <version>1</version>
 
 	<environment>
@@ -32,6 +32,10 @@
 			<variable>
 				<name>bmu_lifespan</name>
 				<type>int</type>
+			</variable>
+			<variable>
+				<name>bmu_av_speed</name>
+				<type>double</type>
 			</variable>
 			<variable>
 				<name>oc_creation_freq</name>
@@ -72,6 +76,22 @@
 			<variable>
 				<name>oc_max_nuclei</name>
 				<type>int</type>
+			</variable>
+			<variable>
+				<name>oc_max_frontdist</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>oc_speed_damp</name>
+				<type>double</type>
+			</variable>
+			<variable>
+				<name>oc_resorb</name>
+				<type>double</type>
+			</variable>
+			<variable>
+				<name>ob_synth</name>
+				<type>double</type>
 			</variable>
 		</constants>
 
@@ -183,10 +203,6 @@
 					<type>int</type>
 				</variable>
 				<variable>
-					<name>oc_nuclei</name>
-					<type>int</type>
-				</variable>
-				<variable>
 					<name>oc_id</name>
 					<type>int</type>
 				</variable>
@@ -244,19 +260,203 @@
 					<name>oc_move</name>
 					<currentState>2</currentState>
 					<nextState>3</nextState>
+					<inputs>
+						<input>
+							<messageName>bmu_position</messageName>
+						</input>
+					</inputs>
+				</function>
+				<function>
+					<name>signal_oc_updated_position</name>
+					<currentState>3</currentState>
+					<nextState>4</nextState>
+					<condition>
+						<lhs><value>a.oc_age</value></lhs>
+						<op>GT</op>
+						<rhs><value>0</value></rhs>
+					</condition>
+					<outputs>
+						<output>
+							<messageName>oc_updated_position</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>oc_update_position</name>
+					<currentState>4</currentState>
+					<nextState>5</nextState>
+					<inputs>
+						<input>
+							<messageName>new_oc_position</messageName>
+						</input>
+					</inputs>
 				</function>
 				<function>
 					<name>oc_get_older</name>
-					<currentState>3</currentState>
-					<nextState>4</nextState>
+					<currentState>5</currentState>
+					<nextState>6</nextState>
 				</function>
 				<function>
 					<name>oc_die</name>
-					<currentState>4</currentState>
+					<currentState>6</currentState>
 					<nextState>end</nextState>
+					<outputs>
+						<output>
+							<messageName>death</messageName>
+						</output>
+					</outputs>
 				</function>
 			</functions>
 		</xagent>
+
+		<!-- BASIC MULTICELLULAR UNIT -->
+		<xagent>
+			<name>bmu</name>
+			<memory>
+				<variable>
+					<name>bmu_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>bmu_direction</name>
+					<type>coordinate</type>
+				</variable>
+				<variable>
+					<name>bmu_speed</name>
+					<type>double</type>
+				</variable>
+				<variable>
+					<name>bmu_position</name>
+					<type>coordinate</type>
+				</variable>
+				<variable>
+					<name>bmu_length</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>bmu_age</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>bmu_width</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>oc_present</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>ob_present</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>z</name>
+					<type>double</type>
+				</variable>
+			</memory>
+			<functions>
+				<function>
+					<name>create</name>
+					<currentState>start</currentState>
+					<nextState>1</nextState>
+				</function>
+				<function>
+					<name>signal_position</name>
+					<currentState>1</currentState>
+					<nextState>2</nextState>
+					<outputs>
+						<output>
+							<messageName>bmu_position</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>bmu_die</name>
+					<currentState>2</currentState>
+					<nextState>3</nextState>
+				</function>
+				<function>
+					<name>ob_push_check</name>
+					<currentState>3</currentState>
+					<nextState>4</nextState>
+					<inputs>
+						<input>
+							<messageName>ob_position</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>new_ob_position</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>calc_fusions</name>
+					<currentState>4</currentState>
+					<nextState>5</nextState>
+					<inputs>
+						<input>
+							<messageName>oc_position</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>fusion_signal</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>oc_push_check</name>
+					<currentState>5</currentState>
+					<nextState>6</nextState>
+					<inputs>
+						<input>
+							<messageName>oc_updated_position</messageName>
+						</input>
+					</inputs>
+					<outputs>
+						<output>
+							<messageName>new_oc_position</messageName>
+						</output>
+					</outputs>
+				</function>
+				<function>
+					<name>bmu_move</name>
+					<currentState>6</currentState>
+					<nextState>7</nextState>
+				</function>
+				<function>
+					<name>bmu_update_data</name>
+					<currentState>7</currentState>
+					<nextState>end</nextState>
+					<inputs>
+						<input>
+							<messageName>death</messageName>
+						</input>
+					</inputs>
+				</function>
+			</functions>
+		</xagent>
+
+<xagent>
+	<name>dcc</name>
+	<memory>
+		<variable>
+			<name>oc_neighbours</name>
+			<type>int</type>
+		</variable>
+		<variable>
+			<name>ob_neighbours</name>
+			<type>int</type>
+		</variable>
+		<variable>
+			<name>threshold</name>
+			<type>double</type>
+		</variable>
+	</memory>
+	<functions>
+	</functions>
+</xagent>
 
 <!-- OSTEOBLAST AGENT -->
 		<xagent>
@@ -337,101 +537,16 @@
 					<name>ob_die</name>
 					<currentState>3</currentState>
 					<nextState>end</nextState>
+					<outputs>
+						<output>
+							<messageName>death</messageName>
+						</output>
+					</outputs>
 				</function>
 			</functions>
 		</xagent>
 
 
-<!-- BASIC MULTICELLULAR UNIT -->
-		<xagent>
-			<name>bmu</name>
-			<memory>
-				<variable>
-					<name>bmu_id</name>
-					<type>int</type>
-				</variable>
-				<variable>
-					<name>bmu_direction</name>
-					<type>coordinate</type>
-				</variable>
-				<variable>
-					<name>bmu_speed</name>
-					<type>double</type>
-				</variable>
-				<variable>
-					<name>bmu_position</name>
-					<type>coordinate</type>
-				</variable>
-				<variable>
-					<name>bmu_length</name>
-					<type>int</type>
-				</variable>
-				<variable>
-					<name>bmu_age</name>
-					<type>int</type>
-				</variable>
-			</memory>
-			<functions>
-				<function>
-					<name>create</name>
-					<currentState>start</currentState>
-					<nextState>1</nextState>
-					<inputs>
-						<input>
-							<messageName>oc_position</messageName>
-						</input>
-						<input>
-							<messageName>ob_position</messageName>
-						</input>
-					</inputs>
-				</function>
-				<function>
-					<name>bmu_die</name>
-					<currentState>1</currentState>
-					<nextState>2</nextState>
-				</function>
-				<function>
-					<name>ob_push_check</name>
-					<currentState>2</currentState>
-					<nextState>3</nextState>
-					<inputs>
-						<input>
-							<messageName>ob_position</messageName>
-						</input>
-					</inputs>
-					<outputs>
-						<output>
-							<messageName>new_ob_position</messageName>
-						</output>
-					</outputs>
-				</function>
-				<function>
-					<name>calc_fusions</name>
-					<currentState>3</currentState>
-					<nextState>4</nextState>
-					<inputs>
-						<input>
-							<messageName>oc_position</messageName>
-						</input>
-					</inputs>
-					<outputs>
-						<output>
-							<messageName>fusion_signal</messageName>
-						</output>
-					</outputs>
-				</function>
-				<function>
-					<name>bmu_move</name>
-					<currentState>4</currentState>
-					<nextState>5</nextState>
-				</function>
-				<function>
-					<name>bmu_getolder</name>
-					<currentState>5</currentState>
-					<nextState>end</nextState>
-				</function>
-			</functions>
-		</xagent>
 
 <!-- ENVIRONMENT -->
 		<xagent>
@@ -440,6 +555,10 @@
 				<variable>
 					<name>rand_init</name>
 					<type>int</type>
+				</variable>
+				<variable>
+					<name>bmu_freq</name>
+					<type>double</type>
 				</variable>
 			</memory>
 			<functions>
@@ -452,6 +571,20 @@
 							<value>a.rand_init</value>
 						</lhs>
 						<op>EQ</op>
+						<rhs>
+							<value>0</value>
+						</rhs>
+					</condition>
+				</function>
+				<function>
+					<name>gen_bmus</name>
+					<currentState>start</currentState>
+					<nextState>end</nextState>
+					<condition>
+						<lhs>
+							<value>a.rand_init</value>
+						</lhs>
+						<op>GT</op>
 						<rhs>
 							<value>0</value>
 						</rhs>
@@ -475,7 +608,20 @@
 					<type>int</type>
 				</variable>
 				<variable>
-					<name>nuclei</name>
+					<name>bmu_scope</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>oc_updated_position</name>
+			<variables>
+				<variable>
+					<name>oc_dimension</name>
+					<type>celldim</type>
+				</variable>
+				<variable>
+					<name>id</name>
 					<type>int</type>
 				</variable>
 				<variable>
@@ -533,6 +679,45 @@
 				<name>dims</name>
 				<type>celldim</type>
 			</variable>
+			</variables>
+		</message>
+			<message>
+			<name>new_oc_position</name>
+			<variables>
+			<variable>
+				<name>push_id</name>
+				<type>int</type>
+			</variable>
+			<variable>
+				<name>dims</name>
+				<type>celldim</type>
+			</variable>
+			</variables>
+		</message>
+		<message>
+			<name>bmu_position</name>
+			<variables>
+				<variable>
+					<name>bmu_pos</name>
+					<type>coordinate</type>
+				</variable>
+				<variable>
+					<name>bmu_id</name>
+					<type>int</type>
+				</variable>
+			</variables>
+		</message>
+		<message>
+			<name>death</name>
+			<variables>
+				<variable>
+					<name>bmu_id</name>
+					<type>int</type>
+				</variable>
+				<variable>
+					<name>celltype</name>
+					<type>int</type>
+				</variable>
 			</variables>
 		</message>
 	</messages>

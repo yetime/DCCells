@@ -28,12 +28,12 @@ double cellid_in_array(fusion_pair_array fusp, int cellid);
  */
 int create(){
 
-		if(BMU_AGE<=BMU_LIFESPAN){
+		if(BMU_AGE<=BMU_LIFESPAN+BMU_SPEED*OC_MAX_FRONTDIST){
 		double rnd_ob=rnd_numbers();
 		double rnd_oc=rnd_numbers();
 
 		//OB creation
-		if(rnd_ob<OB_CREATION_FREQ)
+		if(rnd_ob<OB_CREATION_FREQ && BMU_AGE>=216 && Z<=100)
 		{
 			coordinate ob_pos;
 			init_coordinate(&ob_pos);
@@ -45,10 +45,11 @@ int create(){
 			ob_dim.diameter=OB_DIAMETER;
 			ob_dim.nuclei=1;
 			add_ob_agent(ob_dim,0,get_new_ob_id(),0, BMU_ID, BMU_DIRECTION, FALSE);
+			OB_PRESENT=OB_PRESENT+1;
 		}
 
 		//Osteoclast creation
-		if(rnd_oc<OC_CREATION_FREQ){
+		if(rnd_oc<OC_CREATION_FREQ&& BMU_AGE<BMU_LIFESPAN-OC_MAX_FRONTDIST*BMU_SPEED){
 			coordinate oc_pos;
 			init_coordinate(&oc_pos);
 			oc_pos.x=BMU_POSITION.x;
@@ -62,9 +63,10 @@ int create(){
 			init_coordinate(&oc_dir);
 			oc_dir.x=BMU_DIRECTION.x;
 			oc_dir.y=BMU_DIRECTION.y;
-			add_oc_agent(oc_dim,0,1,get_new_oc_id(), 0, BMU_ID, oc_dir);
+			add_oc_agent(oc_dim,0,get_new_oc_id(), 0, BMU_ID, oc_dir);
+			OC_PRESENT=OC_PRESENT+1;
 		}
-		}
+	}
 
 	return 0;
 }
@@ -74,8 +76,10 @@ int create(){
  */
 
 int bmu_die(){
-	if(BMU_AGE>BMU_LIFESPAN)
-		BMU_SPEED=0;
+
+	if (Z>=100 && BMU_AGE>=BMU_LIFESPAN+OC_MAX_FRONTDIST*BMU_SPEED)
+		return 1;
+	if (BMU_AGE>=BMU_LIFESPAN && Z>=100) BMU_SPEED=0;
 	return 0;
 }
 
@@ -86,8 +90,11 @@ int bmu_die(){
 int bmu_move(){
 	double alpha = atan(BMU_DIRECTION.y/BMU_DIRECTION.x);
 
+
 	double new_y=sin(alpha)*BMU_SPEED;
 	double new_x=cos(alpha)*BMU_SPEED;
+
+
 
 		if(BMU_DIRECTION.x<0 && BMU_DIRECTION.y<0) {
 			new_x=new_x*-1;
@@ -99,6 +106,7 @@ int bmu_move(){
 		}
 		BMU_POSITION.x=BMU_POSITION.x+new_x;
 		BMU_POSITION.y=BMU_POSITION.y+new_y;
+
 	return 0;
 }
 
@@ -125,29 +133,35 @@ int calc_fusions(){
 	fusion_pair_array fusp;
 	init_fusion_pair_array(&fusp);
 
-	int i;
+	int i,j, sum_nuclei;
+	double x1, x2, y1, y2;
+	double dist, sum_radii, overlap, old_overlap_i, old_overlap_j;
 
-	for(i=0;i<bmu_ocs.size-1;i++){
-		double x1=bmu_ocs.array[i].dims.xy.x;
-		double y1=bmu_ocs.array[i].dims.xy.y;
-		double x2=bmu_ocs.array[i+1].dims.xy.x;
-		double y2=bmu_ocs.array[i+1].dims.xy.y;
+	for(i=0;i<bmu_ocs.size;i++){
+		for(j=0;j<bmu_ocs.size;j++){
+			x1=bmu_ocs.array[i].dims.xy.x;
+			y1=bmu_ocs.array[i].dims.xy.y;
+			x2=bmu_ocs.array[j].dims.xy.x;
+			y2=bmu_ocs.array[j].dims.xy.y;
 
-		double dist=eucl_distance(x1, y1, x2, y2);
+			dist=eucl_distance(x1, y1, x2, y2);
+			sum_radii=bmu_ocs.array[i].dims.diameter/2+bmu_ocs.array[j].dims.diameter/2;
+			sum_nuclei=bmu_ocs.array[i].dims.nuclei + bmu_ocs.array[j].dims.nuclei;
 
-		if(dist<=bmu_ocs.array[i].dims.diameter/2+bmu_ocs.array[i+1].dims.diameter/2) {
-			double max=bmu_ocs.array[i].dims.diameter/2;
-			if(max<bmu_ocs.array[i+1].dims.diameter/2) max=bmu_ocs.array[i+1].dims.diameter/2;
+			if(dist-sum_radii<0 && dist>0 && sum_nuclei<OC_MAX_NUCLEI){
+				overlap=sum_radii-dist;
 
-			double overlap=abs(max-bmu_ocs.array[i].dims.diameter/2-bmu_ocs.array[i+1].dims.diameter/2);
-			double old_overlap=cellid_in_array(fusp, bmu_ocs.array[i].id);
-			if(old_overlap<0 && (bmu_ocs.array[i].dims.nuclei+bmu_ocs.array[i+1].dims.nuclei)<=OC_MAX_NUCLEI) {
-				add_fusion_pair(&fusp, bmu_ocs.array[i].id, &bmu_ocs.array[i].dims, bmu_ocs.array[i+1].id, &bmu_ocs.array[i+1].dims, overlap);
+				old_overlap_i=cellid_in_array(fusp, bmu_ocs.array[i].id);
+				old_overlap_j=cellid_in_array(fusp, bmu_ocs.array[j].id);
+
+				if(old_overlap_i<0 && old_overlap_j<0) {
+					add_fusion_pair(&fusp, bmu_ocs.array[i].id, &bmu_ocs.array[i].dims, bmu_ocs.array[j].id, &bmu_ocs.array[j].dims, overlap);
+				}
+				else if(old_overlap_i<overlap || old_overlap_j<overlap){
+					replace_fusion_pair(bmu_ocs.array[i], bmu_ocs.array[j], fusp, overlap);
+				}
+
 			}
-			else if(old_overlap<overlap && (bmu_ocs.array[i].dims.nuclei+bmu_ocs.array[i+1].dims.nuclei)<=OC_MAX_NUCLEI){
-					replace_fusion_pair(bmu_ocs.array[i], bmu_ocs.array[i+1], fusp, overlap);
-			}
-
 		}
 	}
 
@@ -207,7 +221,76 @@ int ob_push_check(){
 	double x1,y1,x2,y2;
 	double new_x, new_y, alpha, overlap, dist, sum_radii;
 
-	printf("Number of OB: %d\n ", bmu_obs.size);
+	while(solved==FALSE && iterations_threshold<1000000){
+
+		solved=TRUE;
+		for(i=0;i<bmu_obs.size;i++){
+			for(j=0;j<bmu_obs.size;j++){
+				x1=bmu_obs.array[i].dims.xy.x;
+				y1=bmu_obs.array[i].dims.xy.y;
+				x2=bmu_obs.array[j].dims.xy.x;
+				y2=bmu_obs.array[j].dims.xy.y;
+
+				dist=eucl_distance(x1, y1, x2, y2);
+				sum_radii=bmu_obs.array[i].dims.diameter/2+bmu_obs.array[j].dims.diameter/2;
+				if(dist-sum_radii<0 && dist>0) {
+					//double max=bmu_obs.array[i].dims.diameter/2;
+					//if(max<bmu_obs.array[i+1].dims.diameter/2) max=bmu_obs.array[i+1].dims.diameter/2;
+
+					overlap=sum_radii-dist;
+					alpha = atan(BMU_DIRECTION.y/BMU_DIRECTION.x);
+					if(rnd_numbers()>0.5) alpha=alpha+PI/2;
+					else alpha=alpha-PI/2;
+
+
+					new_y=sin(alpha)*overlap;
+					new_x=cos(alpha)*overlap;
+
+					/*if(BMU_DIRECTION.x<0 && BMU_DIRECTION.y<0) {
+							new_x=new_x*-1;
+							new_y=new_y*-1;
+						}
+						else if(BMU_DIRECTION.x<0 && BMU_DIRECTION.y>0){
+							new_x=new_x*-1;
+							new_y=new_y*-1;
+						}
+					*/
+					bmu_obs.array[j].dims.xy.x=new_x+bmu_obs.array[j].dims.xy.x;
+					bmu_obs.array[j].dims.xy.y=new_y+bmu_obs.array[j].dims.xy.y;
+
+					solved=FALSE;
+				}
+			}
+			iterations_threshold=iterations_threshold+1;
+		}
+
+	}
+
+	for(i=0;i<bmu_obs.size;i++){
+		add_new_ob_position_message(bmu_obs.array[i].id, bmu_obs.array[i].dims);
+	}
+
+	free_celldim(&d);
+	free_dim_id_array(&bmu_obs);
+	return 0;
+}
+int oc_push_check(){
+	dim_id_array bmu_obs;
+	init_dim_id_array(&bmu_obs);
+
+	celldim d;
+	init_celldim(&d);
+
+	START_OC_UPDATED_POSITION_MESSAGE_LOOP
+		copy_celldim(&oc_updated_position_message->oc_dimension, &d);
+		add_dim_id(&bmu_obs,&d,oc_updated_position_message->id);
+	FINISH_OC_UPDATED_POSITION_MESSAGE_LOOP
+
+	int solved=FALSE;
+	int iterations_threshold=0;
+	int i,j;
+	double x1,y1,x2,y2;
+	double new_x, new_y, alpha, overlap, dist, sum_radii;
 
 	while(solved==FALSE && iterations_threshold<1000000){
 
@@ -247,7 +330,7 @@ int ob_push_check(){
 	}
 
 	for(i=0;i<bmu_obs.size;i++){
-		add_new_ob_position_message(bmu_obs.array[i].id, bmu_obs.array[i].dims);
+		add_new_oc_position_message(bmu_obs.array[i].id, bmu_obs.array[i].dims);
 	}
 
 	free_celldim(&d);
@@ -255,8 +338,30 @@ int ob_push_check(){
 	return 0;
 }
 
-int bmu_getolder(){
+int bmu_update_data(){
 	BMU_AGE=BMU_AGE+1;
+	//BMU_LENGTH=BMU_LENGTH;
+	//BMU_WIDTH=BMU_WIDTH;
+	int n_oc=0;
+	int n_ob=0;
+	START_DEATH_MESSAGE_LOOP
+		if(death_message->celltype==OC_TYPE && death_message->bmu_id==BMU_ID){
+			n_oc=n_oc+1;
+		}
+		if(death_message->celltype==OB_TYPE && death_message->bmu_id==BMU_ID){
+			n_ob=n_ob+1;
+		}
+	FINISH_DEATH_MESSAGE_LOOP
+
+	OC_PRESENT=OC_PRESENT-n_oc;
+	OB_PRESENT=OB_PRESENT-n_ob;
+
+	Z=Z-OC_PRESENT*OC_RESORB+OB_PRESENT*OB_SYNTH;
+	return 0;
+}
+
+int signal_position(){
+	add_bmu_position_message(BMU_POSITION, BMU_ID);
 	return 0;
 }
 

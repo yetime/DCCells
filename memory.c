@@ -52,23 +52,231 @@ void unittest_fuse_1_2()
 
 void unittest_oc_move_2_3()
 {
+	int rc;
 	
+	
+	rc = MB_Iterator_Create(b_bmu_position, &i_bmu_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'bmu_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
 	
 	//return oc_move();
 }
 
-void unittest_oc_get_older_3_4()
+void unittest_signal_oc_updated_position_3_4()
+{
+	
+	
+	//return signal_oc_updated_position();
+}
+
+void unittest_oc_update_position_4_5()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_new_oc_position, &i_new_oc_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'new_oc_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return oc_update_position();
+}
+
+void unittest_oc_get_older_5_6()
 {
 	
 	
 	//return oc_get_older();
 }
 
-void unittest_oc_die_4_end()
+void unittest_oc_die_6_end()
 {
 	
 	
 	//return oc_die();
+}
+
+void unittest_create_start_1()
+{
+	
+	
+	//return create();
+}
+
+void unittest_signal_position_1_2()
+{
+	
+	
+	//return signal_position();
+}
+
+void unittest_bmu_die_2_3()
+{
+	
+	
+	//return bmu_die();
+}
+
+void unittest_ob_push_check_3_4()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_ob_position, &i_ob_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'ob_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return ob_push_check();
+}
+
+void unittest_calc_fusions_4_5()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return calc_fusions();
+}
+
+void unittest_oc_push_check_5_6()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_oc_updated_position, &i_oc_updated_position);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_updated_position'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return oc_push_check();
+}
+
+void unittest_bmu_move_6_7()
+{
+	
+	
+	//return bmu_move();
+}
+
+void unittest_bmu_update_data_7_end()
+{
+	int rc;
+	
+	
+	rc = MB_Iterator_Create(b_death, &i_death);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not create Iterator for 'death'\n");
+	   switch(rc) {
+	       case MB_ERR_INVALID:
+	           fprintf(stderr, "\t reason: 'death' board is invalid\n");
+	           break;
+	       case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'death' board is locked\n");
+               break;
+           case MB_ERR_MEMALLOC:
+               fprintf(stderr, "\t reason: out of memory\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	   }
+	}
+	#endif
+	
+	//return bmu_update_data();
 }
 
 void unittest_initialize_ob_start_end()
@@ -129,145 +337,18 @@ void unittest_ob_die_3_end()
 	//return ob_die();
 }
 
-void unittest_create_start_1()
-{
-	int rc;
-	
-	
-	rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	
-	rc = MB_Iterator_Create(b_ob_position, &i_ob_position);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'ob_position'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	//return create();
-}
-
-void unittest_bmu_die_1_2()
-{
-	
-	
-	//return bmu_die();
-}
-
-void unittest_ob_push_check_2_3()
-{
-	int rc;
-	
-	
-	rc = MB_Iterator_Create(b_ob_position, &i_ob_position);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'ob_position'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	//return ob_push_check();
-}
-
-void unittest_calc_fusions_3_4()
-{
-	int rc;
-	
-	
-	rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
-	#ifdef ERRCHECK
-	if (rc != MB_SUCCESS)
-	{
-	   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
-	   switch(rc) {
-	       case MB_ERR_INVALID:
-	           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
-	           break;
-	       case MB_ERR_LOCKED:
-               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
-               break;
-           case MB_ERR_MEMALLOC:
-               fprintf(stderr, "\t reason: out of memory\n");
-               break;
-           case MB_ERR_INTERNAL:
-               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-               break;
-	   }
-	}
-	#endif
-	
-	//return calc_fusions();
-}
-
-void unittest_bmu_move_4_5()
-{
-	
-	
-	//return bmu_move();
-}
-
-void unittest_bmu_getolder_5_end()
-{
-	
-	
-	//return bmu_getolder();
-}
-
 void unittest_initialize_start_end()
 {
 	
 	
 	//return initialize();
+}
+
+void unittest_gen_bmus_start_end()
+{
+	
+	
+	//return gen_bmus();
 }
 
 
@@ -286,6 +367,31 @@ void free_messages()
 	               break;
 	           case MB_ERR_LOCKED:
 	               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	    rc = MB_Clear(b_oc_updated_position);
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not clear 'oc_updated_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+	               break;
+	           case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
 	               break;
 	           case MB_ERR_INTERNAL:
 	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -375,6 +481,81 @@ void free_messages()
 	    }
 	    #endif
 	
+	    rc = MB_Clear(b_new_oc_position);
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not clear 'new_oc_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+	               break;
+	           case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	    rc = MB_Clear(b_bmu_position);
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not clear 'bmu_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+	               break;
+	           case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	    rc = MB_Clear(b_death);
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not clear 'death' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: 'death' board is invalid\n");
+	               break;
+	           case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'death' board is locked\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
 }
 
 /** \fn void initialise_pointers()
@@ -392,6 +573,34 @@ int rc;
 	    if (rc != MB_SUCCESS)
 	    {
 	       fprintf(stderr, "ERROR: Could not create 'oc_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: Invalid message size\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	/* Initialise message sync composite params as NULL */
+	FLAME_m_oc_updated_position_composite_params = NULL;
+
+	    rc = MB_Create(&b_oc_updated_position, sizeof(m_oc_updated_position));
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not create 'oc_updated_position' board\n");
 	       switch(rc) {
 	           case MB_ERR_INVALID:
 	               fprintf(stderr, "\t reason: Invalid message size\n");
@@ -496,6 +705,94 @@ int rc;
 	    }
 	    #endif
 	
+	/* Initialise message sync composite params as NULL */
+	FLAME_m_new_oc_position_composite_params = NULL;
+
+	    rc = MB_Create(&b_new_oc_position, sizeof(m_new_oc_position));
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not create 'new_oc_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: Invalid message size\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	/* Initialise message sync composite params as NULL */
+	FLAME_m_bmu_position_composite_params = NULL;
+
+	    rc = MB_Create(&b_bmu_position, sizeof(m_bmu_position));
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not create 'bmu_position' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: Invalid message size\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	/* Initialise message sync composite params as NULL */
+	FLAME_m_death_composite_params = NULL;
+
+	    rc = MB_Create(&b_death, sizeof(m_death));
+	    #ifdef ERRCHECK
+	    if (rc != MB_SUCCESS)
+	    {
+	       fprintf(stderr, "ERROR: Could not create 'death' board\n");
+	       switch(rc) {
+	           case MB_ERR_INVALID:
+	               fprintf(stderr, "\t reason: Invalid message size\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+                   fprintf(stderr, "\t MB_Create returned error code: %d (see libmboard docs for details)\n", rc);
+                   break;
+	       }
+
+	       
+       	   exit(rc);
+	    }
+	    #endif
+	
+	oc_6_state = init_oc_state();
+
+	oc_5_state = init_oc_state();
+
 	oc_4_state = init_oc_state();
 
 	oc_3_state = init_oc_state();
@@ -508,17 +805,11 @@ int rc;
 
 	oc_start_state = init_oc_state();
 
-	ob_3_state = init_ob_state();
-
-	ob_2_state = init_ob_state();
-
-	ob_1_state = init_ob_state();
-
-	ob_end_state = init_ob_state();
-
-	ob_start_state = init_ob_state();
-
 	bmu_end_state = init_bmu_state();
+
+	bmu_7_state = init_bmu_state();
+
+	bmu_6_state = init_bmu_state();
 
 	bmu_5_state = init_bmu_state();
 
@@ -531,6 +822,16 @@ int rc;
 	bmu_1_state = init_bmu_state();
 
 	bmu_start_state = init_bmu_state();
+
+	ob_3_state = init_ob_state();
+
+	ob_2_state = init_ob_state();
+
+	ob_1_state = init_ob_state();
+
+	ob_end_state = init_ob_state();
+
+	ob_start_state = init_ob_state();
 
 	environment_end_state = init_environment_state();
 
@@ -899,7 +1200,6 @@ xmachine_memory_oc * init_oc_agent()
 
 	init_celldim(&current->oc_dim);
 	current->oc_age = 0;
-	current->oc_nuclei = 0;
 	current->oc_id = 0;
 	current->oc_death_prob = 0.0;
 	current->oc_mybmu = 0;
@@ -929,7 +1229,6 @@ void unittest_init_oc_agent()
 
 		init_celldim(&current_xmachine_oc->oc_dim);
 		current_xmachine_oc->oc_age = 0;
-		current_xmachine_oc->oc_nuclei = 0;
 		current_xmachine_oc->oc_id = 0;
 		current_xmachine_oc->oc_death_prob = 0.0;
 		current_xmachine_oc->oc_mybmu = 0;
@@ -947,6 +1246,22 @@ void unittest_free_oc_agent()
 
 void free_oc_agents()
 {
+	current_xmachine_oc_holder = oc_6_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_6_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	oc_6_state->count = 0;
+	current_xmachine_oc_holder = oc_5_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		free_oc_agent(current_xmachine_oc_holder, oc_5_state);
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	oc_5_state->count = 0;
 	current_xmachine_oc_holder = oc_4_state->agents;
 	while(current_xmachine_oc_holder)
 	{
@@ -999,6 +1314,8 @@ void free_oc_agents()
 
 void free_oc_states()
 {
+	free(oc_6_state);
+	free(oc_5_state);
 	free(oc_4_state);
 	free(oc_3_state);
 	free(oc_2_state);
@@ -1032,17 +1349,16 @@ void add_oc_agent_internal(xmachine_memory_oc * agent, xmachine_memory_oc_state 
 
 }
 
-/** \fn void add_oc_agent(celldim * oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu, coordinate * oc_direction)
+/** \fn void add_oc_agent(celldim * oc_dim, int oc_age, int oc_id, double oc_death_prob, int oc_mybmu, coordinate * oc_direction)
  * \brief Add oc X-machine to the current being used X-machine list.
  * \param oc_dim Variable for the X-machine memory.
  * \param oc_age Variable for the X-machine memory.
- * \param oc_nuclei Variable for the X-machine memory.
  * \param oc_id Variable for the X-machine memory.
  * \param oc_death_prob Variable for the X-machine memory.
  * \param oc_mybmu Variable for the X-machine memory.
  * \param oc_direction Variable for the X-machine memory.
  */
-void add_oc_agent(celldim oc_dim, int oc_age, int oc_nuclei, int oc_id, double oc_death_prob, int oc_mybmu, coordinate oc_direction)
+void add_oc_agent(celldim oc_dim, int oc_age, int oc_id, double oc_death_prob, int oc_mybmu, coordinate oc_direction)
 {
 	xmachine_memory_oc * current;
 
@@ -1053,11 +1369,228 @@ void add_oc_agent(celldim oc_dim, int oc_age, int oc_nuclei, int oc_id, double o
 
 	copy_celldim(&oc_dim, &current->oc_dim);
 	current->oc_age = oc_age;
-	current->oc_nuclei = oc_nuclei;
 	current->oc_id = oc_id;
 	current->oc_death_prob = oc_death_prob;
 	current->oc_mybmu = oc_mybmu;
 	copy_coordinate(&oc_direction, &current->oc_direction);
+}
+
+xmachine_memory_bmu_state * init_bmu_state()
+{
+	xmachine_memory_bmu_state * current = (xmachine_memory_bmu_state *)malloc(sizeof(xmachine_memory_bmu_state));
+	CHECK_POINTER(current);
+
+	current->agents = NULL;
+	current->count = 0;
+
+	return current;
+}
+
+xmachine_memory_bmu * init_bmu_agent()
+{
+	xmachine_memory_bmu * current = (xmachine_memory_bmu *)malloc(sizeof(xmachine_memory_bmu));
+	CHECK_POINTER(current);
+
+	current->bmu_id = 0;
+	init_coordinate(&current->bmu_direction);
+	current->bmu_speed = 0.0;
+	init_coordinate(&current->bmu_position);
+	current->bmu_length = 0;
+	current->bmu_age = 0;
+	current->bmu_width = 0;
+	current->oc_present = 0;
+	current->ob_present = 0;
+	current->z = 0.0;
+
+	return current;
+}
+
+void free_bmu_agent(xmachine_memory_bmu_holder * tmp, xmachine_memory_bmu_state * state)
+{
+	if(tmp->prev == NULL) state->agents = tmp->next;
+	else tmp->prev->next = tmp->next;
+	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
+
+	free_coordinate(&tmp->agent->bmu_direction);
+	free_coordinate(&tmp->agent->bmu_position);
+	
+
+	free(tmp->agent);
+	free(tmp);
+}
+
+void unittest_init_bmu_agent()
+{
+	current_xmachine_bmu = (xmachine_memory_bmu *)malloc(sizeof(xmachine_memory_bmu));
+	CHECK_POINTER(current);
+
+		current_xmachine_bmu->bmu_id = 0;
+		init_coordinate(&current_xmachine_bmu->bmu_direction);
+		current_xmachine_bmu->bmu_speed = 0.0;
+		init_coordinate(&current_xmachine_bmu->bmu_position);
+		current_xmachine_bmu->bmu_length = 0;
+		current_xmachine_bmu->bmu_age = 0;
+		current_xmachine_bmu->bmu_width = 0;
+		current_xmachine_bmu->oc_present = 0;
+		current_xmachine_bmu->ob_present = 0;
+		current_xmachine_bmu->z = 0.0;
+	
+}
+
+void unittest_free_bmu_agent()
+{
+	free_coordinate(&current_xmachine_bmu->bmu_direction);
+	free_coordinate(&current_xmachine_bmu->bmu_position);
+	
+	free(current_xmachine_bmu);
+}
+
+void free_bmu_agents()
+{
+	current_xmachine_bmu_holder = bmu_end_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_end_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_end_state->count = 0;
+	current_xmachine_bmu_holder = bmu_7_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_7_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_7_state->count = 0;
+	current_xmachine_bmu_holder = bmu_6_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_6_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_6_state->count = 0;
+	current_xmachine_bmu_holder = bmu_5_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_5_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_5_state->count = 0;
+	current_xmachine_bmu_holder = bmu_4_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_4_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_4_state->count = 0;
+	current_xmachine_bmu_holder = bmu_3_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_3_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_3_state->count = 0;
+	current_xmachine_bmu_holder = bmu_2_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_2_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_2_state->count = 0;
+	current_xmachine_bmu_holder = bmu_1_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_1_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_1_state->count = 0;
+	current_xmachine_bmu_holder = bmu_start_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		free_bmu_agent(current_xmachine_bmu_holder, bmu_start_state);
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	bmu_start_state->count = 0;
+}
+
+void free_bmu_states()
+{
+	free(bmu_end_state);
+	free(bmu_7_state);
+	free(bmu_6_state);
+	free(bmu_5_state);
+	free(bmu_4_state);
+	free(bmu_3_state);
+	free(bmu_2_state);
+	free(bmu_1_state);
+	free(bmu_start_state);
+}
+
+void transition_bmu_agent(xmachine_memory_bmu_holder * tmp, xmachine_memory_bmu_state * from_state, xmachine_memory_bmu_state * to_state)
+{
+	if(tmp->prev == NULL) from_state->agents = tmp->next;
+	else tmp->prev->next = tmp->next;
+	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
+
+	add_bmu_agent_internal(tmp->agent, to_state);
+	free(tmp);
+}
+
+void add_bmu_agent_internal(xmachine_memory_bmu * agent, xmachine_memory_bmu_state * state)
+{
+	xmachine_memory_bmu_holder * current = (xmachine_memory_bmu_holder *)malloc(sizeof(xmachine_memory_bmu_holder));
+	CHECK_POINTER(current);
+
+	current->next = state->agents;
+	current->prev = NULL;
+	state->agents = current;
+	if(current->next != NULL) current->next->prev = current;
+	current->agent = agent;
+
+	state->count++;
+
+}
+
+/** \fn void add_bmu_agent(int bmu_id, coordinate * bmu_direction, double bmu_speed, coordinate * bmu_position, int bmu_length, int bmu_age, int bmu_width, int oc_present, int ob_present, double z)
+ * \brief Add bmu X-machine to the current being used X-machine list.
+ * \param bmu_id Variable for the X-machine memory.
+ * \param bmu_direction Variable for the X-machine memory.
+ * \param bmu_speed Variable for the X-machine memory.
+ * \param bmu_position Variable for the X-machine memory.
+ * \param bmu_length Variable for the X-machine memory.
+ * \param bmu_age Variable for the X-machine memory.
+ * \param bmu_width Variable for the X-machine memory.
+ * \param oc_present Variable for the X-machine memory.
+ * \param ob_present Variable for the X-machine memory.
+ * \param z Variable for the X-machine memory.
+ */
+void add_bmu_agent(int bmu_id, coordinate bmu_direction, double bmu_speed, coordinate bmu_position, int bmu_length, int bmu_age, int bmu_width, int oc_present, int ob_present, double z)
+{
+	xmachine_memory_bmu * current;
+
+	current = init_bmu_agent();
+	/* new line added to handle dynamic agent creation*/
+	current_xmachine_bmu_next_state = bmu_start_state;
+	add_bmu_agent_internal(current, current_xmachine_bmu_next_state);
+
+	current->bmu_id = bmu_id;
+	copy_coordinate(&bmu_direction, &current->bmu_direction);
+	current->bmu_speed = bmu_speed;
+	copy_coordinate(&bmu_position, &current->bmu_position);
+	current->bmu_length = bmu_length;
+	current->bmu_age = bmu_age;
+	current->bmu_width = bmu_width;
+	current->oc_present = oc_present;
+	current->ob_present = ob_present;
+	current->z = z;
 }
 
 xmachine_memory_ob_state * init_ob_state()
@@ -1230,190 +1763,6 @@ void add_ob_agent(celldim ob_dim, int ob_age, int ob_id, double ob_death_prob, i
 	current->ob_moved_flag = ob_moved_flag;
 }
 
-xmachine_memory_bmu_state * init_bmu_state()
-{
-	xmachine_memory_bmu_state * current = (xmachine_memory_bmu_state *)malloc(sizeof(xmachine_memory_bmu_state));
-	CHECK_POINTER(current);
-
-	current->agents = NULL;
-	current->count = 0;
-
-	return current;
-}
-
-xmachine_memory_bmu * init_bmu_agent()
-{
-	xmachine_memory_bmu * current = (xmachine_memory_bmu *)malloc(sizeof(xmachine_memory_bmu));
-	CHECK_POINTER(current);
-
-	current->bmu_id = 0;
-	init_coordinate(&current->bmu_direction);
-	current->bmu_speed = 0.0;
-	init_coordinate(&current->bmu_position);
-	current->bmu_length = 0;
-	current->bmu_age = 0;
-
-	return current;
-}
-
-void free_bmu_agent(xmachine_memory_bmu_holder * tmp, xmachine_memory_bmu_state * state)
-{
-	if(tmp->prev == NULL) state->agents = tmp->next;
-	else tmp->prev->next = tmp->next;
-	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
-
-	free_coordinate(&tmp->agent->bmu_direction);
-	free_coordinate(&tmp->agent->bmu_position);
-	
-
-	free(tmp->agent);
-	free(tmp);
-}
-
-void unittest_init_bmu_agent()
-{
-	current_xmachine_bmu = (xmachine_memory_bmu *)malloc(sizeof(xmachine_memory_bmu));
-	CHECK_POINTER(current);
-
-		current_xmachine_bmu->bmu_id = 0;
-		init_coordinate(&current_xmachine_bmu->bmu_direction);
-		current_xmachine_bmu->bmu_speed = 0.0;
-		init_coordinate(&current_xmachine_bmu->bmu_position);
-		current_xmachine_bmu->bmu_length = 0;
-		current_xmachine_bmu->bmu_age = 0;
-	
-}
-
-void unittest_free_bmu_agent()
-{
-	free_coordinate(&current_xmachine_bmu->bmu_direction);
-	free_coordinate(&current_xmachine_bmu->bmu_position);
-	
-	free(current_xmachine_bmu);
-}
-
-void free_bmu_agents()
-{
-	current_xmachine_bmu_holder = bmu_end_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		free_bmu_agent(current_xmachine_bmu_holder, bmu_end_state);
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	bmu_end_state->count = 0;
-	current_xmachine_bmu_holder = bmu_5_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		free_bmu_agent(current_xmachine_bmu_holder, bmu_5_state);
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	bmu_5_state->count = 0;
-	current_xmachine_bmu_holder = bmu_4_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		free_bmu_agent(current_xmachine_bmu_holder, bmu_4_state);
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	bmu_4_state->count = 0;
-	current_xmachine_bmu_holder = bmu_3_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		free_bmu_agent(current_xmachine_bmu_holder, bmu_3_state);
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	bmu_3_state->count = 0;
-	current_xmachine_bmu_holder = bmu_2_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		free_bmu_agent(current_xmachine_bmu_holder, bmu_2_state);
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	bmu_2_state->count = 0;
-	current_xmachine_bmu_holder = bmu_1_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		free_bmu_agent(current_xmachine_bmu_holder, bmu_1_state);
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	bmu_1_state->count = 0;
-	current_xmachine_bmu_holder = bmu_start_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		free_bmu_agent(current_xmachine_bmu_holder, bmu_start_state);
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	bmu_start_state->count = 0;
-}
-
-void free_bmu_states()
-{
-	free(bmu_end_state);
-	free(bmu_5_state);
-	free(bmu_4_state);
-	free(bmu_3_state);
-	free(bmu_2_state);
-	free(bmu_1_state);
-	free(bmu_start_state);
-}
-
-void transition_bmu_agent(xmachine_memory_bmu_holder * tmp, xmachine_memory_bmu_state * from_state, xmachine_memory_bmu_state * to_state)
-{
-	if(tmp->prev == NULL) from_state->agents = tmp->next;
-	else tmp->prev->next = tmp->next;
-	if(tmp->next != NULL) tmp->next->prev = tmp->prev;
-
-	add_bmu_agent_internal(tmp->agent, to_state);
-	free(tmp);
-}
-
-void add_bmu_agent_internal(xmachine_memory_bmu * agent, xmachine_memory_bmu_state * state)
-{
-	xmachine_memory_bmu_holder * current = (xmachine_memory_bmu_holder *)malloc(sizeof(xmachine_memory_bmu_holder));
-	CHECK_POINTER(current);
-
-	current->next = state->agents;
-	current->prev = NULL;
-	state->agents = current;
-	if(current->next != NULL) current->next->prev = current;
-	current->agent = agent;
-
-	state->count++;
-
-}
-
-/** \fn void add_bmu_agent(int bmu_id, coordinate * bmu_direction, double bmu_speed, coordinate * bmu_position, int bmu_length, int bmu_age)
- * \brief Add bmu X-machine to the current being used X-machine list.
- * \param bmu_id Variable for the X-machine memory.
- * \param bmu_direction Variable for the X-machine memory.
- * \param bmu_speed Variable for the X-machine memory.
- * \param bmu_position Variable for the X-machine memory.
- * \param bmu_length Variable for the X-machine memory.
- * \param bmu_age Variable for the X-machine memory.
- */
-void add_bmu_agent(int bmu_id, coordinate bmu_direction, double bmu_speed, coordinate bmu_position, int bmu_length, int bmu_age)
-{
-	xmachine_memory_bmu * current;
-
-	current = init_bmu_agent();
-	/* new line added to handle dynamic agent creation*/
-	current_xmachine_bmu_next_state = bmu_start_state;
-	add_bmu_agent_internal(current, current_xmachine_bmu_next_state);
-
-	current->bmu_id = bmu_id;
-	copy_coordinate(&bmu_direction, &current->bmu_direction);
-	current->bmu_speed = bmu_speed;
-	copy_coordinate(&bmu_position, &current->bmu_position);
-	current->bmu_length = bmu_length;
-	current->bmu_age = bmu_age;
-}
-
 xmachine_memory_environment_state * init_environment_state()
 {
 	xmachine_memory_environment_state * current = (xmachine_memory_environment_state *)malloc(sizeof(xmachine_memory_environment_state));
@@ -1431,6 +1780,7 @@ xmachine_memory_environment * init_environment_agent()
 	CHECK_POINTER(current);
 
 	current->rand_init = 0;
+	current->bmu_freq = 0.0;
 
 	return current;
 }
@@ -1453,6 +1803,7 @@ void unittest_init_environment_agent()
 	CHECK_POINTER(current);
 
 		current_xmachine_environment->rand_init = 0;
+		current_xmachine_environment->bmu_freq = 0.0;
 	
 }
 
@@ -1513,11 +1864,12 @@ void add_environment_agent_internal(xmachine_memory_environment * agent, xmachin
 
 }
 
-/** \fn void add_environment_agent(int rand_init)
+/** \fn void add_environment_agent(int rand_init, double bmu_freq)
  * \brief Add environment X-machine to the current being used X-machine list.
  * \param rand_init Variable for the X-machine memory.
+ * \param bmu_freq Variable for the X-machine memory.
  */
-void add_environment_agent(int rand_init)
+void add_environment_agent(int rand_init, double bmu_freq)
 {
 	xmachine_memory_environment * current;
 
@@ -1527,6 +1879,7 @@ void add_environment_agent(int rand_init)
 	add_environment_agent_internal(current, current_xmachine_environment_next_state);
 
 	current->rand_init = rand_init;
+	current->bmu_freq = bmu_freq;
 }
 
 
@@ -1537,8 +1890,8 @@ void add_environment_agent(int rand_init)
 void freexmachines()
 {
 	free_oc_agents();
-	free_ob_agents();
 	free_bmu_agents();
+	free_ob_agents();
 	free_environment_agents();
 	
 }
@@ -1573,28 +1926,6 @@ void set_oc_age(int oc_age)
 int get_oc_age()
 {
 	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).oc_age;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return (int)0;
-}
-
-/** \fn void set_oc_nuclei(int oc_nuclei)
- * \brief Set oc_nuclei memory variable for current X-machine.
- * \param oc_nuclei New value for variable.
- */
-void set_oc_nuclei(int oc_nuclei)
-{
-	if(current_xmachine->xmachine_oc) (*current_xmachine->xmachine_oc).oc_nuclei = oc_nuclei;
-}
-
-/** \fn int get_oc_nuclei()
- * \brief Get oc_nuclei memory variable from current X-machine.
- * \return Value for variable.
- */
-int get_oc_nuclei()
-{
-	if(current_xmachine->xmachine_oc) return (*current_xmachine->xmachine_oc).oc_nuclei;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
@@ -1678,6 +2009,208 @@ coordinate * get_oc_direction()
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
     return NULL;
+}
+
+/** \fn void set_bmu_id(int bmu_id)
+ * \brief Set bmu_id memory variable for current X-machine.
+ * \param bmu_id New value for variable.
+ */
+void set_bmu_id(int bmu_id)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_id = bmu_id;
+}
+
+/** \fn int get_bmu_id()
+ * \brief Get bmu_id memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_bmu_id()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_id;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn coordinate get_bmu_direction()
+ * \brief Get bmu_direction memory variable from current X-machine.
+ * \return Value for variable.
+ */
+coordinate * get_bmu_direction()
+{
+	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).bmu_direction;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return NULL;
+}
+
+/** \fn void set_bmu_speed(double bmu_speed)
+ * \brief Set bmu_speed memory variable for current X-machine.
+ * \param bmu_speed New value for variable.
+ */
+void set_bmu_speed(double bmu_speed)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_speed = bmu_speed;
+}
+
+/** \fn double get_bmu_speed()
+ * \brief Get bmu_speed memory variable from current X-machine.
+ * \return Value for variable.
+ */
+double get_bmu_speed()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_speed;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
+}
+
+/** \fn coordinate get_bmu_position()
+ * \brief Get bmu_position memory variable from current X-machine.
+ * \return Value for variable.
+ */
+coordinate * get_bmu_position()
+{
+	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).bmu_position;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return NULL;
+}
+
+/** \fn void set_bmu_length(int bmu_length)
+ * \brief Set bmu_length memory variable for current X-machine.
+ * \param bmu_length New value for variable.
+ */
+void set_bmu_length(int bmu_length)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_length = bmu_length;
+}
+
+/** \fn int get_bmu_length()
+ * \brief Get bmu_length memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_bmu_length()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_length;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_bmu_age(int bmu_age)
+ * \brief Set bmu_age memory variable for current X-machine.
+ * \param bmu_age New value for variable.
+ */
+void set_bmu_age(int bmu_age)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_age = bmu_age;
+}
+
+/** \fn int get_bmu_age()
+ * \brief Get bmu_age memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_bmu_age()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_age;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_bmu_width(int bmu_width)
+ * \brief Set bmu_width memory variable for current X-machine.
+ * \param bmu_width New value for variable.
+ */
+void set_bmu_width(int bmu_width)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_width = bmu_width;
+}
+
+/** \fn int get_bmu_width()
+ * \brief Get bmu_width memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_bmu_width()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_width;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_oc_present(int oc_present)
+ * \brief Set oc_present memory variable for current X-machine.
+ * \param oc_present New value for variable.
+ */
+void set_oc_present(int oc_present)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).oc_present = oc_present;
+}
+
+/** \fn int get_oc_present()
+ * \brief Get oc_present memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_oc_present()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).oc_present;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_ob_present(int ob_present)
+ * \brief Set ob_present memory variable for current X-machine.
+ * \param ob_present New value for variable.
+ */
+void set_ob_present(int ob_present)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).ob_present = ob_present;
+}
+
+/** \fn int get_ob_present()
+ * \brief Get ob_present memory variable from current X-machine.
+ * \return Value for variable.
+ */
+int get_ob_present()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).ob_present;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (int)0;
+}
+
+/** \fn void set_z(double z)
+ * \brief Set z memory variable for current X-machine.
+ * \param z New value for variable.
+ */
+void set_z(double z)
+{
+	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).z = z;
+}
+
+/** \fn double get_z()
+ * \brief Get z memory variable from current X-machine.
+ * \return Value for variable.
+ */
+double get_z()
+{
+	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).z;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
 }
 
 /** \fn celldim get_ob_dim()
@@ -1816,120 +2349,6 @@ int get_ob_moved_flag()
     return (int)0;
 }
 
-/** \fn void set_bmu_id(int bmu_id)
- * \brief Set bmu_id memory variable for current X-machine.
- * \param bmu_id New value for variable.
- */
-void set_bmu_id(int bmu_id)
-{
-	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_id = bmu_id;
-}
-
-/** \fn int get_bmu_id()
- * \brief Get bmu_id memory variable from current X-machine.
- * \return Value for variable.
- */
-int get_bmu_id()
-{
-	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_id;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return (int)0;
-}
-
-/** \fn coordinate get_bmu_direction()
- * \brief Get bmu_direction memory variable from current X-machine.
- * \return Value for variable.
- */
-coordinate * get_bmu_direction()
-{
-	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).bmu_direction;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return NULL;
-}
-
-/** \fn void set_bmu_speed(double bmu_speed)
- * \brief Set bmu_speed memory variable for current X-machine.
- * \param bmu_speed New value for variable.
- */
-void set_bmu_speed(double bmu_speed)
-{
-	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_speed = bmu_speed;
-}
-
-/** \fn double get_bmu_speed()
- * \brief Get bmu_speed memory variable from current X-machine.
- * \return Value for variable.
- */
-double get_bmu_speed()
-{
-	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_speed;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return (double)0;
-}
-
-/** \fn coordinate get_bmu_position()
- * \brief Get bmu_position memory variable from current X-machine.
- * \return Value for variable.
- */
-coordinate * get_bmu_position()
-{
-	if(current_xmachine->xmachine_bmu) return &(*current_xmachine->xmachine_bmu).bmu_position;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return NULL;
-}
-
-/** \fn void set_bmu_length(int bmu_length)
- * \brief Set bmu_length memory variable for current X-machine.
- * \param bmu_length New value for variable.
- */
-void set_bmu_length(int bmu_length)
-{
-	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_length = bmu_length;
-}
-
-/** \fn int get_bmu_length()
- * \brief Get bmu_length memory variable from current X-machine.
- * \return Value for variable.
- */
-int get_bmu_length()
-{
-	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_length;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return (int)0;
-}
-
-/** \fn void set_bmu_age(int bmu_age)
- * \brief Set bmu_age memory variable for current X-machine.
- * \param bmu_age New value for variable.
- */
-void set_bmu_age(int bmu_age)
-{
-	if(current_xmachine->xmachine_bmu) (*current_xmachine->xmachine_bmu).bmu_age = bmu_age;
-}
-
-/** \fn int get_bmu_age()
- * \brief Get bmu_age memory variable from current X-machine.
- * \return Value for variable.
- */
-int get_bmu_age()
-{
-	if(current_xmachine->xmachine_bmu) return (*current_xmachine->xmachine_bmu).bmu_age;
-
-    // suppress compiler warning by returning dummy value /
-    // this statement should rightfully NEVER be reached /
-    return (int)0;
-}
-
 /** \fn void set_rand_init(int rand_init)
  * \brief Set rand_init memory variable for current X-machine.
  * \param rand_init New value for variable.
@@ -1952,6 +2371,28 @@ int get_rand_init()
     return (int)0;
 }
 
+/** \fn void set_bmu_freq(double bmu_freq)
+ * \brief Set bmu_freq memory variable for current X-machine.
+ * \param bmu_freq New value for variable.
+ */
+void set_bmu_freq(double bmu_freq)
+{
+	if(current_xmachine->xmachine_environment) (*current_xmachine->xmachine_environment).bmu_freq = bmu_freq;
+}
+
+/** \fn double get_bmu_freq()
+ * \brief Get bmu_freq memory variable from current X-machine.
+ * \return Value for variable.
+ */
+double get_bmu_freq()
+{
+	if(current_xmachine->xmachine_environment) return (*current_xmachine->xmachine_environment).bmu_freq;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
+}
+
 
 /** \fn double agent_get_range()
  * \brief Fixed routine to get the range from current X-machine
@@ -1961,8 +2402,8 @@ double agent_get_range()
 {
     double value = 0.0;
     /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->;*/
-    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->;*/
     /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->;*/
+    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->;*/
     /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->;*/
 
     return value;
@@ -1976,8 +2417,8 @@ int agent_get_id()
 {
     int value = 0;
     /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->;*/
-    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->;*/
     /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->;*/
+    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->;*/
     /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->;*/
 
     return value;
@@ -1991,8 +2432,8 @@ double agent_get_x()
 {
     double value = 0.0;
     /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->0.0;*/
-    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
     /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->0.0;*/
+    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
     /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->0.0;*/
 
     return value;
@@ -2005,8 +2446,8 @@ double agent_get_y()
 {
     double value = 0.0;
     /*if (current_xmachine->xmachine_oc) value = current_xmachine->xmachine_oc->0.0;*/
-    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
     /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->0.0;*/
+    /*if (current_xmachine->xmachine_ob) value = current_xmachine->xmachine_ob->0.0;*/
     /*if (current_xmachine->xmachine_environment) value = current_xmachine->xmachine_environment->0.0;*/
 
     return value;
@@ -2018,6 +2459,7 @@ double agent_get_y()
 double agent_get_z()
 {
     double value = 0.0;
+    /*if (current_xmachine->xmachine_bmu) value = current_xmachine->xmachine_bmu->z;*/
 
     return value;
 }
@@ -2061,9 +2503,13 @@ void add_node(int node_id, double minx, double maxx, double miny, double maxy, d
 	current->agent_total = 0;
 	current->agents = NULL;
 	current->oc_position_messages = NULL;
+	current->oc_updated_position_messages = NULL;
 	current->ob_position_messages = NULL;
 	current->fusion_signal_messages = NULL;
 	current->new_ob_position_messages = NULL;
+	current->new_oc_position_messages = NULL;
+	current->bmu_position_messages = NULL;
+	current->death_messages = NULL;
 
 
 	current->partition_data[0] = minx;
@@ -2111,8 +2557,8 @@ void clean_up(int code)
 	free_FLAME_outputs(&FLAME_outputs);
 	/* Free agent states */
 	free_oc_states();
-	free_ob_states();
 	free_bmu_states();
+	free_ob_states();
 	free_environment_states();
 
 
@@ -2132,6 +2578,31 @@ void clean_up(int code)
                break;
            case MB_ERR_LOCKED:
                fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+
+	       
+       	   exit(rc);
+    }
+    #endif
+
+	rc = MB_Delete(&b_oc_updated_position);
+	#ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not delete 'oc_updated_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'oc_updated_position' board has not been created?\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
                break;
            case MB_ERR_INTERNAL:
                fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
@@ -2221,6 +2692,81 @@ void clean_up(int code)
     }
     #endif
 
+	rc = MB_Delete(&b_new_oc_position);
+	#ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not delete 'new_oc_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'new_oc_position' board has not been created?\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+
+	       
+       	   exit(rc);
+    }
+    #endif
+
+	rc = MB_Delete(&b_bmu_position);
+	#ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not delete 'bmu_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'bmu_position' board has not been created?\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+
+	       
+       	   exit(rc);
+    }
+    #endif
+
+	rc = MB_Delete(&b_death);
+	#ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not delete 'death' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'death' board has not been created?\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'death' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+	       default:
+               fprintf(stderr, "\t MB_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+	       }
+
+	       
+       	   exit(rc);
+    }
+    #endif
+
 
     rc = MB_Env_Finalise();
     #ifdef ERRCHECK
@@ -2290,16 +2836,16 @@ void propagate_agents()
 			y_xmachine = current_xmachine->xmachine_oc->0.0;
 			z_xmachine = 0.0;
 		}
-		else if(current_xmachine->xmachine_ob != NULL)
-		{
-			x_xmachine = current_xmachine->xmachine_ob->0.0;
-			y_xmachine = current_xmachine->xmachine_ob->0.0;
-			z_xmachine = 0.0;
-		}
 		else if(current_xmachine->xmachine_bmu != NULL)
 		{
 			x_xmachine = current_xmachine->xmachine_bmu->0.0;
 			y_xmachine = current_xmachine->xmachine_bmu->0.0;
+			z_xmachine = current_xmachine->xmachine_bmu->z;
+		}
+		else if(current_xmachine->xmachine_ob != NULL)
+		{
+			x_xmachine = current_xmachine->xmachine_ob->0.0;
+			y_xmachine = current_xmachine->xmachine_ob->0.0;
 			z_xmachine = 0.0;
 		}
 		else if(current_xmachine->xmachine_environment != NULL)
@@ -3296,6 +3842,10 @@ int FLAME_get_environment_variable_bmu_lifespan()
 {
 	return FLAME_environment_variable_bmu_lifespan;
 }
+double FLAME_get_environment_variable_bmu_av_speed()
+{
+	return FLAME_environment_variable_bmu_av_speed;
+}
 double FLAME_get_environment_variable_oc_creation_freq()
 {
 	return FLAME_environment_variable_oc_creation_freq;
@@ -3335,6 +3885,22 @@ double FLAME_get_environment_variable_oc_displ_stdev()
 int FLAME_get_environment_variable_oc_max_nuclei()
 {
 	return FLAME_environment_variable_oc_max_nuclei;
+}
+int FLAME_get_environment_variable_oc_max_frontdist()
+{
+	return FLAME_environment_variable_oc_max_frontdist;
+}
+double FLAME_get_environment_variable_oc_speed_damp()
+{
+	return FLAME_environment_variable_oc_speed_damp;
+}
+double FLAME_get_environment_variable_oc_resorb()
+{
+	return FLAME_environment_variable_oc_resorb;
+}
+double FLAME_get_environment_variable_ob_synth()
+{
+	return FLAME_environment_variable_ob_synth;
 }
 
 

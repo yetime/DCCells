@@ -49,9 +49,7 @@ int ob_get_older(){
 	//	OB_DEATH_PROB=OB_DEATH_PROB+1/1440;
 
 	//}
-	//OB_AGE=OB_AGE+1;
-
-	if(OB_AGE>OB_LIFESPAN) return 1;
+	OB_AGE=OB_AGE+1;
 	return 0;
 }
 
@@ -59,11 +57,8 @@ int ob_die(){
 	double rndnr=rnd_numbers();
 
 	if(OB_AGE>OB_LIFESPAN){
+			add_death_message(OB_MYBMU, OB_TYPE);
 			return 1;
-		}
-
-	if(rndnr<OB_DEATH_PROB) {
-		return 1;
 	}
-	return 0;
+	else return 0;
 }

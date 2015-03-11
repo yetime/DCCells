@@ -15,21 +15,24 @@ OC_COLOUR=(51,255,255)
 OB_COLOUR=(102,255,102)
 BMU_COLOUR=(255,255,0)
 
-#should loop through all files here... to let it walk
 
 worldsize=0 
 scale=float(sys.argv[3])
-xmmltree=xmml.parse("../0.xml")
+xmmltree=xmml.parse("../Data/0.xml")
 for env in xmmltree.getElementsByTagName('worldsize'):
         worldsize=int(env.firstChild.nodeValue)
 
 pygame.init()
 screen=pygame.display.set_mode((int(worldsize*scale),int(worldsize*scale))) 
-clock=pygame.time.Clock()
+myfont = pygame.font.SysFont("monospace", 20)
+clock=pygame.time.Clock() 
+pause=False;
+
 
 xmmls=range(int(sys.argv[1]), int(sys.argv[2])+1, int(sys.argv[4])) 
 for x in xmmls:
-    xmmlfile="../"+str(x)+".xml"
+    screen.fill((0,0,0))
+    xmmlfile="../Data/"+str(x)+".xml"
     print(xmmlfile)
     xmmltree=xmml.parse(xmmlfile)
     
@@ -70,32 +73,64 @@ for x in xmmls:
             #rects_oc.append(pygame.Rect(posx, posy, width, width))
             rects_ob.append([posx,posy,radius]);
 	if name=="bmu":
-	    geo=agent.getElementsByTagName("bmu_position")[0].firstChild.nodeValue
-	    print("GEO: "+geo);
+	    geo=agent.getElementsByTagName("bmu_position")[0].firstChild.nodeValue 
 	    geo=(geo[1:len(geo)-1]).split(",");
 	    posx=float(geo[0])*scale+10;
             posy=float(geo[1])*scale+10;
-	    print("X: "+str(posx)+" Y: "+str(posy));
-	    rects_bmu.append([posx,posy,10])
+	    z=agent.getElementsByTagName("z")[0].firstChild.nodeValue
+	    rects_bmu.append([posx,posy,1,z])
+       
+    	for r in rects_dcc:
+            pygame.draw.circle(screen,DCC_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
+    	for r in rects_ob:
+            pygame.draw.circle(screen,OB_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
+    	for r in rects_oc:
+       	    pygame.draw.circle(screen, OC_COLOUR, (int(r[0]), int(r[1])),int(r[2]))  
+    	for r in rects_bmu:
+            pygame.draw.circle(screen,BMU_COLOUR,(int(r[0]), int(r[1])),int(r[2]))    
+	    zlabel=myfont.render("Z: " + str(round(float(r[3]),1)), 1, BMU_COLOUR, (0,0,0))
+	    screen.blit(zlabel, (int(r[0]),int(r[1])));
 	    
-    done=False
     
-    #while not done:
-    #	for event in pygame.event.get():
-    #        if event.type==pygame.QUIT:
-    #            done=True
-    screen.fill((0,0,0))
     
-    for r in rects_dcc:
-        pygame.draw.circle(screen,DCC_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
-    for r in rects_ob:
-        pygame.draw.circle(screen,OB_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
-    for r in rects_oc:
-        pygame.draw.circle(screen, OC_COLOUR, (int(r[0]), int(r[1])),int(r[2]))
-        #print(r[0], r[1]);    
-    for r in rects_bmu:
-        pygame.draw.circle(screen,BMU_COLOUR,(int(r[0]), int(r[1])),int(r[2]))
-    time.sleep(0.2);    
-    pygame.display.flip()
-    print(next)
+    	#Draw other stuff such as the time label and a scale bar
+    	label = myfont.render("Time: " + str(x/24) +" d " + str(x%24) +" h", 1, (255,255,255))
+    	screen.blit(label, (10, 10))
+	
+	label_ob=myfont.render("OB: " + str(len(rects_ob)), 1, OB_COLOUR, (0,0,0))
+	screen.blit(label_ob, (10,worldsize*scale-50))
+	label_oc=myfont.render("OC: " + str(len(rects_oc)), 1, OC_COLOUR, (0,0,0))
+	screen.blit(label_oc, (10,worldsize*scale-25))
+    	
+    
+    	start_line= worldsize * scale - 1100*scale;
+    	end_line=worldsize *scale - 100*scale; 
+    
+    	pygame.draw.line(screen, (255,255,255),(start_line,10), (end_line,10), 10);
+    
+    	label2 = myfont.render("Scale: 1 mm", 1, (255,255,255))
+    	screen.blit(label2, (start_line, 20)) 
+	
+        if  pause == False:
+            for event in pygame.event.get():
+	        if event.type==pygame.KEYUP:
+		    if event.key==pygame.K_p:
+	                pause = True
+		    if event.key==pygame.K_q:
+		    	pygame.quit()
+			sys.exit()
+   		    
+	
+        while pause == True:
+	    time.sleep(0.1);
+	    for event in pygame.event.get():
+	        if event.type==pygame.KEYUP:
+	            if event.key==pygame.K_p:
+		        pause = False;
+		    if event.key==pygame.K_q:
+		    	pygame.quit()
+			sys.exit()
+			
+    time.sleep(0.1)
+    pygame.display.flip() 
 pygame.quit()    

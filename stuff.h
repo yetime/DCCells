@@ -26,6 +26,7 @@ typedef struct item {
 
 
 double rnd_numbers();
+double rnd_numbers_minmax(int min, int max);
 double rnd_numbers_normal(double variance);
 double eucl_distance(int x1, int x2, int y1, int y2);
 

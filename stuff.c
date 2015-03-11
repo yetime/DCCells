@@ -57,6 +57,12 @@ double rnd_numbers_normal(double std_dev){
 
 }
 
+double rnd_numbers_minmax(int min, int max)
+{
+    int diff = max-min;
+    return (int) (((double)(diff+1)/RAND_MAX) * rand() + min);
+}
+
 item_i* add_list_item(item_i *head,int new_i){
 	if(head==NULL) return FALSE;
     item_i *new_item = NULL;

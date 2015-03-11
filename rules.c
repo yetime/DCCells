@@ -89,6 +89,18 @@ int FLAME_condition_oc_signal_oc_position_start_1(xmachine_memory_oc *a)
 }
 
 
+/** \fn int FLAME_condition_oc_signal_oc_updated_position_3_4(xmachine_memory_oc *a)
+ * \brief The condition function for an agent function.
+ * \param a The agent memory.
+ * \return The success (1) or failure (0) of the condition.
+ */
+int FLAME_condition_oc_signal_oc_updated_position_3_4(xmachine_memory_oc *a)
+{
+	if((a->oc_age > 0)) return 1;
+	else return 0;
+}
+
+
 /** \fn int FLAME_condition_ob_initialize_ob_start_end(xmachine_memory_ob *a)
  * \brief The condition function for an agent function.
  * \param a The agent memory.
@@ -121,6 +133,18 @@ int FLAME_condition_ob_signal_ob_position_start_1(xmachine_memory_ob *a)
 int FLAME_condition_environment_initialize_start_end(xmachine_memory_environment *a)
 {
 	if((a->rand_init == 0)) return 1;
+	else return 0;
+}
+
+
+/** \fn int FLAME_condition_environment_gen_bmus_start_end(xmachine_memory_environment *a)
+ * \brief The condition function for an agent function.
+ * \param a The agent memory.
+ * \return The success (1) or failure (0) of the condition.
+ */
+int FLAME_condition_environment_gen_bmus_start_end(xmachine_memory_environment *a)
+{
+	if((a->rand_init > 0)) return 1;
 	else return 0;
 }
 

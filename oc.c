@@ -29,23 +29,30 @@ int initialize_oc(){
  */
 int signal_oc_position(){
 	if(OC_AGE!=0) {
-		add_oc_position_message(OC_DIM,OC_ID,OC_NUCLEI, OC_MYBMU);
+		add_oc_position_message(OC_DIM,OC_ID, OC_MYBMU);
 	}
 		return 0;
 }
 
+int signal_oc_updated_position(){
+	if(OC_AGE!=0){
+		add_oc_updated_position_message(OC_DIM,OC_ID, OC_MYBMU);
+	}
+	return 0;
+}
+
 /*
- * Increments the age (in minutes) of a cell, increments the probability for celldeath in a window
+ * Increments the age  of a cell, increments the probability for celldeath in a window
  * of +- 2 days around the maximum age
  */
 int oc_get_older(){
-	int min=OC_LIFESPAN-2*1440;
-	int max=OC_LIFESPAN-2*1440;
+	//int min=OC_LIFESPAN-2*OC_LIFESPAN;
+	//int max=OC_LIFESPAN-2*OC_LIFESPAN;
 
-	if (min<0) min=0;
-	if(OC_AGE>min && OC_AGE<=max){
-		OC_DEATH_PROB=OC_DEATH_PROB+1/1440;
-	}
+	//if (min<0) min=0;
+	//if(OC_AGE>min && OC_AGE<=max){
+	//	OC_DEATH_PROB=OC_DEATH_PROB+1/OC_LIFESPAN;
+	//}
 	OC_AGE=OC_AGE+1;
 	return 0;
 }
@@ -56,24 +63,28 @@ int oc_get_older(){
  * over the last two days of a cells life
  */
 int oc_die(){
-	double rndnr=rnd_numbers();
-
 	if(OC_AGE>OC_LIFESPAN){
-		return 1;
+		if(OC_DIM.nuclei>1){
+			OC_DIM.diameter=OC_DIM.diameter-OC_DIAMETER;
+			OC_DIM.nuclei=OC_DIM.nuclei-1;
+			OC_AGE=OC_AGE/3;
+			add_death_message(OC_MYBMU, OC_TYPE);
+			return 0;
+		}
+		else {
+			add_death_message(OC_MYBMU, OC_TYPE);
+			return 1;
+		}
 	}
-	if(rndnr<OC_DEATH_PROB) {
-		return 1;
-	}
-	return 0;
+	else return 0;
 }
-
 
 int fuse(){
 	START_FUSION_SIGNAL_MESSAGE_LOOP
 		if(fusion_signal_message->id1==OC_ID && fusion_signal_message->f_bmu_id==OC_MYBMU){
 			if(fusion_signal_message->f_signal==FUSION_DEL) return 1;
 			else {
-				OC_NUCLEI=OC_NUCLEI+fusion_signal_message->f_nuclei;
+				OC_DIM.nuclei=OC_DIM.nuclei+fusion_signal_message->f_nuclei;
 				double dia=(2*PI*OC_DIM.diameter/2+2*PI*fusion_signal_message->second_diameter/2)/PI;
 				OC_DIM.diameter=dia;
 				return 0;
@@ -88,19 +99,46 @@ int fuse(){
  */
 int oc_move(){
 	//determine new position and put a bit of randomization onto it
-	int current_x=OC_DIRECTION.x;
-	int current_y=OC_DIRECTION.y;
+
+	int bmu_x=OC_DIM.xy.x;
+	int bmu_y=OC_DIM.xy.y;
+
+
+
+	START_BMU_POSITION_MESSAGE_LOOP
+		if(bmu_position_message->bmu_id==OC_MYBMU){
+			bmu_x=bmu_position_message->bmu_pos.x;
+			bmu_y=bmu_position_message->bmu_pos.y;
+		}
+	FINISH_BMU_POSITION_MESSAGE_LOOP
+
+	double current_x=OC_DIRECTION.x;
+	double current_y=OC_DIRECTION.y;
 
 	double offset_x=rnd_numbers_normal(OC_DISPL_STDEV);
 	double offset_y=rnd_numbers_normal(OC_DISPL_STDEV);
 
-	double new_x=offset_x+current_x;
-	double new_y=offset_y+current_y;
+	double new_x=current_x;
+	double new_y=current_y;
 
 	double alpha = atan(new_y/new_x);
 
-	new_y=sin(alpha)*OC_SPEED;
-	new_x=cos(alpha)*OC_SPEED;
+	double bmu_dist=eucl_distance(OC_DIM.xy.x, OC_DIM.xy.y, bmu_x, bmu_y);
+
+	double new_speed=OC_SPEED;
+	double angle_offset=0;
+	if(bmu_dist>=OC_MAX_FRONTDIST && bmu_dist!=0){
+		new_speed=OC_SPEED/OC_DIM.nuclei;
+		angle_offset=PI/2;
+		if(rnd_numbers()>0.5) angle_offset=angle_offset*-1;
+	}
+	else if (bmu_dist<OC_MAX_FRONTDIST &&  OC_MAX_FRONTDIST-bmu_dist>=1) {
+		//exponential decay...
+		new_speed=OC_SPEED*exp(-OC_SPEED_DAMP*bmu_dist);
+	}
+	new_y=sin(alpha+angle_offset)*new_speed+offset_y;
+	new_x=cos(alpha+angle_offset)*new_speed+offset_x;
+
 
 	if(current_x<0 && current_y<0) {
 		new_x=new_x*-1;
@@ -118,6 +156,17 @@ int oc_move(){
 	return 0;
 }
 
+int oc_update_position(){
+		START_NEW_OC_POSITION_MESSAGE_LOOP
+			if(new_oc_position_message->push_id==OC_ID){
+				OC_DIM.xy.x=new_oc_position_message->dims.xy.x;
+				OC_DIM.xy.y=new_oc_position_message->dims.xy.y;
+			}
+		FINISH_NEW_OC_POSITION_MESSAGE_LOOP
+
+		return 0;
+	return 0;
+}
 
 /*int move(){
 	printf("OC move\n");

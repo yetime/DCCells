@@ -27,18 +27,26 @@ int main(int argc, char * argv[])
 	int iteration_total;
 	int * p_iteration_number = &iteration_number;
 	//xmachine_memory_oc * temp_xmachine_oc;
-	//xmachine_memory_ob * temp_xmachine_ob;
 	//xmachine_memory_bmu * temp_xmachine_bmu;
+	//xmachine_memory_ob * temp_xmachine_ob;
 	//xmachine_memory_environment * temp_xmachine_environment;
 
 	int FLAME_oc_position_message_board_write;
 	int FLAME_oc_position_message_board_read;
+	int FLAME_oc_updated_position_message_board_write;
+	int FLAME_oc_updated_position_message_board_read;
 	int FLAME_ob_position_message_board_write;
 	int FLAME_ob_position_message_board_read;
 	int FLAME_fusion_signal_message_board_write;
 	int FLAME_fusion_signal_message_board_read;
 	int FLAME_new_ob_position_message_board_write;
 	int FLAME_new_ob_position_message_board_read;
+	int FLAME_new_oc_position_message_board_write;
+	int FLAME_new_oc_position_message_board_read;
+	int FLAME_bmu_position_message_board_write;
+	int FLAME_bmu_position_message_board_read;
+	int FLAME_death_message_board_write;
+	int FLAME_death_message_board_read;
 
 	/* Particle cloud data */
 	double cloud_data[6] = {0.0,0.0,0.0,0.0,0.0,0.0};
@@ -314,6 +322,50 @@ printf("Iterations: %i\n", iteration_total);
 		   exit(rc);
 	}
 	#endif
+	FLAME_oc_updated_position_message_board_write = 0;
+	FLAME_oc_updated_position_message_board_read = 0; 
+	 FLAME_oc_updated_position_message_board_write = 1;
+	 
+	 FLAME_oc_updated_position_message_board_read = 1;
+	
+	/* Call message board library with details */
+	if(FLAME_oc_updated_position_message_board_write == 0 &&
+		FLAME_oc_updated_position_message_board_read == 0)
+			rc = MB_SetAccessMode(b_oc_updated_position, MB_MODE_IDLE);
+	if(FLAME_oc_updated_position_message_board_write == 1 &&
+		FLAME_oc_updated_position_message_board_read == 0)
+			rc = MB_SetAccessMode(b_oc_updated_position, MB_MODE_WRITEONLY);
+	if(FLAME_oc_updated_position_message_board_write == 0 &&
+		FLAME_oc_updated_position_message_board_read == 1)
+			rc = MB_SetAccessMode(b_oc_updated_position, MB_MODE_READONLY);
+	if(FLAME_oc_updated_position_message_board_write == 1 &&
+		FLAME_oc_updated_position_message_board_read == 1)
+			rc = MB_SetAccessMode(b_oc_updated_position, MB_MODE_READWRITE);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not set access mode of 'oc_updated_position' board\n");
+	   switch(rc) {
+		   case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+			   break;
+		   case MB_ERR_LOCKED:
+			   fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+		   
+		   exit(rc);
+	}
+	#endif
 	FLAME_ob_position_message_board_write = 0;
 	FLAME_ob_position_message_board_read = 0; 
 	 FLAME_ob_position_message_board_write = 1;
@@ -446,6 +498,139 @@ printf("Iterations: %i\n", iteration_total);
 		   exit(rc);
 	}
 	#endif
+	FLAME_new_oc_position_message_board_write = 0;
+	FLAME_new_oc_position_message_board_read = 0; 
+	 FLAME_new_oc_position_message_board_write = 1;
+	 
+	 FLAME_new_oc_position_message_board_read = 1;
+	
+	/* Call message board library with details */
+	if(FLAME_new_oc_position_message_board_write == 0 &&
+		FLAME_new_oc_position_message_board_read == 0)
+			rc = MB_SetAccessMode(b_new_oc_position, MB_MODE_IDLE);
+	if(FLAME_new_oc_position_message_board_write == 1 &&
+		FLAME_new_oc_position_message_board_read == 0)
+			rc = MB_SetAccessMode(b_new_oc_position, MB_MODE_WRITEONLY);
+	if(FLAME_new_oc_position_message_board_write == 0 &&
+		FLAME_new_oc_position_message_board_read == 1)
+			rc = MB_SetAccessMode(b_new_oc_position, MB_MODE_READONLY);
+	if(FLAME_new_oc_position_message_board_write == 1 &&
+		FLAME_new_oc_position_message_board_read == 1)
+			rc = MB_SetAccessMode(b_new_oc_position, MB_MODE_READWRITE);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not set access mode of 'new_oc_position' board\n");
+	   switch(rc) {
+		   case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+			   break;
+		   case MB_ERR_LOCKED:
+			   fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+		   
+		   exit(rc);
+	}
+	#endif
+	FLAME_bmu_position_message_board_write = 0;
+	FLAME_bmu_position_message_board_read = 0; 
+	 FLAME_bmu_position_message_board_write = 1;
+	 
+	 FLAME_bmu_position_message_board_read = 1;
+	
+	/* Call message board library with details */
+	if(FLAME_bmu_position_message_board_write == 0 &&
+		FLAME_bmu_position_message_board_read == 0)
+			rc = MB_SetAccessMode(b_bmu_position, MB_MODE_IDLE);
+	if(FLAME_bmu_position_message_board_write == 1 &&
+		FLAME_bmu_position_message_board_read == 0)
+			rc = MB_SetAccessMode(b_bmu_position, MB_MODE_WRITEONLY);
+	if(FLAME_bmu_position_message_board_write == 0 &&
+		FLAME_bmu_position_message_board_read == 1)
+			rc = MB_SetAccessMode(b_bmu_position, MB_MODE_READONLY);
+	if(FLAME_bmu_position_message_board_write == 1 &&
+		FLAME_bmu_position_message_board_read == 1)
+			rc = MB_SetAccessMode(b_bmu_position, MB_MODE_READWRITE);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not set access mode of 'bmu_position' board\n");
+	   switch(rc) {
+		   case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+			   break;
+		   case MB_ERR_LOCKED:
+			   fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+		   
+		   exit(rc);
+	}
+	#endif
+	FLAME_death_message_board_write = 0;
+	FLAME_death_message_board_read = 0; 
+	 FLAME_death_message_board_write = 1;
+	 FLAME_death_message_board_write = 1;
+	 
+	 FLAME_death_message_board_read = 1;
+	
+	/* Call message board library with details */
+	if(FLAME_death_message_board_write == 0 &&
+		FLAME_death_message_board_read == 0)
+			rc = MB_SetAccessMode(b_death, MB_MODE_IDLE);
+	if(FLAME_death_message_board_write == 1 &&
+		FLAME_death_message_board_read == 0)
+			rc = MB_SetAccessMode(b_death, MB_MODE_WRITEONLY);
+	if(FLAME_death_message_board_write == 0 &&
+		FLAME_death_message_board_read == 1)
+			rc = MB_SetAccessMode(b_death, MB_MODE_READONLY);
+	if(FLAME_death_message_board_write == 1 &&
+		FLAME_death_message_board_read == 1)
+			rc = MB_SetAccessMode(b_death, MB_MODE_READWRITE);
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not set access mode of 'death' board\n");
+	   switch(rc) {
+		   case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'death' board is invalid\n");
+			   break;
+		   case MB_ERR_LOCKED:
+			   fprintf(stderr, "\t reason: 'death' board is locked\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+		   
+		   exit(rc);
+	}
+	#endif
 	
 	
 	/* Start timing */
@@ -481,6 +666,43 @@ printf("Iterations: %i\n", iteration_total);
 					   break;
 				   case MB_ERR_LOCKED:
 					   fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
+					   break;
+				   case MB_ERR_MEMALLOC:
+					   fprintf(stderr, "\t reason: out of memory\n");
+					   break;
+				   case MB_ERR_INTERNAL:
+					   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+					   break;
+				   default:
+					   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+					   break;
+			   }
+			   
+					   
+					   exit(rc);
+			   }
+			   #endif
+		}
+		
+		/* Start sync message boards that don't write */
+		if(FLAME_oc_updated_position_message_board_write == 0)
+		{
+			/*printf("%d> oc_updated_position message board sync start early as no agents sending any messages of this type\n", node_number);*/
+			
+			/* ********** sync message board here **********  */
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_oc_updated_position)\n");
+			rc = MB_SyncStart(b_oc_updated_position);
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_oc_updated_position)\n");
+			#ifdef ERRCHECK
+			if (rc != MB_SUCCESS)
+			{
+			   fprintf(stderr, "ERROR: Could not start sync of 'oc_updated_position' board\n");
+			   switch(rc) {
+				   case MB_ERR_INVALID:
+					   fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+					   break;
+				   case MB_ERR_LOCKED:
+					   fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
 					   break;
 				   case MB_ERR_MEMALLOC:
 					   fprintf(stderr, "\t reason: out of memory\n");
@@ -610,6 +832,117 @@ printf("Iterations: %i\n", iteration_total);
 			   #endif
 		}
 		
+		/* Start sync message boards that don't write */
+		if(FLAME_new_oc_position_message_board_write == 0)
+		{
+			/*printf("%d> new_oc_position message board sync start early as no agents sending any messages of this type\n", node_number);*/
+			
+			/* ********** sync message board here **********  */
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_new_oc_position)\n");
+			rc = MB_SyncStart(b_new_oc_position);
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_new_oc_position)\n");
+			#ifdef ERRCHECK
+			if (rc != MB_SUCCESS)
+			{
+			   fprintf(stderr, "ERROR: Could not start sync of 'new_oc_position' board\n");
+			   switch(rc) {
+				   case MB_ERR_INVALID:
+					   fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+					   break;
+				   case MB_ERR_LOCKED:
+					   fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+					   break;
+				   case MB_ERR_MEMALLOC:
+					   fprintf(stderr, "\t reason: out of memory\n");
+					   break;
+				   case MB_ERR_INTERNAL:
+					   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+					   break;
+				   default:
+					   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+					   break;
+			   }
+			   
+					   
+					   exit(rc);
+			   }
+			   #endif
+		}
+		
+		/* Start sync message boards that don't write */
+		if(FLAME_bmu_position_message_board_write == 0)
+		{
+			/*printf("%d> bmu_position message board sync start early as no agents sending any messages of this type\n", node_number);*/
+			
+			/* ********** sync message board here **********  */
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_bmu_position)\n");
+			rc = MB_SyncStart(b_bmu_position);
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_bmu_position)\n");
+			#ifdef ERRCHECK
+			if (rc != MB_SUCCESS)
+			{
+			   fprintf(stderr, "ERROR: Could not start sync of 'bmu_position' board\n");
+			   switch(rc) {
+				   case MB_ERR_INVALID:
+					   fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+					   break;
+				   case MB_ERR_LOCKED:
+					   fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+					   break;
+				   case MB_ERR_MEMALLOC:
+					   fprintf(stderr, "\t reason: out of memory\n");
+					   break;
+				   case MB_ERR_INTERNAL:
+					   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+					   break;
+				   default:
+					   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+					   break;
+			   }
+			   
+					   
+					   exit(rc);
+			   }
+			   #endif
+		}
+		
+		/* Start sync message boards that don't write */
+		if(FLAME_death_message_board_write == 0)
+		{
+			/*printf("%d> death message board sync start early as no agents sending any messages of this type\n", node_number);*/
+			
+			/* ********** sync message board here **********  */
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_death)\n");
+			rc = MB_SyncStart(b_death);
+			if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_death)\n");
+			#ifdef ERRCHECK
+			if (rc != MB_SUCCESS)
+			{
+			   fprintf(stderr, "ERROR: Could not start sync of 'death' board\n");
+			   switch(rc) {
+				   case MB_ERR_INVALID:
+					   fprintf(stderr, "\t reason: 'death' board is invalid\n");
+					   break;
+				   case MB_ERR_LOCKED:
+					   fprintf(stderr, "\t reason: 'death' board is locked\n");
+					   break;
+				   case MB_ERR_MEMALLOC:
+					   fprintf(stderr, "\t reason: out of memory\n");
+					   break;
+				   case MB_ERR_INTERNAL:
+					   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+					   break;
+				   default:
+					   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+					   break;
+			   }
+			   
+					   
+					   exit(rc);
+			   }
+			   #endif
+		}
+		
 		
 	/* DEBUG: States with branching functions */
 		current_xmachine_oc_holder = oc_start_state->agents;
@@ -657,6 +990,29 @@ printf("Iterations: %i\n", iteration_total);
 			
 			current_xmachine_ob_holder = current_xmachine_ob_holder->next;
 		}
+		/* DEBUG: States with branching functions */
+		current_xmachine_environment_holder = environment_start_state->agents;
+		while(current_xmachine_environment_holder)
+		{
+			FLAME_debug_count = 0;
+			/* Function: gen_bmus */
+			if(FLAME_condition_environment_gen_bmus_start_end(current_xmachine_environment_holder->agent)==1)
+			{ FLAME_debug_count++; }
+			/* Function: initialize */
+			if(FLAME_condition_environment_initialize_start_end(current_xmachine_environment_holder->agent)==1)
+			{ FLAME_debug_count++; }
+			/*printf("FLAME_debug_count = %d\n", FLAME_debug_count);*/
+			if(FLAME_debug_count != 1)
+			{
+				fprintf(stderr, "ERROR: A function condition test has failed for agent type 'environment' leaving state 'start'\n");
+				if(FLAME_debug_count > 1)
+					fprintf(stderr, "\t reason: there was more than one possible outgoing transition function\n");
+				if(FLAME_debug_count == 0)
+					fprintf(stderr, "\t reason: there was no possible outgoing transition function\n");
+			}
+			
+			current_xmachine_environment_holder = current_xmachine_environment_holder->next;
+		}
 	
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start signal_oc_position\n");
 	current_xmachine_oc_holder = oc_start_state->agents;
@@ -667,8 +1023,8 @@ printf("Iterations: %i\n", iteration_total);
 		current_xmachine_oc_next_state = oc_1_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_oc = current_xmachine_oc;
 
@@ -742,8 +1098,8 @@ printf("Iterations: %i\n", iteration_total);
 		current_xmachine_ob_next_state = ob_1_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_ob = current_xmachine_ob;
 
@@ -808,6 +1164,46 @@ printf("Iterations: %i\n", iteration_total);
     
 
 
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start gen_bmus\n");
+	current_xmachine_environment_holder = environment_start_state->agents;
+	while(current_xmachine_environment_holder)
+	{
+		temp_xmachine_environment_holder = current_xmachine_environment_holder->next;
+		current_xmachine_environment = current_xmachine_environment_holder->agent;
+		current_xmachine_environment_next_state = environment_end_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_environment = current_xmachine_environment;
+
+		if(FLAME_condition_environment_gen_bmus_start_end(current_xmachine_environment)==1)
+		{
+
+		
+
+			i = gen_bmus();
+
+		
+
+			if(i == 1)
+			{
+				free_environment_agent(current_xmachine_environment_holder, environment_start_state);
+			}
+			else
+			{
+				transition_environment_agent(current_xmachine_environment_holder, environment_start_state, environment_end_state);
+			}
+		}
+
+		current_xmachine_environment = NULL;
+
+		current_xmachine_environment_holder = temp_xmachine_environment_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish gen_bmus\n");
+
+
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start initialize\n");
 	current_xmachine_environment_holder = environment_start_state->agents;
 	while(current_xmachine_environment_holder)
@@ -817,8 +1213,8 @@ printf("Iterations: %i\n", iteration_total);
 		current_xmachine_environment_next_state = environment_end_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_environment = current_xmachine_environment;
 
@@ -857,8 +1253,8 @@ printf("Iterations: %i\n", iteration_total);
 		current_xmachine_ob_next_state = ob_end_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_ob = current_xmachine_ob;
 
@@ -888,6 +1284,45 @@ printf("Iterations: %i\n", iteration_total);
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish initialize_ob\n");
 
 
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start create\n");
+	current_xmachine_bmu_holder = bmu_start_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_1_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
+
+		
+
+		
+
+			i = create();
+
+		
+
+			if(i == 1)
+			{
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_start_state);
+			}
+			else
+			{
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_start_state, bmu_1_state);
+			}
+		
+
+		current_xmachine_bmu = NULL;
+
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish create\n");
+
+
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start initialize_oc\n");
 	current_xmachine_oc_holder = oc_start_state->agents;
 	while(current_xmachine_oc_holder)
@@ -897,8 +1332,8 @@ printf("Iterations: %i\n", iteration_total);
 		current_xmachine_oc_next_state = oc_end_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_oc = current_xmachine_oc;
 
@@ -929,6 +1364,131 @@ printf("Iterations: %i\n", iteration_total);
 
 
 /* End of layer number 0 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start signal_position\n");
+	current_xmachine_bmu_holder = bmu_1_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_2_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
+
+		
+
+		
+
+			i = signal_position();
+
+		
+
+			if(i == 1)
+			{
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_1_state);
+			}
+			else
+			{
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_1_state, bmu_2_state);
+			}
+		
+
+		current_xmachine_bmu = NULL;
+
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish signal_position\n");
+
+	if(FLAME_bmu_position_message_board_write == 1)
+	{
+
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_bmu_position)\n");
+		rc = MB_SyncStart(b_bmu_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_bmu_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'bmu_position' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
+
+
+/* End of layer number 1 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_die\n");
+	current_xmachine_bmu_holder = bmu_2_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_3_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
+
+		
+
+		
+
+			i = bmu_die();
+
+		
+
+			if(i == 1)
+			{
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_2_state);
+			}
+			else
+			{
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_2_state, bmu_3_state);
+			}
+		
+
+		current_xmachine_bmu = NULL;
+
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_die\n");
+
+
+/* End of layer number 2 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
@@ -968,257 +1528,17 @@ printf("Iterations: %i\n", iteration_total);
     
 	}
 	
-	/* If mb is not read then leave sync complete until last possible moment */
-	if(FLAME_oc_position_message_board_read == 1)
-	{
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_oc_position)\n");
-		rc = MB_SyncComplete(b_oc_position);
-		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_oc_position)\n");
-		#ifdef ERRCHECK
-		if (rc != MB_SUCCESS)
-		{
-		   fprintf(stderr, "ERROR: Could not complete sync of 'oc_position' board\n");
-		   switch(rc) {
-				case MB_ERR_INVALID:
-				   fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
-				   break;
-			   case MB_ERR_MEMALLOC:
-				   fprintf(stderr, "\t reason: out of memory\n");
-				   break;
-			   case MB_ERR_INTERNAL:
-				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-				   break;
-			   default:
-				   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
-				   break;
-		   }
-	
-		   
-		   exit(rc);
-		}
-		#endif
-    
-    
-    
-	}
-	
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start create\n");
-	current_xmachine_bmu_holder = bmu_start_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
-		current_xmachine_bmu_next_state = bmu_1_state;
-		/* For backwards compatibility set current_xmachine */
-		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
-		current_xmachine->xmachine_bmu = NULL;
-		current_xmachine->xmachine_environment = NULL;
-		current_xmachine->xmachine_bmu = current_xmachine_bmu;
-
-		
-
-		
-		
-		
-		  rc = MB_Iterator_Create(b_oc_position, &i_oc_position);
-		  
-		
-		#ifdef ERRCHECK
-		if (rc != MB_SUCCESS)
-		{
-		   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_position'\n");
-		   switch(rc) {
-		       case MB_ERR_INVALID:
-		           fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
-		           break;
-		       case MB_ERR_LOCKED:
-	               fprintf(stderr, "\t reason: 'oc_position' board is locked\n");
-	               break;
-	           case MB_ERR_MEMALLOC:
-	               fprintf(stderr, "\t reason: out of memory\n");
-	               break;
-	           case MB_ERR_INTERNAL:
-	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-	               break;
-	           default:
-	           
-               
-                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
-               
-                   break;
-		   }
-
-		   
-           exit(rc);
-		}
-		#endif
-		
-		
-		
-		
-		  rc = MB_Iterator_Create(b_ob_position, &i_ob_position);
-		  
-		
-		#ifdef ERRCHECK
-		if (rc != MB_SUCCESS)
-		{
-		   fprintf(stderr, "ERROR: Could not create Iterator for 'ob_position'\n");
-		   switch(rc) {
-		       case MB_ERR_INVALID:
-		           fprintf(stderr, "\t reason: 'ob_position' board is invalid\n");
-		           break;
-		       case MB_ERR_LOCKED:
-	               fprintf(stderr, "\t reason: 'ob_position' board is locked\n");
-	               break;
-	           case MB_ERR_MEMALLOC:
-	               fprintf(stderr, "\t reason: out of memory\n");
-	               break;
-	           case MB_ERR_INTERNAL:
-	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-	               break;
-	           default:
-	           
-               
-                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
-               
-                   break;
-		   }
-
-		   
-           exit(rc);
-		}
-		#endif
-		
-		
-
-			i = create();
-
-		
-		    rc = MB_Iterator_Delete(&i_oc_position);
-		    #ifdef ERRCHECK
-		    if (rc != MB_SUCCESS)
-		    {
-		       fprintf(stderr, "ERROR: Could not delete 'oc_position' iterator\n");
-		       switch(rc) {
-		           case MB_ERR_INVALID:
-		               fprintf(stderr, "\t reason: 'oc_position' iterator is invalid\n");
-		               break;
-		           case MB_ERR_INTERNAL:
-		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-		               break;
-		           default:
-                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
-                       break;
-		       }
-
-		       
-               exit(rc);
-		    }
-		    #endif
-		
-		    rc = MB_Iterator_Delete(&i_ob_position);
-		    #ifdef ERRCHECK
-		    if (rc != MB_SUCCESS)
-		    {
-		       fprintf(stderr, "ERROR: Could not delete 'ob_position' iterator\n");
-		       switch(rc) {
-		           case MB_ERR_INVALID:
-		               fprintf(stderr, "\t reason: 'ob_position' iterator is invalid\n");
-		               break;
-		           case MB_ERR_INTERNAL:
-		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
-		               break;
-		           default:
-                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
-                       break;
-		       }
-
-		       
-               exit(rc);
-		    }
-		    #endif
-		
-
-			if(i == 1)
-			{
-				free_bmu_agent(current_xmachine_bmu_holder, bmu_start_state);
-			}
-			else
-			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_start_state, bmu_1_state);
-			}
-		
-
-		current_xmachine_bmu = NULL;
-
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish create\n");
-
-
-/* End of layer number 1 */
-
-/* Clear message boards that have finished being used
- * and sync complete if doing late sync complete */
-
-
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_die\n");
-	current_xmachine_bmu_holder = bmu_1_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
-		current_xmachine_bmu_next_state = bmu_2_state;
-		/* For backwards compatibility set current_xmachine */
-		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
-		current_xmachine->xmachine_bmu = NULL;
-		current_xmachine->xmachine_environment = NULL;
-		current_xmachine->xmachine_bmu = current_xmachine_bmu;
-
-		
-
-		
-
-			i = bmu_die();
-
-		
-
-			if(i == 1)
-			{
-				free_bmu_agent(current_xmachine_bmu_holder, bmu_1_state);
-			}
-			else
-			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_1_state, bmu_2_state);
-			}
-		
-
-		current_xmachine_bmu = NULL;
-
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_die\n");
-
-
-/* End of layer number 2 */
-
-/* Clear message boards that have finished being used
- * and sync complete if doing late sync complete */
-
-
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start ob_push_check\n");
-	current_xmachine_bmu_holder = bmu_2_state->agents;
+	current_xmachine_bmu_holder = bmu_3_state->agents;
 	while(current_xmachine_bmu_holder)
 	{
 		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
 		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
-		current_xmachine_bmu_next_state = bmu_3_state;
+		current_xmachine_bmu_next_state = bmu_4_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_bmu = current_xmachine_bmu;
 
@@ -1290,11 +1610,11 @@ printf("Iterations: %i\n", iteration_total);
 
 			if(i == 1)
 			{
-				free_bmu_agent(current_xmachine_bmu_holder, bmu_2_state);
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_3_state);
 			}
 			else
 			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_2_state, bmu_3_state);
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_3_state, bmu_4_state);
 			}
 		
 
@@ -1406,17 +1726,51 @@ if(FLAME_ob_position_message_board_read == 0)
     #endif
 
 
+	/* If mb is not read then leave sync complete until last possible moment */
+	if(FLAME_oc_position_message_board_read == 1)
+	{
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_oc_position)\n");
+		rc = MB_SyncComplete(b_oc_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_oc_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not complete sync of 'oc_position' board\n");
+		   switch(rc) {
+				case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'oc_position' board is invalid\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+	
+		   
+		   exit(rc);
+		}
+		#endif
+    
+    
+    
+	}
+	
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start calc_fusions\n");
-	current_xmachine_bmu_holder = bmu_3_state->agents;
+	current_xmachine_bmu_holder = bmu_4_state->agents;
 	while(current_xmachine_bmu_holder)
 	{
 		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
 		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
-		current_xmachine_bmu_next_state = bmu_4_state;
+		current_xmachine_bmu_next_state = bmu_5_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_bmu = current_xmachine_bmu;
 
@@ -1488,11 +1842,11 @@ if(FLAME_ob_position_message_board_read == 0)
 
 			if(i == 1)
 			{
-				free_bmu_agent(current_xmachine_bmu_holder, bmu_3_state);
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_4_state);
 			}
 			else
 			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_3_state, bmu_4_state);
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_4_state, bmu_5_state);
 			}
 		
 
@@ -1581,8 +1935,8 @@ if(FLAME_ob_position_message_board_read == 0)
 		current_xmachine_ob_next_state = ob_2_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_ob = current_xmachine_ob;
 
@@ -1795,45 +2149,6 @@ if(FLAME_new_ob_position_message_board_read == 0)
     #endif
 
 
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_move\n");
-	current_xmachine_bmu_holder = bmu_4_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
-		current_xmachine_bmu_next_state = bmu_5_state;
-		/* For backwards compatibility set current_xmachine */
-		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
-		current_xmachine->xmachine_bmu = NULL;
-		current_xmachine->xmachine_environment = NULL;
-		current_xmachine->xmachine_bmu = current_xmachine_bmu;
-
-		
-
-		
-
-			i = bmu_move();
-
-		
-
-			if(i == 1)
-			{
-				free_bmu_agent(current_xmachine_bmu_holder, bmu_4_state);
-			}
-			else
-			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_4_state, bmu_5_state);
-			}
-		
-
-		current_xmachine_bmu = NULL;
-
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_move\n");
-
-
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start ob_get_older\n");
 	current_xmachine_ob_holder = ob_2_state->agents;
 	while(current_xmachine_ob_holder)
@@ -1843,8 +2158,8 @@ if(FLAME_new_ob_position_message_board_read == 0)
 		current_xmachine_ob_next_state = ob_3_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_ob = current_xmachine_ob;
 
@@ -1916,8 +2231,8 @@ if(FLAME_new_ob_position_message_board_read == 0)
 		current_xmachine_oc_next_state = oc_2_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_oc = current_xmachine_oc;
 
@@ -2070,45 +2385,6 @@ if(FLAME_fusion_signal_message_board_read == 0)
     #endif
 
 
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_getolder\n");
-	current_xmachine_bmu_holder = bmu_5_state->agents;
-	while(current_xmachine_bmu_holder)
-	{
-		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
-		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
-		current_xmachine_bmu_next_state = bmu_end_state;
-		/* For backwards compatibility set current_xmachine */
-		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
-		current_xmachine->xmachine_bmu = NULL;
-		current_xmachine->xmachine_environment = NULL;
-		current_xmachine->xmachine_bmu = current_xmachine_bmu;
-
-		
-
-		
-
-			i = bmu_getolder();
-
-		
-
-			if(i == 1)
-			{
-				free_bmu_agent(current_xmachine_bmu_holder, bmu_5_state);
-			}
-			else
-			{
-				transition_bmu_agent(current_xmachine_bmu_holder, bmu_5_state, bmu_end_state);
-			}
-		
-
-		current_xmachine_bmu = NULL;
-
-		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
-	}
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_getolder\n");
-
-
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start ob_die\n");
 	current_xmachine_ob_holder = ob_3_state->agents;
 	while(current_xmachine_ob_holder)
@@ -2118,8 +2394,8 @@ if(FLAME_fusion_signal_message_board_read == 0)
 		current_xmachine_ob_next_state = ob_end_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_ob = current_xmachine_ob;
 
@@ -2148,6 +2424,40 @@ if(FLAME_fusion_signal_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish ob_die\n");
 
 
+	/* If mb is not read then leave sync complete until last possible moment */
+	if(FLAME_bmu_position_message_board_read == 1)
+	{
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_bmu_position)\n");
+		rc = MB_SyncComplete(b_bmu_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_bmu_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not complete sync of 'bmu_position' board\n");
+		   switch(rc) {
+				case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+	
+		   
+		   exit(rc);
+		}
+		#endif
+    
+    
+    
+	}
+	
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_move\n");
 	current_xmachine_oc_holder = oc_2_state->agents;
 	while(current_xmachine_oc_holder)
@@ -2157,17 +2467,75 @@ if(FLAME_fusion_signal_message_board_read == 0)
 		current_xmachine_oc_next_state = oc_3_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_oc = current_xmachine_oc;
 
 		
 
 		
+		
+		
+		  rc = MB_Iterator_Create(b_bmu_position, &i_bmu_position);
+		  
+		
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not create Iterator for 'bmu_position'\n");
+		   switch(rc) {
+		       case MB_ERR_INVALID:
+		           fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+		           break;
+		       case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+	           
+               
+                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
+               
+                   break;
+		   }
+
+		   
+           exit(rc);
+		}
+		#endif
+		
+		
 
 			i = oc_move();
 
+		
+		    rc = MB_Iterator_Delete(&i_bmu_position);
+		    #ifdef ERRCHECK
+		    if (rc != MB_SUCCESS)
+		    {
+		       fprintf(stderr, "ERROR: Could not delete 'bmu_position' iterator\n");
+		       switch(rc) {
+		           case MB_ERR_INVALID:
+		               fprintf(stderr, "\t reason: 'bmu_position' iterator is invalid\n");
+		               break;
+		           case MB_ERR_INTERNAL:
+		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+		               break;
+		           default:
+                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+                       break;
+		       }
+
+		       
+               exit(rc);
+		    }
+		    #endif
 		
 
 			if(i == 1)
@@ -2192,8 +2560,68 @@ if(FLAME_fusion_signal_message_board_read == 0)
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
 
+if(FLAME_bmu_position_message_board_read == 0)
+{
+	/*printf("%d> bmu_position message board sync complete late as no agents reading any messages of this type\n", node_number);*/
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_bmu_position)\n");
+	rc = MB_SyncComplete(b_bmu_position);
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_bmu_position)\n");
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not complete sync of 'bmu_position' board\n");
+	   switch(rc) {
+			case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
 
-	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_get_older\n");
+	   
+	   exit(rc);
+	}
+	#endif
+}
+
+    /* Delete any search trees */
+
+    rc = MB_Clear(b_bmu_position);
+    #ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not clear 'bmu_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'bmu_position' board is invalid\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'bmu_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+           default:
+               fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+
+       }
+
+       
+       exit(rc);
+    }
+    #endif
+
+
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start signal_oc_updated_position\n");
 	current_xmachine_oc_holder = oc_3_state->agents;
 	while(current_xmachine_oc_holder)
 	{
@@ -2202,8 +2630,557 @@ if(FLAME_fusion_signal_message_board_read == 0)
 		current_xmachine_oc_next_state = oc_4_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_oc = current_xmachine_oc;
+
+		if(FLAME_condition_oc_signal_oc_updated_position_3_4(current_xmachine_oc)==1)
+		{
+
+		
+
+			i = signal_oc_updated_position();
+
+		
+
+			if(i == 1)
+			{
+				free_oc_agent(current_xmachine_oc_holder, oc_3_state);
+			}
+			else
+			{
+				transition_oc_agent(current_xmachine_oc_holder, oc_3_state, oc_4_state);
+			}
+		}
+
+		current_xmachine_oc = NULL;
+
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish signal_oc_updated_position\n");
+
+	if(FLAME_oc_updated_position_message_board_write == 1)
+	{
+
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_oc_updated_position)\n");
+		rc = MB_SyncStart(b_oc_updated_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_oc_updated_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'oc_updated_position' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
+
+
+/* End of layer number 7 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+
+	/* If mb is not read then leave sync complete until last possible moment */
+	if(FLAME_oc_updated_position_message_board_read == 1)
+	{
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_oc_updated_position)\n");
+		rc = MB_SyncComplete(b_oc_updated_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_oc_updated_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not complete sync of 'oc_updated_position' board\n");
+		   switch(rc) {
+				case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+	
+		   
+		   exit(rc);
+		}
+		#endif
+    
+    
+    
+	}
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_push_check\n");
+	current_xmachine_bmu_holder = bmu_5_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_6_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
+
+		
+
+		
+		
+		
+		  rc = MB_Iterator_Create(b_oc_updated_position, &i_oc_updated_position);
+		  
+		
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not create Iterator for 'oc_updated_position'\n");
+		   switch(rc) {
+		       case MB_ERR_INVALID:
+		           fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+		           break;
+		       case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+	           
+               
+                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
+               
+                   break;
+		   }
+
+		   
+           exit(rc);
+		}
+		#endif
+		
+		
+
+			i = oc_push_check();
+
+		
+		    rc = MB_Iterator_Delete(&i_oc_updated_position);
+		    #ifdef ERRCHECK
+		    if (rc != MB_SUCCESS)
+		    {
+		       fprintf(stderr, "ERROR: Could not delete 'oc_updated_position' iterator\n");
+		       switch(rc) {
+		           case MB_ERR_INVALID:
+		               fprintf(stderr, "\t reason: 'oc_updated_position' iterator is invalid\n");
+		               break;
+		           case MB_ERR_INTERNAL:
+		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+		               break;
+		           default:
+                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+                       break;
+		       }
+
+		       
+               exit(rc);
+		    }
+		    #endif
+		
+
+			if(i == 1)
+			{
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_5_state);
+			}
+			else
+			{
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_5_state, bmu_6_state);
+			}
+		
+
+		current_xmachine_bmu = NULL;
+
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_push_check\n");
+
+	if(FLAME_new_oc_position_message_board_write == 1)
+	{
+
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_new_oc_position)\n");
+		rc = MB_SyncStart(b_new_oc_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_new_oc_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'new_oc_position' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
+
+
+/* End of layer number 8 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+if(FLAME_oc_updated_position_message_board_read == 0)
+{
+	/*printf("%d> oc_updated_position message board sync complete late as no agents reading any messages of this type\n", node_number);*/
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_oc_updated_position)\n");
+	rc = MB_SyncComplete(b_oc_updated_position);
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_oc_updated_position)\n");
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not complete sync of 'oc_updated_position' board\n");
+	   switch(rc) {
+			case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+
+	   
+	   exit(rc);
+	}
+	#endif
+}
+
+    /* Delete any search trees */
+
+    rc = MB_Clear(b_oc_updated_position);
+    #ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not clear 'oc_updated_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'oc_updated_position' board is invalid\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'oc_updated_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+           default:
+               fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+
+       }
+
+       
+       exit(rc);
+    }
+    #endif
+
+
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_move\n");
+	current_xmachine_bmu_holder = bmu_6_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_7_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
+
+		
+
+		
+
+			i = bmu_move();
+
+		
+
+			if(i == 1)
+			{
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_6_state);
+			}
+			else
+			{
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_6_state, bmu_7_state);
+			}
+		
+
+		current_xmachine_bmu = NULL;
+
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_move\n");
+
+
+	/* If mb is not read then leave sync complete until last possible moment */
+	if(FLAME_new_oc_position_message_board_read == 1)
+	{
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_new_oc_position)\n");
+		rc = MB_SyncComplete(b_new_oc_position);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_new_oc_position)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not complete sync of 'new_oc_position' board\n");
+		   switch(rc) {
+				case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+	
+		   
+		   exit(rc);
+		}
+		#endif
+    
+    
+    
+	}
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_update_position\n");
+	current_xmachine_oc_holder = oc_4_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		current_xmachine_oc = current_xmachine_oc_holder->agent;
+		current_xmachine_oc_next_state = oc_5_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_oc = current_xmachine_oc;
+
+		
+
+		
+		
+		
+		  rc = MB_Iterator_Create(b_new_oc_position, &i_new_oc_position);
+		  
+		
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not create Iterator for 'new_oc_position'\n");
+		   switch(rc) {
+		       case MB_ERR_INVALID:
+		           fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+		           break;
+		       case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+	           
+               
+                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
+               
+                   break;
+		   }
+
+		   
+           exit(rc);
+		}
+		#endif
+		
+		
+
+			i = oc_update_position();
+
+		
+		    rc = MB_Iterator_Delete(&i_new_oc_position);
+		    #ifdef ERRCHECK
+		    if (rc != MB_SUCCESS)
+		    {
+		       fprintf(stderr, "ERROR: Could not delete 'new_oc_position' iterator\n");
+		       switch(rc) {
+		           case MB_ERR_INVALID:
+		               fprintf(stderr, "\t reason: 'new_oc_position' iterator is invalid\n");
+		               break;
+		           case MB_ERR_INTERNAL:
+		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+		               break;
+		           default:
+                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+                       break;
+		       }
+
+		       
+               exit(rc);
+		    }
+		    #endif
+		
+
+			if(i == 1)
+			{
+				free_oc_agent(current_xmachine_oc_holder, oc_4_state);
+			}
+			else
+			{
+				transition_oc_agent(current_xmachine_oc_holder, oc_4_state, oc_5_state);
+			}
+		
+
+		current_xmachine_oc = NULL;
+
+		current_xmachine_oc_holder = temp_xmachine_oc_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_update_position\n");
+
+
+/* End of layer number 9 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+if(FLAME_new_oc_position_message_board_read == 0)
+{
+	/*printf("%d> new_oc_position message board sync complete late as no agents reading any messages of this type\n", node_number);*/
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_new_oc_position)\n");
+	rc = MB_SyncComplete(b_new_oc_position);
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_new_oc_position)\n");
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not complete sync of 'new_oc_position' board\n");
+	   switch(rc) {
+			case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+
+	   
+	   exit(rc);
+	}
+	#endif
+}
+
+    /* Delete any search trees */
+
+    rc = MB_Clear(b_new_oc_position);
+    #ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not clear 'new_oc_position' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'new_oc_position' board is invalid\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'new_oc_position' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+           default:
+               fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+
+       }
+
+       
+       exit(rc);
+    }
+    #endif
+
+
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_get_older\n");
+	current_xmachine_oc_holder = oc_5_state->agents;
+	while(current_xmachine_oc_holder)
+	{
+		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
+		current_xmachine_oc = current_xmachine_oc_holder->agent;
+		current_xmachine_oc_next_state = oc_6_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_oc = current_xmachine_oc;
 
@@ -2217,11 +3194,11 @@ if(FLAME_fusion_signal_message_board_read == 0)
 
 			if(i == 1)
 			{
-				free_oc_agent(current_xmachine_oc_holder, oc_3_state);
+				free_oc_agent(current_xmachine_oc_holder, oc_5_state);
 			}
 			else
 			{
-				transition_oc_agent(current_xmachine_oc_holder, oc_3_state, oc_4_state);
+				transition_oc_agent(current_xmachine_oc_holder, oc_5_state, oc_6_state);
 			}
 		
 
@@ -2232,14 +3209,14 @@ if(FLAME_fusion_signal_message_board_read == 0)
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_get_older\n");
 
 
-/* End of layer number 7 */
+/* End of layer number 10 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
 
 
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start oc_die\n");
-	current_xmachine_oc_holder = oc_4_state->agents;
+	current_xmachine_oc_holder = oc_6_state->agents;
 	while(current_xmachine_oc_holder)
 	{
 		temp_xmachine_oc_holder = current_xmachine_oc_holder->next;
@@ -2247,8 +3224,8 @@ if(FLAME_fusion_signal_message_board_read == 0)
 		current_xmachine_oc_next_state = oc_end_state;
 		/* For backwards compatibility set current_xmachine */
 		current_xmachine->xmachine_oc = NULL;
-		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
 		current_xmachine->xmachine_environment = NULL;
 		current_xmachine->xmachine_oc = current_xmachine_oc;
 
@@ -2262,11 +3239,11 @@ if(FLAME_fusion_signal_message_board_read == 0)
 
 			if(i == 1)
 			{
-				free_oc_agent(current_xmachine_oc_holder, oc_4_state);
+				free_oc_agent(current_xmachine_oc_holder, oc_6_state);
 			}
 			else
 			{
-				transition_oc_agent(current_xmachine_oc_holder, oc_4_state, oc_end_state);
+				transition_oc_agent(current_xmachine_oc_holder, oc_6_state, oc_end_state);
 			}
 		
 
@@ -2276,13 +3253,251 @@ if(FLAME_fusion_signal_message_board_read == 0)
 	}
 	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish oc_die\n");
 
+	if(FLAME_death_message_board_write == 1)
+	{
 
-/* End of layer number 8 */
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncStart(b_death)\n");
+		rc = MB_SyncStart(b_death);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finish MB_SyncStart(b_death)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not start sync of 'death' board\n");
+		   switch(rc) {
+			   case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'death' board is invalid\n");
+				   break;
+			   case MB_ERR_LOCKED:
+				   fprintf(stderr, "\t reason: 'death' board is locked\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncStart returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+
+			
+			exit(rc);
+		}
+		#endif
+    }
+    
+
+
+/* End of layer number 11 */
 
 /* Clear message boards that have finished being used
  * and sync complete if doing late sync complete */
 
 
+	/* If mb is not read then leave sync complete until last possible moment */
+	if(FLAME_death_message_board_read == 1)
+	{
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_death)\n");
+		rc = MB_SyncComplete(b_death);
+		if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_death)\n");
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not complete sync of 'death' board\n");
+		   switch(rc) {
+				case MB_ERR_INVALID:
+				   fprintf(stderr, "\t reason: 'death' board is invalid\n");
+				   break;
+			   case MB_ERR_MEMALLOC:
+				   fprintf(stderr, "\t reason: out of memory\n");
+				   break;
+			   case MB_ERR_INTERNAL:
+				   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+				   break;
+			   default:
+				   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+				   break;
+		   }
+	
+		   
+		   exit(rc);
+		}
+		#endif
+    
+    
+    
+	}
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("start bmu_update_data\n");
+	current_xmachine_bmu_holder = bmu_7_state->agents;
+	while(current_xmachine_bmu_holder)
+	{
+		temp_xmachine_bmu_holder = current_xmachine_bmu_holder->next;
+		current_xmachine_bmu = current_xmachine_bmu_holder->agent;
+		current_xmachine_bmu_next_state = bmu_end_state;
+		/* For backwards compatibility set current_xmachine */
+		current_xmachine->xmachine_oc = NULL;
+		current_xmachine->xmachine_bmu = NULL;
+		current_xmachine->xmachine_ob = NULL;
+		current_xmachine->xmachine_environment = NULL;
+		current_xmachine->xmachine_bmu = current_xmachine_bmu;
+
+		
+
+		
+		
+		
+		  rc = MB_Iterator_Create(b_death, &i_death);
+		  
+		
+		#ifdef ERRCHECK
+		if (rc != MB_SUCCESS)
+		{
+		   fprintf(stderr, "ERROR: Could not create Iterator for 'death'\n");
+		   switch(rc) {
+		       case MB_ERR_INVALID:
+		           fprintf(stderr, "\t reason: 'death' board is invalid\n");
+		           break;
+		       case MB_ERR_LOCKED:
+	               fprintf(stderr, "\t reason: 'death' board is locked\n");
+	               break;
+	           case MB_ERR_MEMALLOC:
+	               fprintf(stderr, "\t reason: out of memory\n");
+	               break;
+	           case MB_ERR_INTERNAL:
+	               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+	               break;
+	           default:
+	           
+               
+                   fprintf(stderr, "\t MB_Iterator_Create returned error code: %d (see libmboard docs for details)\n", rc);
+               
+                   break;
+		   }
+
+		   
+           exit(rc);
+		}
+		#endif
+		
+		
+
+			i = bmu_update_data();
+
+		
+		    rc = MB_Iterator_Delete(&i_death);
+		    #ifdef ERRCHECK
+		    if (rc != MB_SUCCESS)
+		    {
+		       fprintf(stderr, "ERROR: Could not delete 'death' iterator\n");
+		       switch(rc) {
+		           case MB_ERR_INVALID:
+		               fprintf(stderr, "\t reason: 'death' iterator is invalid\n");
+		               break;
+		           case MB_ERR_INTERNAL:
+		               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+		               break;
+		           default:
+                       fprintf(stderr, "\t MB_Iterator_Delete returned error code: %d (see libmboard docs for details)\n", rc);
+                       break;
+		       }
+
+		       
+               exit(rc);
+		    }
+		    #endif
+		
+
+			if(i == 1)
+			{
+				free_bmu_agent(current_xmachine_bmu_holder, bmu_7_state);
+			}
+			else
+			{
+				transition_bmu_agent(current_xmachine_bmu_holder, bmu_7_state, bmu_end_state);
+			}
+		
+
+		current_xmachine_bmu = NULL;
+
+		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+	if(FLAME_TEST_PRINT_START_AND_END_OF_MODEL_FUNCTIONS) printf("finish bmu_update_data\n");
+
+
+/* End of layer number 12 */
+
+/* Clear message boards that have finished being used
+ * and sync complete if doing late sync complete */
+
+if(FLAME_death_message_board_read == 0)
+{
+	/*printf("%d> death message board sync complete late as no agents reading any messages of this type\n", node_number);*/
+	
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("start MB_SyncComplete(b_death)\n");
+	rc = MB_SyncComplete(b_death);
+	if(FLAME_TEST_PRINT_START_AND_END_OF_LIBMBOARD_CALLS) printf("finsh MB_SyncComplete(b_death)\n");
+	#ifdef ERRCHECK
+	if (rc != MB_SUCCESS)
+	{
+	   fprintf(stderr, "ERROR: Could not complete sync of 'death' board\n");
+	   switch(rc) {
+			case MB_ERR_INVALID:
+			   fprintf(stderr, "\t reason: 'death' board is invalid\n");
+			   break;
+		   case MB_ERR_MEMALLOC:
+			   fprintf(stderr, "\t reason: out of memory\n");
+			   break;
+		   case MB_ERR_INTERNAL:
+			   fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+			   break;
+		   default:
+			   fprintf(stderr, "\t MB_SyncComplete returned error code: %d (see libmboard docs for details)\n", rc);
+			   break;
+	   }
+
+	   
+	   exit(rc);
+	}
+	#endif
+}
+
+    /* Delete any search trees */
+
+    rc = MB_Clear(b_death);
+    #ifdef ERRCHECK
+    if (rc != MB_SUCCESS)
+    {
+       fprintf(stderr, "ERROR: Could not clear 'death' board\n");
+       switch(rc) {
+           case MB_ERR_INVALID:
+               fprintf(stderr, "\t reason: 'death' board is invalid\n");
+               break;
+           case MB_ERR_LOCKED:
+               fprintf(stderr, "\t reason: 'death' board is locked\n");
+               break;
+           case MB_ERR_INTERNAL:
+               fprintf(stderr, "\t reason: internal error. Recompile libmoard in debug mode for more info \n");
+               break;
+           default:
+               fprintf(stderr, "\t MB_Clear returned error code: %d (see libmboard docs for details)\n", rc);
+               break;
+
+       }
+
+       
+       exit(rc);
+    }
+    #endif
+
+
+
+	/*printf("oc_6_state->count = %d\n", oc_6_state->count);*/
+	oc_6_state->count = 0;
+
+	/*printf("oc_5_state->count = %d\n", oc_5_state->count);*/
+	oc_5_state->count = 0;
 
 	/*printf("oc_4_state->count = %d\n", oc_4_state->count);*/
 	oc_4_state->count = 0;
@@ -2302,23 +3517,14 @@ if(FLAME_fusion_signal_message_board_read == 0)
 	/*printf("oc_start_state->count = %d\n", oc_start_state->count);*/
 	oc_start_state->count = 0;
 
-	/*printf("ob_3_state->count = %d\n", ob_3_state->count);*/
-	ob_3_state->count = 0;
-
-	/*printf("ob_2_state->count = %d\n", ob_2_state->count);*/
-	ob_2_state->count = 0;
-
-	/*printf("ob_1_state->count = %d\n", ob_1_state->count);*/
-	ob_1_state->count = 0;
-
-	/*printf("ob_end_state->count = %d\n", ob_end_state->count);*/
-	ob_end_state->count = 0;
-
-	/*printf("ob_start_state->count = %d\n", ob_start_state->count);*/
-	ob_start_state->count = 0;
-
 	/*printf("bmu_end_state->count = %d\n", bmu_end_state->count);*/
 	bmu_end_state->count = 0;
+
+	/*printf("bmu_7_state->count = %d\n", bmu_7_state->count);*/
+	bmu_7_state->count = 0;
+
+	/*printf("bmu_6_state->count = %d\n", bmu_6_state->count);*/
+	bmu_6_state->count = 0;
 
 	/*printf("bmu_5_state->count = %d\n", bmu_5_state->count);*/
 	bmu_5_state->count = 0;
@@ -2338,6 +3544,21 @@ if(FLAME_fusion_signal_message_board_read == 0)
 	/*printf("bmu_start_state->count = %d\n", bmu_start_state->count);*/
 	bmu_start_state->count = 0;
 
+	/*printf("ob_3_state->count = %d\n", ob_3_state->count);*/
+	ob_3_state->count = 0;
+
+	/*printf("ob_2_state->count = %d\n", ob_2_state->count);*/
+	ob_2_state->count = 0;
+
+	/*printf("ob_1_state->count = %d\n", ob_1_state->count);*/
+	ob_1_state->count = 0;
+
+	/*printf("ob_end_state->count = %d\n", ob_end_state->count);*/
+	ob_end_state->count = 0;
+
+	/*printf("ob_start_state->count = %d\n", ob_start_state->count);*/
+	ob_start_state->count = 0;
+
 	/*printf("environment_end_state->count = %d\n", environment_end_state->count);*/
 	environment_end_state->count = 0;
 
@@ -2355,15 +3576,6 @@ if(FLAME_fusion_signal_message_board_read == 0)
 		current_xmachine_oc_holder = temp_xmachine_oc_holder;
 	}
 
-	current_xmachine_ob_holder = ob_end_state->agents;
-	while(current_xmachine_ob_holder)
-	{
-		temp_xmachine_ob_holder = current_xmachine_ob_holder->next;
-		transition_ob_agent(current_xmachine_ob_holder, ob_end_state, ob_start_state);
-
-		current_xmachine_ob_holder = temp_xmachine_ob_holder;
-	}
-
 	current_xmachine_bmu_holder = bmu_end_state->agents;
 	while(current_xmachine_bmu_holder)
 	{
@@ -2371,6 +3583,15 @@ if(FLAME_fusion_signal_message_board_read == 0)
 		transition_bmu_agent(current_xmachine_bmu_holder, bmu_end_state, bmu_start_state);
 
 		current_xmachine_bmu_holder = temp_xmachine_bmu_holder;
+	}
+
+	current_xmachine_ob_holder = ob_end_state->agents;
+	while(current_xmachine_ob_holder)
+	{
+		temp_xmachine_ob_holder = current_xmachine_ob_holder->next;
+		transition_ob_agent(current_xmachine_ob_holder, ob_end_state, ob_start_state);
+
+		current_xmachine_ob_holder = temp_xmachine_ob_holder;
 	}
 
 	current_xmachine_environment_holder = environment_end_state->agents;
